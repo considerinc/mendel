@@ -4,7 +4,7 @@
 /* Inspired by both karma-commonjs and karma-closure */
 var path = require('path');
 var fs = require('fs');
-var metrohash64 = require('metrohash').metrohash64;
+var murmurhash = require('murmurhash');
 var configLoader = require('mendel-config');
 var MendelClient = require('mendel-pipeline/client');
 var {SourceMapGenerator, SourceMapConsumer} = require('source-map');
@@ -19,7 +19,7 @@ fs.writeFileSync(MENDEL_GLOBAL_PATH, 'window');
 var globalClient;
 var globalConfig;
 
-var initMendelFramework = function(logger, emitter, fileList, karmaConfig) {
+var initMendelFramework = function (logger, emitter, fileList, karmaConfig) {
     var configMendel = karmaConfig.mendel;
     var configFiles = karmaConfig.files;
 
@@ -62,11 +62,11 @@ var initMendelFramework = function(logger, emitter, fileList, karmaConfig) {
     var root = config.projectRoot;
 
     // When karma starts or detects file changes, provide dependencies
-    emitter.on('file_list_modified', function(files) {
+    emitter.on('file_list_modified', function (files) {
         // karma will swallow errors without this try/catch
         try {
             // from karma loaded files, find matching mendel modules
-            var filesWithMendelModule = files.included.map(item => {
+            var filesWithMendelModule = files.included.map((item) => {
                 var relative = path.relative(root, item.originalPath);
                 var module = client.registry.getEntry('./' + relative);
                 if (module) {
@@ -77,7 +77,7 @@ var initMendelFramework = function(logger, emitter, fileList, karmaConfig) {
 
             // all found mendel modules are entries
             var entryModules = filesWithMendelModule
-                .map(_ => _.module)
+                .map((_) => _.module)
                 .filter(Boolean)
                 .reduce((map, item) => {
                     map.set(item.id, item);
@@ -85,30 +85,30 @@ var initMendelFramework = function(logger, emitter, fileList, karmaConfig) {
                 }, new Map());
 
             Array.from(entryModules.values())
-                .map(_ => _.normalizedId)
-                .forEach(_ => log.debug('looking for dependencies for ' + _));
+                .map((_) => _.normalizedId)
+                .forEach((_) => log.debug('looking for dependencies for ' + _));
 
             // calculate which files to never modify
             var passThroughFiles = filesWithMendelModule
-                .filter(_ => !_.module)
-                .filter(_ => !_.originalPath !== MENDEL_GLOBAL_PATH);
+                .filter((_) => !_.module)
+                .filter((_) => !_.originalPath !== MENDEL_GLOBAL_PATH);
 
             passThroughFiles
-                .map(_ => _.originalPath)
-                .forEach(_ => log.debug('keeping ' + _));
+                .map((_) => _.originalPath)
+                .forEach((_) => log.debug('keeping ' + _));
 
             var globalModule = filesWithMendelModule.find(
-                _ => _.originalPath === MENDEL_GLOBAL_PATH
+                (_) => _.originalPath === MENDEL_GLOBAL_PATH
             );
             globalModule.content = globalModuleContent();
 
             var collectedModules = new Map();
 
-            Array.from(entryModules.values()).forEach(module => {
+            Array.from(entryModules.values()).forEach((module) => {
                 client.registry.walk(
                     module.normalizedId,
-                    {types: config.types.map(_ => _.name)},
-                    dep => {
+                    {types: config.types.map((_) => _.name)},
+                    (dep) => {
                         if (collectedModules.has(dep.id)) return false;
                         collectedModules.set(dep.id, dep);
                     }
@@ -117,7 +117,7 @@ var initMendelFramework = function(logger, emitter, fileList, karmaConfig) {
 
             var servedFiles = files.served;
             var injectedModules = Array.from(collectedModules.values()).map(
-                mod => {
+                (mod) => {
                     var filepath = path.join(root, mod.id);
                     for (
                         var i = 0, length = servedFiles.length;
@@ -141,7 +141,7 @@ var initMendelFramework = function(logger, emitter, fileList, karmaConfig) {
                         isUrl: false,
                         mtime: new Date(),
                         content: contents,
-                        sha: metrohash64(new Buffer(contents, 'utf8')),
+                        sha: murmurhash(contents),
                     };
 
                     files.served.push(externalFile);
@@ -160,14 +160,14 @@ var initMendelFramework = function(logger, emitter, fileList, karmaConfig) {
 
     // Mendel provides dependencies that Karma don't know about
     // tell karma when those changed
-    client.on('change', function() {
+    client.on('change', function () {
         fileList.refresh();
     });
 };
 
 initMendelFramework.$inject = ['logger', 'emitter', 'fileList', 'config'];
 
-var createPreprocesor = function(logger) {
+var createPreprocesor = function (logger) {
     var log = logger.create('preprocessor:mendel');
     var debounce = true;
 
@@ -227,7 +227,7 @@ function globalModuleContent() {
         'process = {',
         '   env: {',
         Object.keys(process.env)
-            .map(key => {
+            .map((key) => {
                 return '       ' + key + ':' + JSON.stringify(process.env[key]);
             })
             .join(',\n'),
@@ -283,7 +283,7 @@ function wrapMendelModule(module) {
     if (module.map) {
         // remap existing map summing our module padding
         var existingMap = new SourceMapConsumer(module.map);
-        existingMap.eachMapping(function(mapping) {
+        existingMap.eachMapping(function (mapping) {
             const add = {
                 original: {
                     line: mapping.originalLine,

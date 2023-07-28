@@ -1,6 +1,6 @@
 {
   "name": "karma-mendel",
-  "version": "3.1.13",
+  "version": "3.1.14",
   "description": "Karma plugin for mendel",
   "main": "lib/plugin.js",
   "scripts": {
@@ -45,7 +45,7 @@
     "mendel-config": "^3.3.3",
     "mendel-development": "^3.0.1",
     "mendel-pipeline": "^3.4.10",
-    "metrohash": "^2.3.0",
+    "murmurhash": "^2.0.1",
     "source-map": "^0.5.7"
   }
 }
