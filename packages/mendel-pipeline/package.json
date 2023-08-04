@@ -18,10 +18,10 @@
   },
   "dependencies": {
     "chalk": "^1.1.3",
-    "chokidar": "^1.6.0",
+    "chokidar": "^3.5.3",
     "cli-table": "^0.3.1",
     "commander": "^2.9.0",
-    "debug": "^2.2.0",
+    "debug": "^4.3.4",
     "figures": "^2.0.0",
     "mendel-config": "^3.3.3",
     "mendel-deps": "^3.3.3",
@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "eslint": "^3.7.1",
-    "tap": "^7.1.2"
+    "tap": "^16.3.8"
   },
   "engines": {
     "node": ">=6.0"

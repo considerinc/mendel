@@ -18,6 +18,7 @@
     "url": "https://github.com/yahoo/mendel"
   },
   "dependencies": {
+    "debug": "^4.3.4",
     "fs-extra": "~0.26.5",
     "mendel-development": "^1.0.7",
     "through2": "^2.0.1"

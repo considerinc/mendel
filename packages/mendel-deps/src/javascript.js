@@ -1,8 +1,5 @@
 // `console` is not included as it works flawlessly in Node and browser.
-const GLOBAL_WHITELIST = [
-    'global',
-    'process',
-];
+const GLOBAL_WHITELIST = ['global', 'process'];
 
 // {
 //     imports: ['./foo', '../bar', 'baz'],
@@ -16,12 +13,12 @@ function _depFinder(ast) {
 
     visit(ast, {
         /************** IMPORT/REQUIRE ***************/
-        visitImportDeclaration: function(nodePath) {
+        visitImportDeclaration: function (nodePath) {
             const node = nodePath.value;
             imports[node.source.value] = true;
             return false;
         },
-        visitCallExpression: function(nodePath) {
+        visitCallExpression: function (nodePath) {
             const node = nodePath.value;
 
             // cjs require syntax support
@@ -37,9 +34,11 @@ function _depFinder(ast) {
         },
         visitMemberExpression(nodePath) {
             const node = nodePath.value;
-            if (node.object.type === 'Identifier' &&
+            if (
+                node.object.type === 'Identifier' &&
                 !nodePath.scope.lookup(node.object.name) &&
-                GLOBAL_WHITELIST.indexOf(node.object.name) >= 0) {
+                GLOBAL_WHITELIST.indexOf(node.object.name) >= 0
+            ) {
                 globals[node.object.name] = true;
             }
 
@@ -52,14 +51,15 @@ function _depFinder(ast) {
 
             if (!node.declaration && node.specifiers.length) {
                 node.specifiers
-                .filter(({type}) => type === 'ExportSpecifier')
-                .forEach(({exported}) => exports[exported.name] = []);
+                    .filter(({type}) => type === 'ExportSpecifier')
+                    .forEach(({exported}) => (exports[exported.name] = []));
             } else if (node.declaration) {
                 if (node.declaration.type === 'FunctionDeclaration') {
                     exportName = node.declaration.id.name;
                 } else if (node.declaration.type === 'VariableDeclaration') {
-                    const declarator = node.declaration.declarations
-                        .find(({type}) => type === 'VariableDeclarator');
+                    const declarator = node.declaration.declarations.find(
+                        ({type}) => type === 'VariableDeclarator'
+                    );
                     exportName = declarator && declarator.id.name;
                 }
 
@@ -77,7 +77,7 @@ function _depFinder(ast) {
         },
     });
 
-    Object.keys(globals).forEach(use => {
+    Object.keys(globals).forEach((use) => {
         imports[use] = true;
     });
 
@@ -98,16 +98,35 @@ function _depFinder(ast) {
  *   "../baz.js": "./baz.js"
  * }
  */
-module.exports = function jsDependency(source) {
-    const acorn = require('acorn-jsx/inject')(require('acorn'));
-    const ast = acorn.parse(source, {
-        plugins: {jsx: true},
-        ecmaVersion: 6,
-        sourceType: 'module',
-        allowReturnOutsideFunction: true,
-        allowHashBang: true,
-    });
-    return _depFinder(ast);
+const jsx = require('acorn-jsx');
+const {Parser} = require('acorn');
+module.exports = function jsDependency(source, filePath) {
+        const acorn = Parser.extend(jsx());
+        let ast;
+
+        try {
+            ast = acorn.parse(source, {
+                plugins: {jsx: true},
+                ecmaVersion: 'latest',
+                sourceType: 'module',
+                allowReturnOutsideFunction: true,
+                allowHashBang: true,
+            });
+        } catch(e) {
+            const {message, loc: {line, column} = {}} = e;
+
+            if(message && line && column) {
+                console.error(
+                    `[Mendel] (acorn) ${message} ${filePath}:${line}:${column}`
+                );
+            } else {
+                console.error(e);
+            }
+
+            return false;
+        }
+
+        return _depFinder(ast);
 };
 
 module.exports.supports = new Set(['.js', '.jsx', '.esnext']);

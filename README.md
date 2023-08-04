@@ -130,7 +130,9 @@ The main goal for Mendel is to be sustainable. Sustainability comes from being a
 
 ### Developing Mendel and Contributions
 
-Mendel is a monorepo. In order to develop for Mendel you will need to create a lot of `npm link`s. To make it easier, we created a small script. You can run `npm run linkall` to link all packages to your node installation and cross-link all Mendel packages that depend on each other. This will also run `npm install` in all places that you need to.
+Mendel is a monorepo. In order to develop for Mendel you will need to create a lot of `npm link`s. To make it easier, we created a small script. You can run `npm run bootstrap` to link all packages to your node installation and cross-link all Mendel packages that depend on each other. This will also run `npm install` in all places that you need to.
+
+If you want to use your local development version of mendel against the project you use mendel with, after running the bootstrap script you can run `npm link $(ls node_modules | grep mendel)` insite your project. That will link all development versions inside your project. To veryfy everything worked you can run `npm ls` and verify it uses ascii arrows (`->`) with relative paths to your mendel copy.
 
 Mendel follows Browserify's plugin pattern and NPM small packages style. Whitespace conventions are on `.editorconfig` file, please use [editor config plugin for your code editor](http://editorconfig.org).
 

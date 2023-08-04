@@ -1,4 +1,4 @@
-const babelCore = require('babel-core');
+const babelCore = require('@babel/core');
 const inliner = require('babel-plugin-transform-inline-environment-variables');
 
 module.exports = function({source, filename, map: inputSourceMap}) {

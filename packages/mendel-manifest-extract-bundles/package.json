@@ -18,7 +18,7 @@
     "url": "https://github.com/yahoo/mendel"
   },
   "dependencies": {
-    "debug": "^2.3.3",
+    "debug": "^4.3.4",
     "mendel-development": "^3.0.1"
   }
 }

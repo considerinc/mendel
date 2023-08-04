@@ -16,7 +16,7 @@
     "url": "https://github.com/yahoo/mendel"
   },
   "dependencies": {
-    "debug": "^2.6.8",
+    "debug": "^4.3.4",
     "js-yaml": "^3.6.1",
     "minimatch": "^3.0.3",
     "resolve": "^1.1.7",

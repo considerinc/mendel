@@ -16,6 +16,7 @@
     "url": "https://github.com/yahoo/mendel"
   },
   "dependencies": {
+    "debug": "^4.3.4",
     "falafel": "^1.2.0",
     "glob": "^7.0.3",
     "shasum": "^1.0.2",

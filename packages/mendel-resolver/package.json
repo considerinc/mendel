@@ -13,9 +13,10 @@
     "url": "https://github.com/yahoo/mendel"
   },
   "dependencies": {
+    "debug": "^4.3.4",
     "mendel-development": "^3.0.1"
   },
   "devDependencies": {
-    "tap": "^7.1.2"
+    "tap": "^16.3.8"
   }
 }

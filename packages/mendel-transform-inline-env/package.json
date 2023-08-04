@@ -25,7 +25,8 @@
   },
   "homepage": "https://github.com/yahoo/mendel#readme",
   "dependencies": {
-    "babel-core": "^6.26.0",
-    "babel-plugin-transform-inline-environment-variables": "^0.3.0"
+    "@babel/core": "^7.22.9",
+    "babel-plugin-transform-inline-environment-variables": "^0.4.4",
+    "debug": "^4.3.4"
   }
 }

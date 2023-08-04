@@ -20,7 +20,7 @@
     "url": "https://github.com/yahoo/mendel"
   },
   "dependencies": {
-    "debug": "^2.2.0",
+    "debug": "^4.3.4",
     "uglify-js": "^2.7.4"
   }
 }

@@ -1,5 +1,6 @@
 const analytics = require('../helpers/analytics/analytics-worker')('deps');
 const debug = require('debug')('mendel:deps:slave-' + process.pid);
+const verbose = require('debug')('verbose:mendel:deps:slave-' + process.pid);
 const dep = require('mendel-deps');
 const path = require('path');
 const VariationalResolver = require('mendel-resolver/bisource-resolver');
@@ -62,6 +63,7 @@ module.exports = function(done) {
             })
             .then(deps => {
                 analytics.toc();
+                verbose({filePath, deps});
                 debug(`Dependencies for ${filePath} found!`);
                 done({filePath, deps});
             });

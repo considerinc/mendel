@@ -1,4 +1,4 @@
-const babelCore = require('babel-core');
+const babelCore = require('@babel/core');
 let istanbul = require('babel-plugin-istanbul');
 if (istanbul.default) {
     istanbul = istanbul.default;

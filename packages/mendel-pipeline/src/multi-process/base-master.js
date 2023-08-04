@@ -17,7 +17,8 @@ class BaseMasterProcess {
             .map(() => {
                 return fork(
                     path.join(__dirname, 'worker.js'),
-                    [this._name, workerFileName].concat(options.workerArgs)
+                    [this._name, workerFileName].concat(options.workerArgs),
+                    {stdio:'inherit'}
                 );
             });
         this._workers.forEach(cp => analyticsCollector.connectProcess(cp));

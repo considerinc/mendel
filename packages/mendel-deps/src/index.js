@@ -14,9 +14,9 @@ function isSupported(extension) {
 function getDependencies(filePath, source) {
     const ext = path.extname(filePath);
     if (jsDependency.supports.has(ext)) {
-        return jsDependency(source);
+        return jsDependency(source, filePath);
     } else if (cssDependency.supports.has(ext)) {
-        return cssDependency(source);
+        return cssDependency(source, filePath);
     }
     return {imports: [], exports: []};
 }
