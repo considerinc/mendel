@@ -6,27 +6,28 @@
   "scripts": {
     "build": "mendel",
     "development": "nodemon index.js",
-    "production": "NODE_ENV=production node index.js"
+    "production": "NODE_ENV=production node index.js",
+    "postinstall": "npm link $(ls node_modules | grep mendel)"
   },
   "dependencies": {
-    "cookie-parser": "^1.4.3",
+    "cookie-parser": "^1.4.6",
     "express": "^4.13.4",
-    "mendel-middleware": "*",
+    "mendel": "*",
     "morgan": "^1.7.0",
     "node-uuid": "^1.4.7",
-    "planout": "^3.0.1",
-    "react": "^0.14.8",
-    "react-dom": "^0.14.8"
+    "planout": "^5.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "babel-preset-es2015": "^6.6.0",
-    "babel-preset-react": "^6.5.0",
-    "babelify": "^7.3.0",
-    "eslint-plugin-react": "^5.2.2",
-    "mendel": "*",
+    "@babel/preset-env": "^7.22.9",
+    "@babel/preset-react": "^7.22.5",
+    "babelify": "^10.0.0",
+    "eslint-plugin-react": "^7.33.1",
     "mendel-development-middleware": "*",
-    "nodemon": "^1.9.2",
-    "watchify": "^3.7.0"
+    "mendel-middleware": "*",
+    "nodemon": "^3.0.1",
+    "watchify": "^4.0.0"
   },
   "babel": {
     "presets": [
