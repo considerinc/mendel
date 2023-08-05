@@ -6,13 +6,12 @@
   "scripts": {
     "build": "mendel",
     "development": "nodemon index.js",
-    "production": "NODE_ENV=production node index.js",
-    "postinstall": "npm link $(ls node_modules | grep mendel)"
+    "production": "NODE_ENV=production node index.js"
   },
   "dependencies": {
     "cookie-parser": "^1.4.6",
     "express": "^4.13.4",
-    "mendel": "*",
+    "mendel-middleware": "../../packages/mendel-middleware",
     "morgan": "^1.7.0",
     "node-uuid": "^1.4.7",
     "planout": "^5.3.0",
@@ -23,9 +22,8 @@
     "@babel/preset-env": "^7.22.9",
     "@babel/preset-react": "^7.22.5",
     "babelify": "^10.0.0",
-    "eslint-plugin-react": "^7.33.1",
-    "mendel-development-middleware": "*",
-    "mendel-middleware": "*",
+    "mendel-development-middleware": "../../packages/mendel-development-middleware",
+    "mendel-pipeline": "../../packages/mendel-pipeline",
     "nodemon": "^3.0.1",
     "watchify": "^4.0.0"
   },
