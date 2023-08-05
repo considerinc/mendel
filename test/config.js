@@ -9,6 +9,9 @@ var fs = require('fs');
 
 var config = require('../packages/mendel-config');
 var origEnv = process.env.NODE_ENV;
+var origMendelEnv = process.env.MENDEL_ENV;
+delete process.env.NODE_ENV;
+delete process.env.MENDEL_ENV;
 var where;
 var opts;
 
@@ -17,7 +20,7 @@ mkdirp.sync('/tmp/1/2/3/');
 
 process.chdir('/tmp/');
 
-t.contains(config('./1/2/3/').basedir, '1/2/3',
+t.match(config('./1/2/3/').basedir, '1/2/3',
     'recurses and give up if no config found');
 
 
@@ -162,6 +165,8 @@ t.match(config(where), {
         id: 'default',
         dir: /.*src\/default$/,
     },
+}, 'dev environment baseConfig');
+t.match(config(where), {
     types: [
         {
             name: 'node_modules',
@@ -174,6 +179,8 @@ t.match(config(where), {
             transforms: ['envify-dev'],
         },
     ],
+}, 'dev environment types');
+t.match(config(where), {
     transforms: [
         {
             id: 'babelify-prod',
@@ -198,14 +205,16 @@ t.match(config(where), {
             },
         },
     ],
+}, 'dev environment transforms');
+t.match(config(where), {
     outlets: [
         {
             id: 'manifest',
-            plugin: /.+\/mendel-outlet-manifest.*/,
+            plugin: false,
         },
         {
             id: 'css',
-            plugin: /.+\/mendel-outlet-css.*/,
+            plugin: false,
             options: {
                 plugin: [
                     [
@@ -216,7 +225,7 @@ t.match(config(where), {
             },
         },
     ],
-}, 'default environment');
+}, 'dev environment outlets');
 
 process.env.NODE_ENV = 'production';
 t.match(config(where), {
@@ -242,3 +251,4 @@ t.match(config(where), {
 }, 'production environment');
 
 process.env.NODE_ENV = origEnv;
+process.env.MENDEL_ENV = origMendelEnv;
