@@ -64,8 +64,8 @@ transforms:
     plugin: mendel-transform-babel
     options:
       presets:
-        - env
-        - react
+        - '@babel/preset-env'
+        - '@babel/preset-react'
       plugins:
         - istanbul
   json-client-side-support:
@@ -159,18 +159,12 @@ outlets:
     plugin: mendel-outlet-css # PostCSS-based css output
     options:
       plugin:
-        -
-          - autoprefixer
-          -
-            browsers: "last 2 versions"
+        - autoprefixer
   - id: css-rtl
     plugin: mendel-outlet-css
     options:
       plugin:
-        -
-          - autoprefixer
-          -
-            browsers: "last 2 versions"
+        - autoprefixer
         - rtlcss
   - id: ssr
     plugin: mendel-outlet-server-side-render # Outputs artifacts for server side render
