@@ -23,10 +23,10 @@
     "react-dom": "^16.14.0"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.22.9",
+    "@babel/preset-react": "^7.22.5",
     "autoprefixer": "^10.4.14",
     "babel-plugin-istanbul": "^6.1.1",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
     "chai": "^4.3.7",
     "jasmine-core": "^2.99.1",
     "jsdom": "^22.1.0",
@@ -57,10 +57,14 @@
   },
   "babel": {
     "presets": [
-      "env",
-      "react"
+      "@babel/preset-env",
+      "@babe/preset-react"
     ]
   },
+  "browserslist": [
+    "defaults and supports es6-module",
+    "maintained node versions"
+  ],
   "contributors": [
     {
       "name": "Irae Carvalho",

@@ -54,8 +54,8 @@ transforms:
     plugin: mendel-transform-babel # must match an npm package already installed
     options:
       presets:
-        - env
-        - react
+        - '@babel/preset-env'
+        - '@babel/preset-react'
   javascript-inline-variables:               # used in production only
     plugin: mendel-transform-inline-env
   javascript-minification:                   # used in production only
