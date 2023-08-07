@@ -98,19 +98,20 @@ function _depFinder(ast) {
  *   "../baz.js": "./baz.js"
  * }
  */
+const acorn = require('acorn');
 const jsx = require('acorn-jsx');
-const {Parser} = require('acorn');
+const JSXParser = acorn.Parser.extend(jsx());
 module.exports = function jsDependency(source, filePath) {
-        const acorn = Parser.extend(jsx());
         let ast;
 
         try {
-            ast = acorn.parse(source, {
-                plugins: {jsx: true},
+            ast = JSXParser.parse(source, {
                 ecmaVersion: 'latest',
                 sourceType: 'module',
                 allowReturnOutsideFunction: true,
                 allowHashBang: true,
+                allowAwaitOutsideFunction: true,
+                allowImportExportEverywhere: true,
             });
         } catch(e) {
             const {message, loc: {line, column} = {}} = e;
