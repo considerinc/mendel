@@ -7,20 +7,22 @@ const postcss = require('postcss');
 
 let currentRemoval = new Set();
 
-module.exports = postcss.plugin('postcss-remove-import', (/* options */) => {
-    // Work with options here
-    return root => {
+module.exports = postcss.plugin((/* options */) => {
+    return {
+        postcssPlugin: 'postcss-remove-import',
         // Transform each rule here
-        root.walkAtRules('import', atRule => {
-            const path = atRule.params.replace(/(^["']|["']$)/g, '');
+        Once(root /*,{result}*/) {
+            root.walkAtRules('import', (atRule) => {
+                const path = atRule.params.replace(/(^["']|["']$)/g, '');
 
-            if (currentRemoval.has(path)) {
-                atRule.remove();
-            }
-        });
+                if (currentRemoval.has(path)) {
+                    atRule.remove();
+                }
+            });
+        },
     };
 });
 
-module.exports.setToRemove = function(removalSet) {
+module.exports.setToRemove = function (removalSet) {
     currentRemoval = removalSet;
 };

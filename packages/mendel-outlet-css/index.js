@@ -27,6 +27,7 @@ module.exports = class CSSOutlet {
             .then(({source, map}) => {
                 const postCssOptions = Object.assign(
                     {
+                        from: undefined,
                         // Sourcemap url will be generated using this property.
                         // E.g., ./app.css.map
                         to: outfile,
@@ -132,7 +133,7 @@ module.exports = class CSSOutlet {
         return promise.then(() => processedEntries);
     }
 
-    _transform(source, plugins, options = {}) {
+    _transform(source, plugins, options = {from: undefined}) {
         return postcss(plugins).process(source, options);
     }
 };
