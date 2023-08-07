@@ -21,6 +21,6 @@
   },
   "dependencies": {
     "debug": "^4.3.4",
-    "uglify-js": "^2.7.4"
+    "uglify-js": "^3.17.4"
   }
 }

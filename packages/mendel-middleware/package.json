@@ -23,7 +23,7 @@
   "dependencies": {
     "browser-pack": "^6.0.1",
     "debug": "^4.3.4",
-    "dissolve": "^0.3.3",
+    "dissolve": "^0.2.1",
     "mendel-core": "^3.0.6",
     "mendel-loader": "^3.0.0",
     "path-to-regexp": "^1.2.1"

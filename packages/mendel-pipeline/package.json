@@ -22,18 +22,20 @@
     "cli-table": "^0.3.1",
     "commander": "^2.9.0",
     "debug": "^4.3.4",
+    "dissolve": "0.2.1",
     "figures": "^2.0.0",
     "mendel-config": "^3.3.3",
     "mendel-deps": "^3.3.3",
     "mendel-development": "^3.0.1",
     "mendel-resolver": "^3.0.3",
     "mkdirp": "^0.5.1",
+    "mocha": "10.2.0",
     "node-libs-browser": "^2.0.0",
     "pretty-ms": "^2.1.0",
     "resolve": "^1.1.7"
   },
   "devDependencies": {
-    "eslint": "^3.7.1",
+    "eslint": "^8.46.0",
     "tap": "^16.3.8"
   },
   "engines": {
