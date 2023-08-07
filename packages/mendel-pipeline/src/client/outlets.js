@@ -27,6 +27,11 @@ class MendelOutlets {
             return Promise.resolve()
             .then(analyze.tic.bind(analyze, outlet.id))
             .then(() => plugin.perform(bundle, variations))
+            .catch(e => {
+                e.bundle = {id: bundle.id, options: bundle.options};
+                e.outletConfig = outlet;
+                throw e;
+            })
             .then(analyze.toc.bind(analyze, outlet.id))
             .then(output => bundle.output = output);
         });
