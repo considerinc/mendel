@@ -136,6 +136,11 @@ module.exports = class BrowserPackOutlet {
                 return _.replace(/^\.\//, '');
             });
         }
+        
+        const sourceMapLine = INLINE_MAP_PREFIX + Buffer.from(
+            JSON.stringify(item.map)
+        ).toString('base64');
+
         const data = {
             id: item.normalizedId,
             // Clone the object so mutating it does not mutate source entry
@@ -150,8 +155,9 @@ module.exports = class BrowserPackOutlet {
             // Kinda ugly but browser pack uses "combine-source-map" which expects
             // inline source map which gets removed when putting multiple files together
             // as a bundle.
-            source: !item.map ? item.source : `${item.source}
-${INLINE_MAP_PREFIX}${new Buffer(JSON.stringify(item.map)).toString('base64')}`,
+            source: !item.map
+                ? item.source
+                : [item.source, sourceMapLine].join('\n'),
             entry: item.entry,
             expose: item.expose,
             map: item.map,

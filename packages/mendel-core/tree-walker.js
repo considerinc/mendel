@@ -32,7 +32,7 @@ MendelWalker.prototype.find = function(module) {
     this.deps[module.index] = resolved;
 
     if (this.serialiser) {
-        this.serialiser.pushFileHash(new Buffer(resolved.sha, 'hex'));
+        this.serialiser.pushFileHash(Buffer.from(resolved.sha, 'hex'));
     }
 
     return resolved;

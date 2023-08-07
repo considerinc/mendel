@@ -13,7 +13,7 @@ t.equal(sut.constructor, TreeSerialiser, 'correct constructor');
 sut = createPredictable();
 
 sut.pushBranch(2);
-sut.pushFileHash(new Buffer('f8968ed58fa6f771df78e0be89be5a97c5d3fb59', 'hex'));
+sut.pushFileHash(Buffer.from('f8968ed58fa6f771df78e0be89be5a97c5d3fb59', 'hex'));
 
 var expected = 'bWVuZGVsAQAC_wIACwymnXS-hyyRSwbove5neRfo6fI';
 
@@ -35,7 +35,7 @@ function() {
 t.throws(
 function() {
     sut.pushFileHash(
-        new Buffer('f790b83d19df02e79d50eeb84590a32b966f8e13', 'hex'));
+        Buffer.from('f790b83d19df02e79d50eeb84590a32b966f8e13', 'hex'));
 },
 'Throws if pushFileHash after result');
 
@@ -43,7 +43,7 @@ function createPredictable() {
     var sut = new TreeSerialiser();
     sut.pushBranch(0);
     sut.pushFileHash(
-        new Buffer('6310b41adf425242c338afc1d5f4fbf99cdccf47', 'hex')
+        Buffer.from('6310b41adf425242c338afc1d5f4fbf99cdccf47', 'hex')
     );
     return sut;
 }
@@ -60,8 +60,8 @@ var sut2 = createPredictable();
 
 sut1.pushBranch(1);
 sut2.pushBranch(1);
-sut1.pushFileHash(new Buffer('f790b83d19df02e79d50eeb84590a32b966f8e13','hex'));
-sut2.pushFileHash(new Buffer('f790b83d19df02e79d50eeb84590a32b966f8e13','hex'));
+sut1.pushFileHash(Buffer.from('f790b83d19df02e79d50eeb84590a32b966f8e13','hex'));
+sut2.pushFileHash(Buffer.from('f790b83d19df02e79d50eeb84590a32b966f8e13','hex'));
 
 t.equal(sut1.result(), sut2.result(),
     'Consistent result if same files pushed');
@@ -71,8 +71,8 @@ sut2 = createPredictable();
 
 sut1.pushBranch(1);
 sut2.pushBranch(1);
-sut1.pushFileHash(new Buffer('f790b83d19df02e79d50eeb84590a32b966f8e13','hex'));
-sut2.pushFileHash(new Buffer('b84590a32b966f8e13f790b83d19df02e79d50ee','hex'));
+sut1.pushFileHash(Buffer.from('f790b83d19df02e79d50eeb84590a32b966f8e13','hex'));
+sut2.pushFileHash(Buffer.from('b84590a32b966f8e13f790b83d19df02e79d50ee','hex'));
 
 t.notEqual(sut1.result(), sut2.result(),
     'different result if different hahses pushed');

@@ -337,7 +337,7 @@ function wrapMendelModule(module) {
 
     var comment = [
         INLINE_MAP_PREFIX,
-        new Buffer(finalMap).toString('base64'),
+        Buffer.from(finalMap).toString('base64'),
     ].join('');
 
     return output + '\n' + comment + '\n';
