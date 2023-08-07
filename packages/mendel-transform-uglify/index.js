@@ -1,4 +1,4 @@
-const uglify = require('uglify-es');
+const uglify = require('uglify-js');
 
 module.exports = function({ source, filename, map: inputSourceMap }, options) {
     const mergedOptions = Object.assign({}, options, {

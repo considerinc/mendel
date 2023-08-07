@@ -23,6 +23,6 @@
   "homepage": "https://github.com/yahoo/mendel#readme",
   "dependencies": {
     "debug": "^4.3.4",
-    "uglify-es": "^3.3.10"
+    "uglify-js": "^3.17.4"
   }
 }
