@@ -16,7 +16,7 @@ class ModuleResolver {
         cwd=process.cwd(),
         basedir=process.cwd(),
         extensions=['.js'],
-        runtimes=['main'],
+        runtimes=['main', 'module', 'browser'],
         recordPackageJson=false,
     } = {}) {
         this.extensions = extensions;

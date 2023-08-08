@@ -229,6 +229,7 @@ class MendelCache extends EventEmitter {
         if (isPkgModule && this.hasEntry(oDep.packageJson)) return;
         // If oDependency is not added yet,
         isPkgModule && this._requestEntry(oDep.packageJson);
+        isPkgModule && oDep.module && this._requestEntry(oDep.module);
         let isIsomorphic = false;
         if (typeof oDep.browser === 'object') {
             const val = oDep.browser[oDep.main];

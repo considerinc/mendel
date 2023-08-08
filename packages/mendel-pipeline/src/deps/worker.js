@@ -6,7 +6,7 @@ const path = require('path');
 const VariationalResolver = require('mendel-resolver/bisource-resolver');
 
 const pendingInquiry = new Map();
-const RUNTIME = ['main', 'browser'];
+const RUNTIME = ['main', 'browser', 'module'];
 const resolveCache = new Map();
 let resolver;
 
