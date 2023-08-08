@@ -43,10 +43,10 @@
   },
   "dependencies": {
     "debug": "^4.3.4",
+    "karma": "^6.4.2",
     "mendel-config": "^3.3.3",
     "mendel-development": "^3.0.1",
     "mendel-pipeline": "^3.4.10",
-    "murmurhash": "^2.0.1",
-    "source-map": "^0.5.7"
+    "source-map": "^0.7.4"
   }
 }

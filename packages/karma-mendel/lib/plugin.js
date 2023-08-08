@@ -2,9 +2,12 @@
    Copyrights licensed under the MIT License.
    See the accompanying LICENSE file for terms. */
 /* Inspired by both karma-commonjs and karma-closure */
+var debug = require('debug')('mendel:karma-mendel:plugin');
+var verbose = require('debug')('verbose:mendel:karma-mendel:plugin');
 var path = require('path');
 var fs = require('fs');
-var murmurhash = require('murmurhash');
+var File = require('karma/lib/file');
+const { createHash } = require('crypto');
 var configLoader = require('mendel-config');
 var MendelClient = require('mendel-pipeline/client');
 var {SourceMapGenerator, SourceMapConsumer} = require('source-map');
@@ -19,7 +22,8 @@ fs.writeFileSync(MENDEL_GLOBAL_PATH, 'window');
 var globalClient;
 var globalConfig;
 
-var initMendelFramework = function (logger, emitter, fileList, karmaConfig) {
+async function initMendelFramework(logger, emitter, fileList, karmaConfig) {
+    debug('initMendelFramework');
     var configMendel = karmaConfig.mendel;
     var configFiles = karmaConfig.files;
 
@@ -62,11 +66,23 @@ var initMendelFramework = function (logger, emitter, fileList, karmaConfig) {
     var root = config.projectRoot;
 
     // When karma starts or detects file changes, provide dependencies
-    emitter.on('file_list_modified', function (files) {
+    emitter.on('file_list_modified', async function (files) {
+        debug('file_list_modified');
         // karma will swallow errors without this try/catch
         try {
+
+            await new Promise(function waiter (resolve) {
+                if(globalClient.isSynced()) {
+                    return resolve();
+                }
+                debug('file_list_modified hold');
+                setTimeout(()=> waiter(resolve), 100);
+            })
+
+            debug('file_list_modified continue');
+
             // from karma loaded files, find matching mendel modules
-            var filesWithMendelModule = files.included.map((item) => {
+            var filesWithMendelModule = files.served.map((item) => {
                 var relative = path.relative(root, item.originalPath);
                 var module = client.registry.getEntry('./' + relative);
                 if (module) {
@@ -85,7 +101,7 @@ var initMendelFramework = function (logger, emitter, fileList, karmaConfig) {
                 }, new Map());
 
             Array.from(entryModules.values())
-                .map((_) => _.normalizedId)
+                .map((_) => _.id)
                 .forEach((_) => log.debug('looking for dependencies for ' + _));
 
             // calculate which files to never modify
@@ -95,7 +111,7 @@ var initMendelFramework = function (logger, emitter, fileList, karmaConfig) {
 
             passThroughFiles
                 .map((_) => _.originalPath)
-                .forEach((_) => log.debug('keeping ' + _));
+                .forEach((_) => log.debug('passThroughFiles ' + _));
 
             var globalModule = filesWithMendelModule.find(
                 (_) => _.originalPath === MENDEL_GLOBAL_PATH
@@ -116,8 +132,8 @@ var initMendelFramework = function (logger, emitter, fileList, karmaConfig) {
             });
 
             var servedFiles = files.served;
-            var injectedModules = Array.from(collectedModules.values()).map(
-                (mod) => {
+            var injectedModules = await Promise.all(Array.from(collectedModules.values()).map(
+                async (mod) => {
                     var filepath = path.join(root, mod.id);
                     for (
                         var i = 0, length = servedFiles.length;
@@ -133,22 +149,31 @@ var initMendelFramework = function (logger, emitter, fileList, karmaConfig) {
                         mod.entry = true;
                     }
 
-                    var contents = wrapMendelModule(mod);
-                    var externalFile = {
-                        path: filepath,
-                        originalPath: filepath,
-                        contentPath: filepath,
-                        isUrl: false,
-                        mtime: new Date(),
-                        content: contents,
-                        sha: murmurhash(contents),
-                    };
+                    var contents = await wrapMendelModule(mod);
 
-                    files.served.push(externalFile);
-                    log.debug('added dependency ', mod.id);
+                    // TODO: if mendel client/server module cache adds modification time
+                    // we can improve karma caching by passing the correct time
+                    const modificationTime = new Date(Date.now());
+                    // doNotCache must be false, otherwise `contents` will be ignored
+                    // and karma will load the unprocessed module from the filesystem
+                    const doNotCache = false;
+                    const type = 'js';
+                    const isBinary = false;
+                    // integrity is used on the <script> tag to prevent loading the wrong file
+                    var integrity = sha256(contents);
+
+                    var externalFile = new File(filepath, modificationTime, doNotCache, type, isBinary, integrity);
+
+                    externalFile.content = contents;
+                    // sha is used in URL request to prevent http caching
+                    externalFile.sha = integrity;
+                    
+                    servedFiles.push(externalFile);
+                    // files.included.push(externalFile);
+                    log.debug('added (preprocessed) dependency ', mod.id);
                     return externalFile;
                 }
-            );
+            ));
 
             files.included = [globalModule]
                 .concat(injectedModules)
@@ -163,7 +188,7 @@ var initMendelFramework = function (logger, emitter, fileList, karmaConfig) {
     client.on('change', function () {
         fileList.refresh();
     });
-};
+}
 
 initMendelFramework.$inject = ['logger', 'emitter', 'fileList', 'config'];
 
@@ -171,40 +196,43 @@ var createPreprocesor = function (logger) {
     var log = logger.create('preprocessor:mendel');
     var debounce = true;
 
-    return function getFile(content, file, done, logged) {
+    return async function getFile(content, file, done, logged) {
         var relativeFile =
             './' + path.relative(globalConfig.projectRoot, file.originalPath);
         logged !== 'logged' && log.debug('transforming "%s".', relativeFile);
 
         if (!globalClient.isSynced() || debounce) {
             debounce = false;
-            return setTimeout(
+            setTimeout(
                 () => getFile(content, file, done, 'logged'),
                 250
             );
+            return;
         }
 
         if (file.originalPath === BRIDGE_FILE_PATH) {
             debounce = true;
-            return done(content);
+            done(null, content);
+            return;
         }
 
         var module = globalClient.registry.getEntry(relativeFile);
 
         if (!module) {
             debounce = true;
-            return done(content);
+            done(null, content);
+            return;
         }
 
         // preprocessed modules are always entry, as injected modules don't
         // get preprocessed by karma
         module.entry = true;
 
-        var output = wrapMendelModule(module, file.originalPath);
+        var output = await wrapMendelModule(module, file.originalPath);
 
         log.debug(relativeFile, 'transformed');
         debounce = true;
-        done(output);
+        done(null, output);
     };
 };
 createPreprocesor.$inject = ['logger'];
@@ -214,30 +242,21 @@ function globalModuleContent() {
         globalConfig.variationConfig.variations
     );
 
-    const contents = [
-        'window.__mendel_module__ = window.__mendel_module__ || {};',
-        'window.__mendel_config__ = {',
-        [
-            '   variations:' + variationsString,
-            '   baseVariationDir:' +
-                JSON.stringify(globalConfig.baseConfig.dir),
-            '   baseVariationId:' + JSON.stringify(globalConfig.baseConfig.id),
-        ].join(',\n'),
-        '};',
-        'process = {',
-        '   env: {',
-        Object.keys(process.env)
-            .map((key) => {
-                return '       ' + key + ':' + JSON.stringify(process.env[key]);
-            })
-            .join(',\n'),
-        '   }',
-        '};',
-    ].join('\n');
+    const contents = `
+        window.__mendel_module__ = window.__mendel_module__ || {};
+        window.__mendel_config__ = {
+            variations: ${variationsString},
+            baseVariationDir: ${JSON.stringify(globalConfig.baseConfig.dir)},
+            baseVariationId: ${JSON.stringify(globalConfig.baseConfig.id)},
+        };
+        process = {
+            env: ${JSON.stringify(process.env)},
+        };
+    `;
     return contents;
 }
 
-function wrapMendelModule(module) {
+async function wrapMendelModule(module) {
     var keepProps = ['id', 'normalizedId', 'variation', 'entry', 'expose'];
     var browserModule = Object.keys(module).reduce((bModule, key) => {
         if (keepProps.includes(key)) {
@@ -282,39 +301,47 @@ function wrapMendelModule(module) {
     var finalMap;
     if (module.map) {
         // remap existing map summing our module padding
-        var existingMap = new SourceMapConsumer(module.map);
+        var existingMap = await new SourceMapConsumer(module.map);
         existingMap.eachMapping(function (mapping) {
+            const {
+                source,
+                generatedLine,
+                generatedColumn,
+                originalLine,
+                originalColumn,
+                name,
+            } = mapping;
             const add = {
                 original: {
-                    line: mapping.originalLine,
-                    column: mapping.originalColumn,
+                    line: originalLine,
+                    column: originalColumn,
                 },
                 generated: {
-                    line: padLines.length - 1 + mapping.generatedLine,
+                    line: padLines.length - 1 + generatedLine,
                     column:
                         mapping.generatedLine !== 1
-                            ? mapping.generatedColumn
-                            : padCol + mapping.generatedColumn,
+                            ? generatedColumn
+                            : padCol + generatedColumn,
                 },
-                source: mapping.source,
-                name: mapping.name,
+                source,
+                name,
             };
             if (
-                null === mapping.originalLine ||
-                null === mapping.originalColumn
+                null === originalLine ||
+                null === originalColumn
             ) {
                 add.original = null;
             }
             newSourceMap.addMapping(add);
-            // Only use mappings from new map, so we keep paths in a way
-            // that karma understands and keeps track of it
-            const newMapObject = JSON.parse(newSourceMap.toString());
-            finalMap = JSON.stringify(
-                Object.assign({}, module.map, {
-                    mappings: newMapObject.mappings,
-                })
-            );
         });
+        // Only use mappings from new map, so we keep paths in a way
+        // that karma understands and keeps track of it
+        const newMapObject = JSON.parse(newSourceMap.toString());
+        finalMap = JSON.stringify(
+            Object.assign({}, module.map, {
+                mappings: newMapObject.mappings,
+            })
+        );
     } else {
         // create a line-only sourcemap, accounting for padding
         var sourceLinesCount = module.source.split('\n');
@@ -340,7 +367,26 @@ function wrapMendelModule(module) {
         Buffer.from(finalMap).toString('base64'),
     ].join('');
 
+    const logModules = [
+        'chai/lib/chai/utils/inspect.js',
+        'node_modules/react/index.js',
+        'src/isomorphic/base/components/_test_/button_test.js',
+    ];
+
+    if(logModules.some(_ => module.id.indexOf(_)!==-1)) {
+        verbose(output);
+    }
+
     return output + '\n' + comment + '\n';
+}
+
+function sha256(string) {
+    const enc = "utf8";
+    const algorithm = 'sha256'
+    const hash = createHash(algorithm).update(string, enc);
+    const sha  = hash.digest("base64");
+
+    return `${algorithm}-${sha}`;
 }
 
 // PUBLISH DI MODULE

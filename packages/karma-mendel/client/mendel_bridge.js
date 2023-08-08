@@ -2,16 +2,16 @@
    Copyrights licensed under the MIT License.
    See the accompanying LICENSE file for terms. */
 
-/* global window, __mendel_module__, __mendel_config__ */
+/* global __mendel_module__, __mendel_config__ */
 
-(function(window, modules, config, cache) {
+(async function(window, modules, config, cache) {
     // Save the require from previous bundle to this closure if any
     var previousRequire = typeof require == 'function' && require;
     var variations = config.variations;
     var baseId = config.baseVariationId;
     var baseDir = config.baseVariationDir;
 
-    function mendelRequire(name, variationId, jumped) {
+    function mendelRequire(name, variationId, jumped, calleeModule) {
         if (!cache[name] && variationId) {
             var allByNormId = Object.keys(modules).reduce(function(
                 normMatches,
@@ -53,7 +53,7 @@
                 // many times as there are bundles until the module is found or
                 // we exhaust the require chain.
                 if (previousRequire) return previousRequire(name, true);
-                var err = new Error('Cannot find module "' + name + '"');
+                var err = new Error('Cannot find module "' + name + '"'+ (calleeModule? ' from: "'+calleeModule+'"': ''));
                 err.code = 'MODULE_NOT_FOUND';
                 throw err;
             }
@@ -62,7 +62,7 @@
                 m.exports,
                 function(x) {
                     var id = modules[name].deps[x];
-                    return mendelRequire(id ? id : x, variationId);
+                    return mendelRequire(id ? id : x, variationId, false, name);
                 },
                 m,
                 m.exports
