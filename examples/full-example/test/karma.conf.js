@@ -11,17 +11,17 @@ module.exports = function(config) {
 
         // list of files / patterns to load in the browser
         // for use with mendel, list only your test files here
-        files: ['../src/isomorphic/**/_test_/*.js'],
+        files: [{pattern: '../src/isomorphic/**/_test_/*.js', included: false, served: true}],
 
         // list of files to exclude
         // you should exclude auto-executing files, such as your app initialization
-        exclude: ['isomorphic/base/main.js'],
+        exclude: [],
 
         // preprocess matching files before serving them to the browser
         // please only use mendel, you can use test configuration to have different
         // transforms than production bundles (such as istanbul)
         preprocessors: {
-            '../src/isomorphic/**/*.js': ['mendel'],
+            '/**/*.js': ['mendel'],
         },
 
         /*
@@ -41,7 +41,6 @@ module.exports = function(config) {
         mendel: {
             environment: 'test',
         },
-
         // any of these options are valid: https://github.com/istanbuljs/istanbuljs/blob/aae256fb8b9a3d19414dcf069c592e88712c32c6/packages/istanbul-api/lib/config.js#L33-L39
         coverageIstanbulReporter: {
             // reports can be any that are listed here: https://github.com/istanbuljs/istanbuljs/tree/aae256fb8b9a3d19414dcf069c592e88712c32c6/packages/istanbul-reports/lib
@@ -68,7 +67,7 @@ module.exports = function(config) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['Chrome'],
+        browsers: ['ChromeHeadless'],
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits

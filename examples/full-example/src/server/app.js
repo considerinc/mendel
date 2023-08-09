@@ -37,7 +37,7 @@ app.get('/', function(req, res) {
         // array of bundle ids you only need for ssr rendering
         const resolver = req.mendel.resolver(['main']);
         var Main = resolver.require('./main');
-        optionalMarkup = ReactDOMServer.renderToString(Main());
+        optionalMarkup = ReactDOMServer.renderToStaticMarkup(Main());
     }
 
     var html = [

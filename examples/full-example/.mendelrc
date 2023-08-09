@@ -53,8 +53,15 @@ transforms:
   javascript-sources:
     plugin: mendel-transform-babel # must match an npm package already installed
     options:
-      presets:
+      presets: &babel-presets
         - '@babel/preset-env'
+          # - '@babel/preset-env'
+          # - targets:
+          #     ie: 9
+          #   useBuiltIns: entry
+          #   corejs: "3.32.0"
+          #   modules: cjs
+          #   ignoreBrowserslistConfig: true
         - '@babel/preset-react'
   javascript-inline-variables:               # used in production only
     plugin: mendel-transform-inline-env
@@ -63,9 +70,7 @@ transforms:
   javascript-sources-coverage:               # used in test only
     plugin: mendel-transform-babel
     options:
-      presets:
-        - '@babel/preset-env'
-        - '@babel/preset-react'
+      presets: *babel-presets
       plugins:
         - istanbul
   json-client-side-support:
@@ -319,14 +324,16 @@ env:
         transforms:
           - javascript-sources-coverage
         glob:
-          - "**/*.{js,jsx}"
+          - "src/**/*.{js,jsx}"
           - "!**/_test_/*"
-      js-test-only:
+      not-covered-js:
         transforms:
           - javascript-sources
         glob:
-          - "**/_test_/*"
-    # test/setup/*.js are used only in test environment.
-    # Since they may pull in large test-related dependency in test environment,
-    # otherwise useless, Mendel supports "support" configuration.
-    support: test/**/*.js
+          - "**/*.{js,jsx,json}"
+        include-node_modules: true
+      json:
+        extensions:
+          - .json
+        parser-to-type: not-covered-js 
+        include-node_modules: true
