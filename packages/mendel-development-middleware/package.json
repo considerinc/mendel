@@ -3,9 +3,6 @@
     "version": "4.0.0-alpha.0",
     "description": "Mendel middleware that executes and builds based on a Mendel client appropriate for during development.",
     "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
     "author": "Stephan Lee <stephanwlee@gmail.com>",
     "license": "MIT",
     "repository": {

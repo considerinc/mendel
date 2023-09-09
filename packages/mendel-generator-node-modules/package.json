@@ -2,9 +2,6 @@
     "name": "mendel-generator-node-modules",
     "version": "4.0.0-alpha.0",
     "description": "Mendel-generator that creates special bundle with only node_modules from a bundle",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
     "main": "generator-node-modules.js",
     "keywords": [
         "mendel",

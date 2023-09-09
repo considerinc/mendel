@@ -7,7 +7,7 @@ var path = require('path');
 var mkdirp = require('mkdirp');
 var fs = require('fs');
 
-var config = require('../packages/mendel-config');
+var config = require('../');
 var origEnv = process.env.NODE_ENV;
 var origMendelEnv = process.env.MENDEL_ENV;
 delete process.env.NODE_ENV;

@@ -4,7 +4,7 @@
     "description": "Mendel shared dependencies production use",
     "main": "trees.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "tap --no-check-coverage test/*.js"
     },
     "keywords": [
         "mendel"

@@ -4,7 +4,7 @@
 
 var t = require('tap');
 
-var MendelServerVariationWalker = require('../packages/mendel-core/tree-variation-walker-server');
+var MendelServerVariationWalker = require('../tree-variation-walker-server');
 
 t.equals(
     MendelServerVariationWalker().constructor,

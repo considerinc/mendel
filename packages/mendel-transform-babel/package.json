@@ -4,9 +4,6 @@
     "description": "Mendel transforms that uses @babel/core",
     "main": "index.js",
     "mode": "ist",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
     "keywords": [
         "mendel-ift"
     ],

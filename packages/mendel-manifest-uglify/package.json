@@ -3,9 +3,6 @@
     "version": "4.0.0-alpha.0",
     "description": "Walks all manifest and apply UglifyJS to source",
     "main": "manifest-uglify.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
     "keywords": [
         "mendel",
         "mendel-manifest-processor",

@@ -3,9 +3,6 @@
     "version": "4.0.0-alpha.0",
     "description": "JavaScript executor using VM and Mendelv2 for custom variational resolving.",
     "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
     "author": "Stephan Lee <stephanwlee@gmail.com>",
     "license": "MIT",
     "repository": {

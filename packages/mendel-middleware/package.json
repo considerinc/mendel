@@ -3,9 +3,6 @@
     "version": "4.0.0-alpha.0",
     "description": "Mendel middleware that uses manifests to output multilayer resolution of isomorphic applications.",
     "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
     "keywords": [
         "mendel",
         "production",

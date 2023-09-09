@@ -4,7 +4,7 @@
 
 var t = require('tap');
 
-var MendelWalker = require('../packages/mendel-core/tree-walker');
+var MendelWalker = require('../tree-walker');
 
 var walker = MendelWalker();
 

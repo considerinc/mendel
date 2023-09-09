@@ -4,7 +4,7 @@
 
 var t = require('tap');
 
-var deserialize = require('../packages/mendel-core/tree-deserialiser');
+var deserialize = require('../tree-deserialiser');
 
 var expected = {
     decoded: {

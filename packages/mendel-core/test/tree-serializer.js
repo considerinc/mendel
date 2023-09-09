@@ -4,7 +4,7 @@
 
 var t = require('tap');
 
-var TreeSerialiser = require('../packages/mendel-core/tree-serialiser');
+var TreeSerialiser = require('../tree-serialiser');
 
 var sut = TreeSerialiser();
 
