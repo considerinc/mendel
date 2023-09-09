@@ -20,6 +20,5 @@ if (module.parent) {
 }
 
 function writeToDOM(string) {
-    /* global document */
     document.querySelector('body').innerText = string;
 }

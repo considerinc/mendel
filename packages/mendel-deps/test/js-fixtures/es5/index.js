@@ -8,3 +8,5 @@ console.log(bar);
 
 var baz = 'baz';
 console.log(baz.toString());
+void hi;
+void foo;

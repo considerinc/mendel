@@ -212,7 +212,7 @@ class MendelCache extends EventEmitter {
      * For instance: "./node_modules/superagent/emitter" is one.
      */
     _applyModuleAlias(id, depKey, depObject) {
-        const match = id.match(/(.*\/node_modules\/[^\/]+)\/\S+$/);
+        const match = id.match(/(.*\/node_modules\/[^/]+)\/\S+$/);
         if (!match || match.length !== 2) return depObject;
         const key = path.join(match[1], depKey);
         if (!this._moduleAliasMap.has(key)) return depObject;

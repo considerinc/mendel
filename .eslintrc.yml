@@ -11,3 +11,6 @@ parserOptions:
 plugins:
     - react
 rules: {}
+settings:
+    react:
+        version: 18.0.0

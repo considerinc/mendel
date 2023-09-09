@@ -1,5 +1,5 @@
 const { SourceMapConsumer } = require('source-map');
-const regex = /(at \S* |\S*@)[\(]{0,1}(\S+)\:(\d+)\:(\d+)[\)]{0,1}$/;
+const regex = /(at \S* |\S*@)[(]{0,1}(\S+):(\d+):(\d+)[)]{0,1}$/;
 
 function parseStackTrace(rawStackTrace) {
     return rawStackTrace.split('\n').map((stackLine) => {

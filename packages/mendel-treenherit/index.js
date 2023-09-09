@@ -86,7 +86,7 @@ var requireTransform = transformTools.makeRequireTransform(
 );
 
 function isExternalModule(file) {
-    var regexp = process.platform === 'win32' ? /^(\.|\w:)/ : /^[\/.]/;
+    var regexp = process.platform === 'win32' ? /^(\.|\w:)/ : /^[/.]/;
     return !regexp.test(file);
 }
 

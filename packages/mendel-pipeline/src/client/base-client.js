@@ -111,9 +111,8 @@ class BaseMendelClient extends EventEmitter {
         if (this.client) this.client.onExit();
     }
 
-    onUnsync(entryId) {
-        // eslint-disable-line no-unused-vars
-    }
+    // eslint-disable-next-line no-unused-vars
+    onUnsync(entryId) {}
 
     onSync() {}
 

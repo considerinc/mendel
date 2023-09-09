@@ -61,7 +61,7 @@ function applyExtraOptions(b, options) {
             } else add(x, {});
 
             function add(x, opts) {
-                if (/^[\/.]/.test(x)) b.external(path.resolve(x), opts);
+                if (/^[/.]/.test(x)) b.external(path.resolve(x), opts);
                 else b.external(x, opts);
             }
         });

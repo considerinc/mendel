@@ -1,7 +1,6 @@
 /* Copyright 2015, Yahoo Inc.
    Copyrights licensed under the MIT License.
    See the accompanying LICENSE file for terms. */
-const path = require('path');
 
 module.exports = function () {
     const mendelEnv =

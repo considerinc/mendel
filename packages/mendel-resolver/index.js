@@ -46,7 +46,7 @@ class ModuleResolver {
     }
 
     static isNodeModule(name) {
-        return !/^(?:\.\.?(?:\/|$)|\/|([A-Za-z]:)?[\\\/])/.test(name);
+        return !/^(?:\.\.?(?:\/|$)|\/|([A-Za-z]:)?[\\/])/.test(name);
     }
 
     setBaseDir(basedir) {
@@ -279,7 +279,7 @@ class ModuleResolver {
             prefix = '\\\\';
         }
 
-        const splitRe = process.platform === 'win32' ? /[\/\\]/ : /\/+/;
+        const splitRe = process.platform === 'win32' ? /[/\\]/ : /\/+/;
         const parts = start.split(splitRe);
 
         const dirs = [];

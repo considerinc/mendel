@@ -6,7 +6,7 @@ class FsWatcher {
     constructor({ projectRoot, ignore }, cacheManager) {
         this.cacheManager = cacheManager;
         // Default ignore .dot files.
-        this.ignored = (ignore || []).concat([/[\/\\]\./]);
+        this.ignored = (ignore || []).concat([/[/\\]\./]);
 
         // file size priority
         this.isInitialized = false;

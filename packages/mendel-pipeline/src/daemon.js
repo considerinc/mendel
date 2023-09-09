@@ -114,7 +114,7 @@ module.exports = class MendelPipelineDaemon extends EventEmitter {
         Object.keys(config.env)
             .concat('development')
             .forEach((environment) => {
-                if (!this.environments.hasOwnProperty(environment)) {
+                if (!Object.hasOwn(this.environments, environment)) {
                     const envConf = mendelConfig(
                         Object.assign({}, options, { environment })
                     );

@@ -1,8 +1,8 @@
 class Printer {
     constructor() {}
 
+    // eslint-disable-next-line no-unused-vars
     print(data) {
-        // eslint-disable-line
         throw new Error('Please implement me.');
     }
 }

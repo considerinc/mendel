@@ -147,7 +147,7 @@ function removeOrphans(manifest, logName) {
         bundle.data.forEach(function (module) {
             Object.keys(module.deps).forEach(function (key) {
                 var value = module.deps[key];
-                if (visitedIndexes.hasOwnProperty(value)) {
+                if (Object.hasOwn(visitedIndexes, value)) {
                     visitBundle(value);
                 }
             });
@@ -165,7 +165,7 @@ function removeOrphans(manifest, logName) {
     filterFilesFromManifest(
         manifest,
         function (file) {
-            return visitedIndexes.hasOwnProperty(file) && visitedIndexes[file];
+            return Object.hasOwn(visitedIndexes, file) && visitedIndexes[file];
         },
         logName
     );

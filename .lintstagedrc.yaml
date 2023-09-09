@@ -1,1 +1,6 @@
-'*': prettier --write
+concurrent:
+'*!(*.js|*.mjs|*.ts|*.jsx|*.tsx)':
+    - prettier --write
+'*(*.js|*.mjs|*.ts|*.jsx|*.tsx)':
+    - prettier --write
+    - eslint --fix

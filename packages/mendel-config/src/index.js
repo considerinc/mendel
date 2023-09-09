@@ -99,7 +99,7 @@ function onlyKeys(oldObj, whitelist) {
 function deepMerge(dest, src) {
     for (var key in src) {
         // istanbul ignore else
-        if (src.hasOwnProperty(key)) {
+        if (Object.hasOwn(src, key)) {
             if (isObject(dest[key]) && isObject(src[key])) {
                 dest[key] = deepMerge(dest[key], src[key]);
             } else if (typeof src[key] !== 'undefined') {

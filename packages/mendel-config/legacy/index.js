@@ -66,7 +66,7 @@ function parseBundles(bundles) {
 function mergeRecursive(dest, src) {
     for (var key in src) {
         // istanbul ignore else
-        if (src.hasOwnProperty(key)) {
+        if (Object.hasOwn(src, key)) {
             if (isObject(dest[key]) && isObject(src[key])) {
                 dest[key] = mergeRecursive(dest[key], src[key]);
             } else {

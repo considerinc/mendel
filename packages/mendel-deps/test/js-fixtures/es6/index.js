@@ -5,3 +5,4 @@ function foo() {
 }
 
 console.log(hi);
+void foo;
