@@ -654,7 +654,7 @@ For that reason, `mendel-core` generates a hash for each bundle. The hash is bas
 Using hashes guarantees that we will cache bust only the required bundle on every deployment. It is very common for large applications to split the logic into multiple bundles and also common to do heavy development in variations. This allows developers to use Continuous Integration, Continuous Deployment and Continuous Delivery and rest assured that most users are not getting cache busted constantly.
 
 Source code and details on Mendel Hashing is available at:
-https://github.com/yahoo/mendel/tree/master/packages/mendel-core
+https://github.com/considerinc/mendel/tree/master/packages/mendel-core
 
 
 #### **A) Resolving bundle URL on HTML request:**

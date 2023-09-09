@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yahoo/mendel.git"
+    "url": "git+https://github.com/considerinc/mendel.git"
   },
   "keywords": [
     "mendel",
@@ -20,9 +20,9 @@
   "author": "Irae Carvalho <irae@irae.pro.br>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/yahoo/mendel/issues"
+    "url": "https://github.com/considerinc/mendel/issues"
   },
-  "homepage": "https://github.com/yahoo/mendel#readme",
+  "homepage": "https://github.com/considerinc/mendel#readme",
   "dependencies": {
     "@babel/core": "^7.22.9",
     "babel-plugin-istanbul": "^6.1.1",

@@ -18,7 +18,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yahoo/mendel"
+    "url": "https://github.com/considerinc/mendel"
   },
   "dependencies": {
     "browser-pack": "^6.0.1",

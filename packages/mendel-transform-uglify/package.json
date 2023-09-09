@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yahoo/mendel.git"
+    "url": "git+https://github.com/considerinc/mendel.git"
   },
   "keywords": [
     "mendel",
@@ -18,9 +18,9 @@
   "author": "Irae Carvalho <irae@irae.pro.br>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/yahoo/mendel/issues"
+    "url": "https://github.com/considerinc/mendel/issues"
   },
-  "homepage": "https://github.com/yahoo/mendel#readme",
+  "homepage": "https://github.com/considerinc/mendel#readme",
   "dependencies": {
     "debug": "^4.3.4",
     "uglify-js": "^3.17.4"
