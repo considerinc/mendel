@@ -1,6 +1,6 @@
 const path = require('path');
-const {EventEmitter} = require('events');
-const {Minimatch} = require('minimatch');
+const { EventEmitter } = require('events');
+const { Minimatch } = require('minimatch');
 const verbose = require('debug')('verbose:mendel:cache');
 
 const Entry = require('./entry');
@@ -32,20 +32,20 @@ class MendelCache extends EventEmitter {
         this._baseConfig = config.baseConfig;
         this._variations = config.variationConfig.variations;
         this._shimPathToId = new Map();
-        Object.keys(config.shim).forEach(shimId => {
+        Object.keys(config.shim).forEach((shimId) => {
             this._shimPathToId.set(config.shim[shimId], shimId);
             this._shimPathToId.set(shimId, shimId);
         });
         this._types = config.types;
 
-        const ignores = Array.isArray(config.ignores) ?
-            config.ignores : [config.ignores];
-        this._ignores = ignores.map(ignore => {
+        const ignores = Array.isArray(config.ignores)
+            ? config.ignores
+            : [config.ignores];
+        this._ignores = ignores.map((ignore) => {
             const negate = ignore[0] === '!';
             ignore = ignore.slice(negate);
             let pattern = negate ? '!' : '';
-            if (!ignore.startsWith('**/'))
-                pattern += '**/';
+            if (!ignore.startsWith('**/')) pattern += '**/';
             pattern += ignore;
             return new Minimatch(pattern);
         });
@@ -54,15 +54,18 @@ class MendelCache extends EventEmitter {
     _testForIgnore(id) {
         if (id.startsWith('./')) id = id.slice(2);
         const globs = this._ignores;
-        return globs.filter(({negate}) => !negate).some(g => g.match(id)) &&
-            globs.filter(({negate}) => negate).every(g => g.match(id));
+        return (
+            globs.filter(({ negate }) => !negate).some((g) => g.match(id)) &&
+            globs.filter(({ negate }) => negate).every((g) => g.match(id))
+        );
     }
 
     // Get Type only based on the entryId. IST can convert the types.
     getInitialType(id) {
         const nodeModule = isNodeModule(id);
         // Find type as if node module was a source
-        if (nodeModule) id = '.' + id.slice(id.lastIndexOf('node_modules') + 12);
+        if (nodeModule)
+            id = '.' + id.slice(id.lastIndexOf('node_modules') + 12);
         const type = Entry.getTypeForConfig(this._types, id);
         return {
             type: nodeModule ? 'node_modules' : type,
@@ -128,13 +131,15 @@ class MendelCache extends EventEmitter {
     invariantTwoPackagesSameTarget(packageNormId, targetNormId) {
         const existing = this._packageMap.get(targetNormId);
         if (existing && existing.mapToId !== packageNormId) {
-            throw new Error([
-                'Invariant: Found 2 `package.json` targeting same normalizedId',
-                '\n',
-                `${packageNormId} -> ${targetNormId}`,
-                `${existing.mapToId} -> ${targetNormId}`,
-                '\n',
-            ].join(' '));
+            throw new Error(
+                [
+                    'Invariant: Found 2 `package.json` targeting same normalizedId',
+                    '\n',
+                    `${packageNormId} -> ${targetNormId}`,
+                    `${existing.mapToId} -> ${targetNormId}`,
+                    '\n',
+                ].join(' ')
+            );
         }
     }
 
@@ -195,7 +200,7 @@ class MendelCache extends EventEmitter {
         if (!this.hasEntry(id)) return;
         const entry = this.getEntry(id);
         entry.error = error;
-        this.emit('entryErrored', {id, error});
+        this.emit('entryErrored', { id, error });
     }
 
     /**
@@ -212,12 +217,13 @@ class MendelCache extends EventEmitter {
         const key = path.join(match[1], depKey);
         if (!this._moduleAliasMap.has(key)) return depObject;
 
-        if (typeof depObject !== 'object') depObject = {
-            main: false,
-            browser: false,
-        };
+        if (typeof depObject !== 'object')
+            depObject = {
+                main: false,
+                browser: false,
+            };
 
-        const {to, runtime} = this._moduleAliasMap.get(key);
+        const { to, runtime } = this._moduleAliasMap.get(key);
         depObject[runtime] = to;
         return depObject;
     }
@@ -239,68 +245,72 @@ class MendelCache extends EventEmitter {
         }
 
         RUNTIME
-        // dep can have false as a value in which case indicates not found modules
-        .filter(runtime => oDep[runtime])
-        .forEach(runtime => {
-            const dep = oDep[runtime];
-            if (typeof dep === 'string') {
-                if (isPkgModule && !isIsomorphic) {
-                    const name = path.dirname(oDep.packageJson);
+            // dep can have false as a value in which case indicates not found modules
+            .filter((runtime) => oDep[runtime])
+            .forEach((runtime) => {
+                const dep = oDep[runtime];
+                if (typeof dep === 'string') {
+                    if (isPkgModule && !isIsomorphic) {
+                        const name = path.dirname(oDep.packageJson);
 
-                    name && this._packageMap.set(dep, {
-                        mapToId: name,
-                        runtime,
+                        name &&
+                            this._packageMap.set(dep, {
+                                mapToId: name,
+                                runtime,
+                            });
+                    }
+
+                    this._requestEntry(dep);
+                } else {
+                    // This code path when dependency in a runtime
+                    // contains a mapping of source to another within a module.
+                    // It often pertains to node modules like superagent.
+                    // https://github.com/visionmedia/superagent/blob/36ce8782842c2fee402013ff0650d7f8b310e3a7/package.json#L53-L57
+                    Object.keys(dep).forEach((fromDep) => {
+                        const toDep = dep[fromDep];
+                        if (typeof toDep === 'undefined') {
+                            return;
+                        } else if (toDep === false) {
+                            this._depIgnoreMap.set(
+                                fromDep,
+                                (
+                                    this._depIgnoreMap.get(fromDep) || new Set()
+                                ).add(runtime)
+                            );
+                        } else if (fromDep.indexOf('./') !== 0) {
+                            // This is the case where node module mapping exists
+                            // but it points to unexisting module.
+                            // e.g.,
+                            // "browser": {
+                            //      "unexisting": "existing"
+                            // }
+                            // and in the code, `require('unexisting');` should resolve
+                            // to `existing`.
+                            this._moduleAliasMap.set(
+                                // Makes something like './node_modules/module'
+                                path.join(
+                                    path.dirname(oDep.packageJson),
+                                    fromDep
+                                ),
+                                {
+                                    to: toDep,
+                                    runtime,
+                                }
+                            );
+                        } else {
+                            this._packageMap.set(toDep, {
+                                mapToId: this.getNormalizedId(fromDep),
+                                runtime,
+                            });
+                            this._packageMap.set(fromDep, {
+                                mapToId: this.getNormalizedId(fromDep),
+                                runtime: 'main',
+                            });
+                        }
+                        this._requestEntry(toDep);
                     });
                 }
-
-                this._requestEntry(dep);
-            } else {
-                // This code path when dependency in a runtime
-                // contains a mapping of source to another within a module.
-                // It often pertains to node modules like superagent.
-                // https://github.com/visionmedia/superagent/blob/36ce8782842c2fee402013ff0650d7f8b310e3a7/package.json#L53-L57
-                Object.keys(dep)
-                .forEach(fromDep => {
-                    const toDep = dep[fromDep];
-                    if (typeof toDep === 'undefined') {
-                        return;
-                    } else if (toDep === false) {
-                        this._depIgnoreMap.set(
-                            fromDep,
-                            (this._depIgnoreMap.get(fromDep) || new Set())
-                                .add(runtime)
-                        );
-                    } else if (fromDep.indexOf('./') !== 0) {
-                        // This is the case where node module mapping exists
-                        // but it points to unexisting module.
-                        // e.g.,
-                        // "browser": {
-                        //      "unexisting": "existing"
-                        // }
-                        // and in the code, `require('unexisting');` should resolve
-                        // to `existing`.
-                        this._moduleAliasMap.set(
-                            // Makes something like './node_modules/module'
-                            path.join(path.dirname(oDep.packageJson), fromDep),
-                            {
-                                to: toDep,
-                                runtime,
-                            }
-                        );
-                    } else {
-                        this._packageMap.set(toDep, {
-                            mapToId: this.getNormalizedId(fromDep),
-                            runtime,
-                        });
-                        this._packageMap.set(fromDep, {
-                            mapToId: this.getNormalizedId(fromDep),
-                            runtime: 'main',
-                        });
-                    }
-                    this._requestEntry(toDep);
-                });
-            }
-        });
+            });
     }
 
     setSource(id, source, deps, map) {
@@ -308,34 +318,40 @@ class MendelCache extends EventEmitter {
         const normDep = new Dependencies();
 
         Object.keys(deps)
-        // mod = module name or require literal
-        .forEach(mod => {
-            const dep = deps[mod] = this._applyModuleAlias(id, mod, deps[mod]);
-            if (typeof dep === 'object' && this._depIgnoreMap.has(dep.main)) {
-                const set = this._depIgnoreMap.get(dep.main);
-                set.forEach(runtime => {
-                    dep[runtime] = false;
+            // mod = module name or require literal
+            .forEach((mod) => {
+                const dep = (deps[mod] = this._applyModuleAlias(
+                    id,
+                    mod,
+                    deps[mod]
+                ));
+                if (
+                    typeof dep === 'object' &&
+                    this._depIgnoreMap.has(dep.main)
+                ) {
+                    const set = this._depIgnoreMap.get(dep.main);
+                    set.forEach((runtime) => {
+                        dep[runtime] = false;
+                    });
+                }
+                this._handleDependency(dep);
+
+                normDep[mod] = new Dependency();
+                RUNTIME.forEach((runtime) => {
+                    let rtDep = dep && dep[runtime];
+                    if (rtDep === false) return (normDep[mod][runtime] = false);
+
+                    // When we add entries, we add them index them by normalizedId.
+                    // Because of normalizedId, even in the package.json case where multiple
+                    // runtimes can point to different sources, we can use normalizedId
+                    // to map it back, thus, it should be sufficient to use any version of dep
+                    // to generate normalizedId when we store.
+                    // The resolver will pick the right runtime entry.
+                    // main is "false" when depdenecy is a node's core module.
+                    rtDep = typeof rtDep === 'string' ? rtDep : dep.main;
+                    normDep[mod][runtime] = this.getNormalizedId(rtDep || mod);
                 });
-            }
-            this._handleDependency(dep);
-
-            normDep[mod] = new Dependency();
-            RUNTIME.forEach(runtime => {
-                let rtDep = dep && dep[runtime];
-                if (rtDep === false)
-                    return normDep[mod][runtime] = false;
-
-                // When we add entries, we add them index them by normalizedId.
-                // Because of normalizedId, even in the package.json case where multiple
-                // runtimes can point to different sources, we can use normalizedId
-                // to map it back, thus, it should be sufficient to use any version of dep
-                // to generate normalizedId when we store.
-                // The resolver will pick the right runtime entry.
-                // main is "false" when depdenecy is a node's core module.
-                rtDep = typeof rtDep === 'string' ? rtDep : dep.main;
-                normDep[mod][runtime] = this.getNormalizedId(rtDep || mod);
             });
-        });
 
         entry.setSource(source, normDep, map);
     }
@@ -352,7 +368,7 @@ class MendelCache extends EventEmitter {
     }
 
     debug() {
-        Array.from(this._store.values()).forEach(entry => {
+        Array.from(this._store.values()).forEach((entry) => {
             console.log(entry.id);
             console.log('  norm: ' + entry.normalizedId);
             console.log('  var: ' + entry.variation);
@@ -368,8 +384,6 @@ function isNodeModule(id) {
 
 module.exports = MendelCache;
 
-class Dependency {
-}
+class Dependency {}
 
-class Dependencies {
-}
+class Dependencies {}

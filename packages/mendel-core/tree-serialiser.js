@@ -3,13 +3,15 @@
    Copyrights licensed under the MIT License.
    See the accompanying LICENSE file for terms. */
 
-var Concentrate = require("concentrate");
-var crypto = require("crypto");
-var util = require("util");
+var Concentrate = require('concentrate');
+var crypto = require('crypto');
+var util = require('util');
 var URLSafeBase64 = require('urlsafe-base64');
 
 function TreeSerialiser() {
-    if (!(this instanceof TreeSerialiser)) { return new TreeSerialiser(); }
+    if (!(this instanceof TreeSerialiser)) {
+        return new TreeSerialiser();
+    }
 
     Concentrate.call(this);
 
@@ -22,21 +24,21 @@ function TreeSerialiser() {
 
 util.inherits(TreeSerialiser, Concentrate);
 
-TreeSerialiser.prototype._metadata = function() {
-    if (this._meta) throw new Error("Double metadata");
+TreeSerialiser.prototype._metadata = function () {
+    if (this._meta) throw new Error('Double metadata');
 
-    var name = "mendel";
+    var name = 'mendel';
     var version = 1;
     this._meta = true;
     return this.string(name).uint8(version);
 };
 
-TreeSerialiser.prototype.pushBranch = function(index) {
+TreeSerialiser.prototype.pushBranch = function (index) {
     if (this._result) throw new Error("Can't pushPath after result");
     return this.uint8(index);
 };
 
-TreeSerialiser.prototype.pushFileHash = function(sha) {
+TreeSerialiser.prototype.pushFileHash = function (sha) {
     if (this._result) throw new Error("Can't pushFileHash after result");
     if (Buffer.isBuffer(sha)) {
         this._files++;
@@ -45,7 +47,7 @@ TreeSerialiser.prototype.pushFileHash = function(sha) {
     return this;
 };
 
-TreeSerialiser.prototype.result = function() {
+TreeSerialiser.prototype.result = function () {
     if (this._result) return this._result;
 
     this.uint8(255); // signals end of branches

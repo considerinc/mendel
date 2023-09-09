@@ -19,7 +19,7 @@ class Worker {
 
         process.title = `Mendel ${this._name} Helper`;
         // Event binding
-        process.on('message', args => this._onMessage(args));
+        process.on('message', (args) => this._onMessage(args));
         process.on('exit', () => {
             if (this._subscriptions && this._subscriptions.onExit) {
                 this._subscriptions.onExit();
@@ -29,15 +29,17 @@ class Worker {
         // childProcess.kill triggers this. We want to gracefully exit
         process.on('SIGTERM', () => process.exit(0));
 
-        this._subscriptions = require(workerModule)(arg => {
+        this._subscriptions = require(workerModule)((arg) => {
             this.dispatchDone(arg);
         }, options);
         // Validation
         if (!this._subscriptions[Protocol.START]) {
-            throw new Error([
-                `Required subscriber for "${Protocol.START}" missing`,
-                `in ${this.constructor.name}`,
-            ].join(' '));
+            throw new Error(
+                [
+                    `Required subscriber for "${Protocol.START}" missing`,
+                    `in ${this.constructor.name}`,
+                ].join(' ')
+            );
         }
     }
 
@@ -45,7 +47,7 @@ class Worker {
         this._send(Protocol.DONE, result);
     }
 
-    _onMessage({type, args}) {
+    _onMessage({ type, args }) {
         const subscriber = this._subscriptions[type];
         if (!subscriber) return;
 
@@ -58,7 +60,7 @@ class Worker {
                 if (type === Protocol.START) {
                     artifact = artifact.then(this.dispatchDone.bind(this));
                 }
-                artifact.catch(e => this._onError(e));
+                artifact.catch((e) => this._onError(e));
             }
         } catch (e) {
             this._onError(e);
@@ -66,8 +68,8 @@ class Worker {
     }
 
     _onError(error) {
-        const {stack, message} = error;
-        this._send(Protocol.ERROR, {stack, message});
+        const { stack, message } = error;
+        this._send(Protocol.ERROR, { stack, message });
     }
 
     _send(type, message) {

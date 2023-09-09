@@ -16,7 +16,7 @@ function MendelWalker(_lookupChains, _base, _hash) {
     }
 }
 
-MendelWalker.prototype.find = function(module) {
+MendelWalker.prototype.find = function (module) {
     var resolved;
     if (this.deps[module.index]) {
         return this.deps[module.index];
@@ -38,11 +38,11 @@ MendelWalker.prototype.find = function(module) {
     return resolved;
 };
 
-MendelWalker.prototype._resolveBranch = function() {
+MendelWalker.prototype._resolveBranch = function () {
     throw new Error('You should extend and implement _resolveBranch');
 };
 
-MendelWalker.prototype.found = function() {
+MendelWalker.prototype.found = function () {
     var found = {
         deps: this.deps,
     };

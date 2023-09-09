@@ -1,26 +1,26 @@
 {
-  "name": "mendel-manifest-uglify",
-  "version": "4.0.0-alpha.0",
-  "description": "Walks all manifest and apply UglifyJS to source",
-  "main": "manifest-uglify.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "mendel",
-    "mendel-manifest-processor",
-    "compress",
-    "uglify",
-    "build"
-  ],
-  "author": "Irae Carvalho <irae@irae.pro.br>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/considerinc/mendel"
-  },
-  "dependencies": {
-    "debug": "^4.3.4",
-    "uglify-js": "^3.17.4"
-  }
+    "name": "mendel-manifest-uglify",
+    "version": "4.0.0-alpha.0",
+    "description": "Walks all manifest and apply UglifyJS to source",
+    "main": "manifest-uglify.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "mendel",
+        "mendel-manifest-processor",
+        "compress",
+        "uglify",
+        "build"
+    ],
+    "author": "Irae Carvalho <irae@irae.pro.br>",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/considerinc/mendel"
+    },
+    "dependencies": {
+        "debug": "^4.3.4",
+        "uglify-js": "^3.17.4"
+    }
 }

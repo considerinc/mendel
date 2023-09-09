@@ -3,16 +3,16 @@ const parseConfig = require('mendel-config');
 const resolveVariations = require('mendel-development/resolve-variations');
 const MendelClient = require('mendel-pipeline/client');
 const Stream = require('stream');
-const {execWithRegistry} = require('mendel-exec');
+const { execWithRegistry } = require('mendel-exec');
 const path = require('path');
 
 module.exports = MendelMiddleware;
 
 function MendelMiddleware(opts) {
-    const client = new MendelClient(Object.assign({}, opts, {noout: true}));
+    const client = new MendelClient(Object.assign({}, opts, { noout: true }));
     client.run();
     const config = parseConfig(opts);
-    const {variations: varsConfig} = config.variationConfig;
+    const { variations: varsConfig } = config.variationConfig;
     const route = config.routeConfig.variation || '/mendel/:variations/:bundle';
     const getPath = pathToRegExp.compile(route);
     const keys = [];
@@ -20,34 +20,39 @@ function MendelMiddleware(opts) {
     // i.e., "variations", "bundle"
     const bundleRoute = pathToRegExp(route, keys);
     const bundles = new Set();
-    config.bundles.forEach(bundle => bundles.add(bundle.id));
+    config.bundles.forEach((bundle) => bundles.add(bundle.id));
 
-    return function(req, res, next) {
-        req.mendel = req.mendel || {variations: false};
+    return function (req, res, next) {
+        req.mendel = req.mendel || { variations: false };
         req.mendel.getBundleEntries = function getBundleEntries(bundleId) {
-            const bundleConfig = config.bundles.find(({id}) => id === bundleId);
+            const bundleConfig = config.bundles.find(
+                ({ id }) => id === bundleId
+            );
             if (!bundleConfig)
                 throw new Error(`No bundle with id ${bundleId} found`);
 
             // Without bundling yet, we need to get normalizedIds of entries/entrances
             const normIds = new Set();
-            client.registry.getEntriesByGlob(bundleConfig.entries || [])
-                .forEach(entry => normIds.add(entry.normalizedId));
+            client.registry
+                .getEntriesByGlob(bundleConfig.entries || [])
+                .forEach((entry) => normIds.add(entry.normalizedId));
             return Array.from(normIds.keys());
         };
 
         req.mendel.setVariations = function setVariations(variations) {
             // You can set variation only once
             if (req.mendel.variations === false) {
-                let validVars = variations.filter(variation => {
-                    return varsConfig.some(({id}) => id === variation);
+                let validVars = variations.filter((variation) => {
+                    return varsConfig.some(({ id }) => id === variation);
                 });
 
                 if (config.verbose && validVars.length !== variations.length) {
-                    console.log([
-                        `[WARN] Certain variations in ${variations}`,
-                        'does not exist. Defaulted to base variation.',
-                    ].join(' '));
+                    console.log(
+                        [
+                            `[WARN] Certain variations in ${variations}`,
+                            'does not exist. Defaulted to base variation.',
+                        ].join(' ')
+                    );
                 }
 
                 if (!validVars.length) {
@@ -56,30 +61,35 @@ function MendelMiddleware(opts) {
 
                 req.mendel.variations = validVars;
             } else {
-                console.error('You cannot set variation more than once per request'); //eslint-disable-line max-len
+                console.error(
+                    'You cannot set variation more than once per request'
+                ); //eslint-disable-line max-len
             }
             return req.mendel.variations;
         };
 
         req.mendel.getURL = function getURL(bundleId) {
-            const variations = req.mendel.variations.join(',') ||
-                config.baseConfig.id;
-            return getPath({bundle: bundleId, variations});
+            const variations =
+                req.mendel.variations.join(',') || config.baseConfig.id;
+            return getPath({ bundle: bundleId, variations });
         };
 
-        req.mendel.resolver = function(bundles, variations) {
+        req.mendel.resolver = function (bundles, variations) {
             return {
                 require: function mendelRequire(entryId) {
                     variations = variations ||
-                        req.mendel.variations ||
-                        [config.baseConfig.dir];
+                        req.mendel.variations || [config.baseConfig.dir];
 
                     return execWithRegistry(
                         client.registry,
                         entryId,
-                        variations.map(variation => {
-                            return varsConfig.find(({id}) => id === variation);
-                        }).filter(Boolean)
+                        variations
+                            .map((variation) => {
+                                return varsConfig.find(
+                                    ({ id }) => id === variation
+                                );
+                            })
+                            .filter(Boolean)
                     );
                 },
             };
@@ -117,27 +127,35 @@ function MendelMiddleware(opts) {
             res.header('content-type', 'application/javascript');
         }
 
-        client.build(bundle, vars)
-        .then(bundle => {
-            if (bundle instanceof Stream) return bundle.pipe(res);
-            else if (typeof bundle === 'string') return res.send(bundle).end();
+        client
+            .build(bundle, vars)
+            .then((bundle) => {
+                if (bundle instanceof Stream) return bundle.pipe(res);
+                else if (typeof bundle === 'string')
+                    return res.send(bundle).end();
 
-            console.error(
-                'Build is imcompatible with middleware.',
-                'Bundle: "' + bundle + '"',
-                'Output is: ' + typeof bundle
-            );
+                console.error(
+                    'Build is imcompatible with middleware.',
+                    'Bundle: "' + bundle + '"',
+                    'Output is: ' + typeof bundle
+                );
 
-            res.status(500)
-            .send('console.error("Error compiling client bundle. Please check Mendel output")') // eslint-disable-line max-len
-            .end();
-        })
-        .catch(e => {
-            console.error(e.stack);
-            res.status(500)
-            .send('console.error("Error compiling client bundle",' + JSON.stringify({stack: e.stack}, null, 2) + ')') // eslint-disable-line max-len
-            .end();
-        });
+                res.status(500)
+                    .send(
+                        'console.error("Error compiling client bundle. Please check Mendel output")'
+                    ) // eslint-disable-line max-len
+                    .end();
+            })
+            .catch((e) => {
+                console.error(e.stack);
+                res.status(500)
+                    .send(
+                        'console.error("Error compiling client bundle",' +
+                            JSON.stringify({ stack: e.stack }, null, 2) +
+                            ')'
+                    ) // eslint-disable-line max-len
+                    .end();
+            });
     };
 }
 

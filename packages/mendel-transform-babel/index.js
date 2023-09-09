@@ -27,11 +27,11 @@ function optionDepPath(arr, optionName) {
     });
 }
 
-module.exports = function ({source, filename, map: inputSourceMap}, options) {
+module.exports = function ({ source, filename, map: inputSourceMap }, options) {
     options.presets = optionDepPath(options.presets, 'preset');
     options.plugins = optionDepPath(options.plugins, 'plugin');
 
-    const {code, map} = babel.transform(
+    const { code, map } = babel.transform(
         source,
         Object.assign(
             {
@@ -46,5 +46,5 @@ module.exports = function ({source, filename, map: inputSourceMap}, options) {
         )
     );
 
-    return {source: code, map};
+    return { source: code, map };
 };

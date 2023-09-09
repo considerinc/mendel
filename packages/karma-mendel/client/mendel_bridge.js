@@ -4,7 +4,7 @@
 
 /* global __mendel_module__, __mendel_config__ */
 
-(async function(window, modules, config, cache) {
+(async function (window, modules, config, cache) {
     // Save the require from previous bundle to this closure if any
     var previousRequire = typeof require == 'function' && require;
     var variations = config.variations;
@@ -13,7 +13,7 @@
 
     function mendelRequire(name, variationId, jumped, calleeModule) {
         if (!cache[name] && variationId) {
-            var allByNormId = Object.keys(modules).reduce(function(
+            var allByNormId = Object.keys(modules).reduce(function (
                 normMatches,
                 id
             ) {
@@ -21,9 +21,8 @@
                     normMatches.push(modules[id]);
                 }
                 return normMatches;
-            },
-            []);
-            var variation = variations.find(function(_) {
+            }, []);
+            var variation = variations.find(function (_) {
                 return _.id === variationId;
             });
             var found;
@@ -31,7 +30,7 @@
                 var dir = variation.chain[i];
                 found =
                     found ||
-                    allByNormId.find(function(_) {
+                    allByNormId.find(function (_) {
                         return _.variation === dir;
                     });
             }
@@ -53,14 +52,19 @@
                 // many times as there are bundles until the module is found or
                 // we exhaust the require chain.
                 if (previousRequire) return previousRequire(name, true);
-                var err = new Error('Cannot find module "' + name + '"'+ (calleeModule? ' from: "'+calleeModule+'"': ''));
+                var err = new Error(
+                    'Cannot find module "' +
+                        name +
+                        '"' +
+                        (calleeModule ? ' from: "' + calleeModule + '"' : '')
+                );
                 err.code = 'MODULE_NOT_FOUND';
                 throw err;
             }
-            var m = (cache[name] = {exports: {}});
+            var m = (cache[name] = { exports: {} });
             modules[name].moduleFn.call(
                 m.exports,
-                function(x) {
+                function (x) {
                     var id = modules[name].deps[x];
                     return mendelRequire(id ? id : x, variationId, false, name);
                 },
@@ -73,10 +77,10 @@
 
     // Run entry modules
     Object.keys(modules)
-        .filter(function(id) {
+        .filter(function (id) {
             return Boolean(modules[id].entry);
         })
-        .sort(function(aId, bId) {
+        .sort(function (aId, bId) {
             var a = modules[aId];
             var b = modules[bId];
             if (a.variation === baseDir) {
@@ -87,7 +91,7 @@
             }
             return 0;
         })
-        .forEach(function(id) {
+        .forEach(function (id) {
             var module = modules[id];
             var match = variationMatches(variations, module.id);
             if (match) {
@@ -100,8 +104,8 @@
     function variationMatches(variations, path) {
         if (path.indexOf('node_modules') >= 0) return;
         var result;
-        variations.some(function(variation) {
-            return variation.chain.some(function(dir) {
+        variations.some(function (variation) {
+            return variation.chain.some(function (dir) {
                 var parts = path.split(new RegExp('/' + dir + '/'));
                 var found = parts.length > 1;
                 if (found)

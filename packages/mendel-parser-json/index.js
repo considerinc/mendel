@@ -1,4 +1,4 @@
-function JSONParser({source} /*, options */) {
+function JSONParser({ source } /*, options */) {
     return {
         source: `module.exports = ${source}`,
     };

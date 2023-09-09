@@ -1,8 +1,8 @@
 class Printer {
-    constructor() {
-    }
+    constructor() {}
 
-    print(data) { // eslint-disable-line
+    print(data) {
+        // eslint-disable-line
         throw new Error('Please implement me.');
     }
 }

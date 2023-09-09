@@ -16,7 +16,7 @@ function _wrap(src) {
     return wrapper[0] + src + wrapper[1];
 }
 
-function replaceRequiresOnSource (destinationPath, src, dirs, wrap) {
+function replaceRequiresOnSource(destinationPath, src, dirs, wrap) {
     var opts = {
         ecmaVersion: 6,
         allowReturnOutsideFunction: true,
@@ -24,15 +24,15 @@ function replaceRequiresOnSource (destinationPath, src, dirs, wrap) {
     var _src = falafel(src, opts, function (node) {
         if (isRequire(node)) {
             var module = node.arguments[0].value;
-            var match = variationMatches([{chain: dirs}], module);
+            var match = variationMatches([{ chain: dirs }], module);
 
             if (match) {
                 node.update("__mendel_require__('" + match.file + "')");
             } else if (isAbsolutePath(module)) {
                 node.update(
-                    "require('"+
-                    path.relative(path.dirname(destinationPath), module)+
-                    "')"
+                    "require('" +
+                        path.relative(path.dirname(destinationPath), module) +
+                        "')"
                 );
             }
         }
@@ -46,9 +46,7 @@ module.exports.wrapper = wrapper;
 module.exports.wrap = _wrap;
 
 // isAbsolutePath copied from browserify MIT licenced source code
-function isAbsolutePath (file) {
-    var regexp = process.platform === 'win32' ?
-        /^\w:/ :
-        /^\//;
+function isAbsolutePath(file) {
+    var regexp = process.platform === 'win32' ? /^\w:/ : /^\//;
     return regexp.test(file);
 }

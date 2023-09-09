@@ -1,6 +1,6 @@
 // npx tap --coverage-map=.tap.coverage.map.js ./test/some-file.js
 
-const {relative} = require('node:path');
+const { relative } = require('node:path');
 
 module.exports = function (testFile) {
     return map[relative(__dirname, testFile)] || [];

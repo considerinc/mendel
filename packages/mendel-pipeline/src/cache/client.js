@@ -10,7 +10,7 @@ const verbose = require('debug')('verbose:mendel:net:client');
 const colors = require('chalk');
 
 class CacheClient extends EventEmitter {
-    constructor({cacheConnection, environment}, registry) {
+    constructor({ cacheConnection, environment }, registry) {
         super();
 
         this.registry = registry;
@@ -38,7 +38,7 @@ class CacheClient extends EventEmitter {
         this.connection.end();
     }
 
-    connect(isRetry=false) {
+    connect(isRetry = false) {
         verbose('connecting with params', this.cacheConnection);
         const conn = network.getClient(this.cacheConnection);
         this.connection = conn;
@@ -46,44 +46,41 @@ class CacheClient extends EventEmitter {
         conn.on('data', (data) => {
             try {
                 data = JSON.parse(data);
-            } catch(e) {
+            } catch (e) {
                 error(e);
             }
             if (!data || !data.type) return;
 
             switch (data.type) {
-                case 'addEntry':
-                    {
-                        this.registry.addEntry(data.entry);
-                        verbose('got', data.entry.id);
-                        if (typeof data.totalEntries === 'number') {
-                            this.checkStatus(data.totalEntries);
-                        }
-                        break;
+                case 'addEntry': {
+                    this.registry.addEntry(data.entry);
+                    verbose('got', data.entry.id);
+                    if (typeof data.totalEntries === 'number') {
+                        this.checkStatus(data.totalEntries);
                     }
-                case 'removeEntry':
-                    {
-                        const unsynced = this.synced ? true : false;
-                        this.synced = false;
-                        this.registry.removeEntry(data.id);
-                        if (unsynced) this.emit('unsync', data.id);
-                        break;
-                    }
-                case 'errorEntry':
-                    {
-                        const unsynced = this.synced ? true : false;
-                        this.synced = false;
-                        this.registry.removeEntry(data.id);
-                        if (unsynced) this.emit('unsync', data.id);
+                    break;
+                }
+                case 'removeEntry': {
+                    const unsynced = this.synced ? true : false;
+                    this.synced = false;
+                    this.registry.removeEntry(data.id);
+                    if (unsynced) this.emit('unsync', data.id);
+                    break;
+                }
+                case 'errorEntry': {
+                    const unsynced = this.synced ? true : false;
+                    this.synced = false;
+                    this.registry.removeEntry(data.id);
+                    if (unsynced) this.emit('unsync', data.id);
 
-                        console.error(
-                            colors.red(
-                                `[Mendel] Errored while parsing ${data.id}\n`
-                            ),
-                            data.error.stack
-                        );
-                        break;
-                    }
+                    console.error(
+                        colors.red(
+                            `[Mendel] Errored while parsing ${data.id}\n`
+                        ),
+                        data.error.stack
+                    );
+                    break;
+                }
                 default:
                     break;
             }
@@ -107,10 +104,12 @@ class CacheClient extends EventEmitter {
             if (this.closeReqeusted) return;
 
             if (!isRetry) {
-                debug([
-                    'Daemon has disconnected.',
-                    'Will try to reconnect...',
-                ].join(' '));
+                debug(
+                    [
+                        'Daemon has disconnected.',
+                        'Will try to reconnect...',
+                    ].join(' ')
+                );
             }
 
             setTimeout(() => {

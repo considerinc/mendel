@@ -5,7 +5,7 @@
 var oneNumber = require('./some-number');
 var util = require('./util');
 
-module.exports = function() {
+module.exports = function () {
     var a = [oneNumber()];
     return util.isArray(a) ? a : [];
 };

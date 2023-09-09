@@ -1,4 +1,4 @@
-const {JSDOM} = require('jsdom');
+const { JSDOM } = require('jsdom');
 const dom = new JSDOM('<!DOCTYPE html><html><head></head><body></body></html>');
 global.window = dom.window;
 
@@ -55,7 +55,7 @@ Object.assign(global, browserGlobal);
                 return text;
             }
             let values = Array.from(node.childNodes)
-                .filter(node => {
+                .filter((node) => {
                     return BLACKLIST_ELEMENT.indexOf(node.nodeName) < 0;
                 })
                 .reduce((reduced, curNode) => {
@@ -78,10 +78,10 @@ Object.assign(global, browserGlobal);
         }
 
         Object.defineProperty(global.window.Element.prototype, 'innerText', {
-            get: function() {
+            get: function () {
                 return innerText(this);
             },
-            set: function(text) {
+            set: function (text) {
                 this.innerHTML = text;
             },
         });

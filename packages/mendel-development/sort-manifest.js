@@ -10,24 +10,27 @@ function sortManifest(inputIndexes, inputBundles) {
         bundles: [],
     };
 
-    Object.keys(inputIndexes).sort().forEach(function(file) {
-        var bundle = inputBundles[inputIndexes[file]];
-        sortedManifest.bundles.push(bundle);
+    Object.keys(inputIndexes)
+        .sort()
+        .forEach(function (file) {
+            var bundle = inputBundles[inputIndexes[file]];
+            sortedManifest.bundles.push(bundle);
 
-        var index = sortedManifest.bundles.indexOf(bundle);
-        sortedManifest.indexes[file] = index;
-        bundle.index = index;
+            var index = sortedManifest.bundles.indexOf(bundle);
+            sortedManifest.indexes[file] = index;
+            bundle.index = index;
 
-        bundle.data.forEach(function(dep) {
-            var oldSubDeps = dep.deps;
-            var newSubDeps = {};
-            Object.keys(oldSubDeps).sort().forEach(function(key) {
-                newSubDeps[key] = oldSubDeps[key];
+            bundle.data.forEach(function (dep) {
+                var oldSubDeps = dep.deps;
+                var newSubDeps = {};
+                Object.keys(oldSubDeps)
+                    .sort()
+                    .forEach(function (key) {
+                        newSubDeps[key] = oldSubDeps[key];
+                    });
+                dep.deps = newSubDeps;
             });
-            dep.deps = newSubDeps;
         });
-
-    });
 
     return sortedManifest;
 }

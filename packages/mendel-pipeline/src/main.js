@@ -13,27 +13,37 @@ class Mendel {
 
     constructor(config) {
         this.daemon = new Mendel.Daemon(config);
-        this.client = new Mendel.Client(Object.assign({
-            verbose: false,
-        }, config));
+        this.client = new Mendel.Client(
+            Object.assign(
+                {
+                    verbose: false,
+                },
+                config
+            )
+        );
     }
 
     run(callback) {
-        this.daemon.run(error => {
+        this.daemon.run((error) => {
             if (error) {
                 if (error instanceof ReferenceError) {
-                    console.warn(chalk.yellow([
-                        '[Mendel] Instance of builder may be running.',
-                        'Attemping to recycle...',
-                    ].join('\n')));
+                    console.warn(
+                        chalk.yellow(
+                            [
+                                '[Mendel] Instance of builder may be running.',
+                                'Attemping to recycle...',
+                            ].join('\n')
+                        )
+                    );
                 } else {
                     console.error(
-                        '[Mendel] Unknown builder execution error: ', error
+                        '[Mendel] Unknown builder execution error: ',
+                        error
                     );
                     process.exit(1);
                 }
             }
-            this.client.run(error => {
+            this.client.run((error) => {
                 if (error) return callback(error);
                 setImmediate(() => callback());
             });

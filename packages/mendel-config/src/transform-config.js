@@ -1,7 +1,7 @@
 var createValidator = require('./validator');
 var resolvePlugin = require('./resolve-plugin');
 
-function TransformConfig(id, transform, {projectRoot}) {
+function TransformConfig(id, transform, { projectRoot }) {
     this.id = id;
     this.options = transform.options;
 
@@ -13,9 +13,9 @@ function TransformConfig(id, transform, {projectRoot}) {
 }
 
 TransformConfig.validate = createValidator({
-    id: {required: true},
-    plugin: {required: true},
-    mode: {required: true},
+    id: { required: true },
+    plugin: { required: true },
+    mode: { required: true },
 });
 
 module.exports = TransformConfig;

@@ -1,31 +1,31 @@
 {
-  "name": "mendel-middleware",
-  "version": "4.0.0-alpha.0",
-  "description": "Mendel middleware that uses manifests to output multilayer resolution of isomorphic applications.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "mendel",
-    "production",
-    "express",
-    "middleware",
-    "multilayer",
-    "multivariate"
-  ],
-  "author": "Irae <irae@irae.pro.br>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/considerinc/mendel"
-  },
-  "dependencies": {
-    "browser-pack": "^6.0.1",
-    "debug": "^4.3.4",
-    "dissolve": "^0.2.1",
-    "mendel-core": "^4.0.0-alpha.0",
-    "mendel-loader": "^4.0.0-alpha.0",
-    "path-to-regexp": "^1.2.1"
-  }
+    "name": "mendel-middleware",
+    "version": "4.0.0-alpha.0",
+    "description": "Mendel middleware that uses manifests to output multilayer resolution of isomorphic applications.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "mendel",
+        "production",
+        "express",
+        "middleware",
+        "multilayer",
+        "multivariate"
+    ],
+    "author": "Irae <irae@irae.pro.br>",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/considerinc/mendel"
+    },
+    "dependencies": {
+        "browser-pack": "^6.0.1",
+        "debug": "^4.3.4",
+        "dissolve": "^0.2.1",
+        "mendel-core": "^4.0.0-alpha.0",
+        "mendel-loader": "^4.0.0-alpha.0",
+        "path-to-regexp": "^1.2.1"
+    }
 }

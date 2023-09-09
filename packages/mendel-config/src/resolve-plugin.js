@@ -5,7 +5,7 @@ function resolvePlugin(pluginName, basedir) {
     const pluginPackagePath = _resolve(path.join(pluginName, 'package.json'), {
         basedir,
     });
-    const pluginPath = _resolve(pluginName, {basedir});
+    const pluginPath = _resolve(pluginName, { basedir });
 
     const resolved = {
         plugin: pluginPath,
@@ -28,8 +28,10 @@ function resolvePlugin(pluginName, basedir) {
 
     if (resolved.mode === 'unknown' && process.env.NODE_ENV !== 'production') {
         console.error(
-            'WARN: ' + pluginName + ' was not found. Check your configuration '+
-            'or your "npm install --save-dev" your plugin'
+            'WARN: ' +
+                pluginName +
+                ' was not found. Check your configuration ' +
+                'or your "npm install --save-dev" your plugin'
         );
     }
 

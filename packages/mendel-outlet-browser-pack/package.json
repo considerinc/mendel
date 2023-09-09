@@ -1,19 +1,19 @@
 {
-  "name": "mendel-outlet-browser-pack",
-  "version": "4.0.0-alpha.0",
-  "description": "Mendel outlet for JavaScript bundles using browser-pack.",
-  "main": "src/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Stephan Lee <stephanwlee@gmail.com>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/considerinc/mendel"
-  },
-  "dependencies": {
-    "browser-pack": "^6.1.0",
-    "debug": "^4.3.4"
-  }
+    "name": "mendel-outlet-browser-pack",
+    "version": "4.0.0-alpha.0",
+    "description": "Mendel outlet for JavaScript bundles using browser-pack.",
+    "main": "src/index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Stephan Lee <stephanwlee@gmail.com>",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/considerinc/mendel"
+    },
+    "dependencies": {
+        "browser-pack": "^6.1.0",
+        "debug": "^4.3.4"
+    }
 }

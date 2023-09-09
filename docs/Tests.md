@@ -6,15 +6,15 @@ For the moment, Mendel relies on some private repositories for integration tests
 
 **File organization:**
 
-  * All tests are in the test/ directory
-  * Each test files corresponds to exactly one source file
-  * Only stubs and fixtures use subdirectories
-  * All build/ directories are ignored via the .gitignore to prevent generated output from being committed
+-   All tests are in the test/ directory
+-   Each test files corresponds to exactly one source file
+-   Only stubs and fixtures use subdirectories
+-   All build/ directories are ignored via the .gitignore to prevent generated output from being committed
 
 #### Running tests.
 
 If you have not already, please link all your local npm packages
-    npm run linkall
+npm run linkall
 
 To run tests quickly, please use:
 
@@ -47,4 +47,3 @@ Tests are written to target a single file, so when running the single test file,
 Finally, if you want to find out if your changes are impacting those individual files coverage, there is a helper to loop through each test file running coverage and outputting summary to the terminal.
 
     npm run coverage-all-individualy
-

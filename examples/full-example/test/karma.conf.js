@@ -4,14 +4,20 @@
 
 // Karma configuration
 
-module.exports = function(config) {
+module.exports = function (config) {
     config.set({
         // frameworks to use, please delcare 'mendel' first
         frameworks: ['mendel', 'jasmine'],
 
         // list of files / patterns to load in the browser
         // for use with mendel, list only your test files here
-        files: [{pattern: '../src/isomorphic/**/_test_/*.js', included: false, served: true}],
+        files: [
+            {
+                pattern: '../src/isomorphic/**/_test_/*.js',
+                included: false,
+                served: true,
+            },
+        ],
 
         // list of files to exclude
         // you should exclude auto-executing files, such as your app initialization

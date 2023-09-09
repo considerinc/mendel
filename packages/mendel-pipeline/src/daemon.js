@@ -24,11 +24,17 @@ class CacheManager extends EventEmitter {
     addCache(cache) {
         const env = cache.environment;
         this._caches.set(env, cache);
-        cache.on('entryRequested', path => this.emit('entryRequested', path));
-        cache.on('doneEntry', ent => this.emit('doneEntry', cache, ent));
-        cache.on('entryRemoved', ent => this.emit('entryRemoved', cache, ent));
-        cache.on('entryChanged', ent => this.emit('entryRemoved', cache, ent));
-        cache.on('entryErrored', des => this.emit('entryErrored', cache, des));
+        cache.on('entryRequested', (path) => this.emit('entryRequested', path));
+        cache.on('doneEntry', (ent) => this.emit('doneEntry', cache, ent));
+        cache.on('entryRemoved', (ent) =>
+            this.emit('entryRemoved', cache, ent)
+        );
+        cache.on('entryChanged', (ent) =>
+            this.emit('entryRemoved', cache, ent)
+        );
+        cache.on('entryErrored', (des) =>
+            this.emit('entryErrored', cache, des)
+        );
     }
 
     /**
@@ -36,10 +42,10 @@ class CacheManager extends EventEmitter {
      */
     sync(to) {
         const caches = Array.from(this._caches.values()).filter(
-            cache => cache !== to
+            (cache) => cache !== to
         );
-        Array.from(this._watchedFileId.keys()).forEach(id => {
-            const from = caches.find(cache => cache.hasEntry(id));
+        Array.from(this._watchedFileId.keys()).forEach((id) => {
+            const from = caches.find((cache) => cache.hasEntry(id));
             // TODO clean up and remove entry everywhere if no cache has this entry
             if (!from) return;
 
@@ -59,18 +65,20 @@ class CacheManager extends EventEmitter {
 
     addEntry(id) {
         this._watchedFileId.add(id);
-        Array.from(this._caches.values()).forEach(cache => cache.addEntry(id));
+        Array.from(this._caches.values()).forEach((cache) =>
+            cache.addEntry(id)
+        );
     }
 
     hasEntry(id) {
-        return Array.from(this._caches.values()).some(cache =>
+        return Array.from(this._caches.values()).some((cache) =>
             cache.hasEntry(id)
         );
     }
 
     removeEntry(id) {
         this._watchedFileId.delete(id);
-        Array.from(this._caches.values()).forEach(cache =>
+        Array.from(this._caches.values()).forEach((cache) =>
             cache.removeEntry(id)
         );
     }
@@ -85,7 +93,7 @@ module.exports = class MendelPipelineDaemon extends EventEmitter {
             },
             DefaultShims
         );
-        options = Object.assign({defaultShim}, options);
+        options = Object.assign({ defaultShim }, options);
 
         const config = mendelConfig(options);
         this.config = config;
@@ -105,16 +113,16 @@ module.exports = class MendelPipelineDaemon extends EventEmitter {
         this.environments[config.environment] = config;
         Object.keys(config.env)
             .concat('development')
-            .forEach(environment => {
+            .forEach((environment) => {
                 if (!this.environments.hasOwnProperty(environment)) {
                     const envConf = mendelConfig(
-                        Object.assign({}, options, {environment})
+                        Object.assign({}, options, { environment })
                     );
                     this.environments[environment] = envConf;
                 }
             });
 
-        this.server.on('environmentRequested', env => this._watch(env));
+        this.server.on('environmentRequested', (env) => this._watch(env));
         this.server.once('ready', () => this.emit('ready'));
         this.server.once('error', () => setImmediate(() => process.exit(1)));
         this.watcher.subscribe(
@@ -141,7 +149,7 @@ module.exports = class MendelPipelineDaemon extends EventEmitter {
         process.once('SIGTERM', () => process.exit(0));
         // Above `process.exit()` results in `exit` event.
         process.once('exit', () => this.onExit());
-        process.once('uncaughtException', error => {
+        process.once('uncaughtException', (error) => {
             console.error('[Mendel] Force closing due to a critical error:');
             console.error(error.stack);
             this.onForceExit();
@@ -152,7 +160,7 @@ module.exports = class MendelPipelineDaemon extends EventEmitter {
         lastPipeline.once('idle', () => {
             setTimeout(() => {
                 const nextEnv = Object.keys(this.environments)
-                    .filter(env => {
+                    .filter((env) => {
                         // ony envs we din't process yet
                         return !this.pipelines[env];
                     })
@@ -242,8 +250,8 @@ module.exports = class MendelPipelineDaemon extends EventEmitter {
             this.server,
             this.watcher,
         ]
-            .filter(tool => tool.onExit)
-            .forEach(tool => tool.onExit());
+            .filter((tool) => tool.onExit)
+            .forEach((tool) => tool.onExit());
     }
 
     onForceExit() {
@@ -255,7 +263,7 @@ module.exports = class MendelPipelineDaemon extends EventEmitter {
             this.server,
             this.watcher,
         ]
-            .filter(tool => tool.onForceExit)
-            .forEach(tool => tool.onForceExit());
+            .filter((tool) => tool.onForceExit)
+            .forEach((tool) => tool.onForceExit());
     }
 };

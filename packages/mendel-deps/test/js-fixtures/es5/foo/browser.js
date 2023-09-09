@@ -1,1 +1,1 @@
-const {test} = require('glob');
+const { test } = require('glob');

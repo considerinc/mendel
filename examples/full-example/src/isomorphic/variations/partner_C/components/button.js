@@ -10,8 +10,8 @@ class Button extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            count: ++count
-        }
+            count: ++count,
+        };
     }
     render() {
         return (

@@ -1,33 +1,33 @@
 {
-  "name": "mendel-transform-buble",
-  "version": "4.0.0-alpha.0",
-  "description": "Mendel Transform for bublé",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "mode": "ist",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/considerinc/mendel.git"
-  },
-  "keywords": [
-    "mendel",
-    "plugin",
-    "mendel-ift",
-    "mendel-transform",
-    "transform",
-    "buble",
-    "es6"
-  ],
-  "author": "Irae Carvalho",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/considerinc/mendel/issues"
-  },
-  "homepage": "https://github.com/considerinc/mendel#readme",
-  "dependencies": {
-    "buble": "^0.20.0",
-    "debug": "^4.3.4"
-  }
+    "name": "mendel-transform-buble",
+    "version": "4.0.0-alpha.0",
+    "description": "Mendel Transform for bublé",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "mode": "ist",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/considerinc/mendel.git"
+    },
+    "keywords": [
+        "mendel",
+        "plugin",
+        "mendel-ift",
+        "mendel-transform",
+        "transform",
+        "buble",
+        "es6"
+    ],
+    "author": "Irae Carvalho",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/considerinc/mendel/issues"
+    },
+    "homepage": "https://github.com/considerinc/mendel#readme",
+    "dependencies": {
+        "buble": "^0.20.0",
+        "debug": "^4.3.4"
+    }
 }

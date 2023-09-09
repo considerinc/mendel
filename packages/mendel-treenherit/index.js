@@ -6,13 +6,13 @@
 var transformTools = require('browserify-transform-tools');
 var resolveInDirs = require('./resolve-dirs');
 
-        /*  CLI USAGE:
+/*  CLI USAGE:
             browserify src/A/main.js \
                     -o build/A_main.js \
                     -t [ mandel-treenherit --dirs [ A/ B/ ] ]
         */
 
-        /*  ALGORITHM:
+/*  ALGORITHM:
             Let's assume the following input directory chain:
                 dirs = ["B/","A/"]
             And the following files exist:
@@ -35,20 +35,27 @@ var resolveInDirs = require('./resolve-dirs');
         */
 
 var requireTransform = transformTools.makeRequireTransform(
-    "treenherit",
+    'treenherit',
     {
         evaluateArguments: true,
         includeExtensions: [
-            ".js", ".coffee", ".coffee.md", ".litcoffee", ".jsx", ".es", ".es6",
+            '.js',
+            '.coffee',
+            '.coffee.md',
+            '.litcoffee',
+            '.jsx',
+            '.es',
+            '.es6',
         ],
     },
-    function(args, opts, transformDone) {
+    function (args, opts, transformDone) {
         var parent = opts.file;
         var file = args[0];
         var basedir = opts.config._flags && opts.config._flags.basedir;
 
         var dirs = opts.config.dirs || [];
-        if (dirs._) { // CLI compatibility
+        if (dirs._) {
+            // CLI compatibility
             dirs = dirs._;
         }
         if (typeof dirs === 'string') {
@@ -60,8 +67,8 @@ var requireTransform = transformTools.makeRequireTransform(
 
         // removes all folder information,
         // per example /User/code/project/A/lib/foo.js -> lib/foo.js
-        dirs.some(function(dir) {
-            var parts = parent.split(new RegExp("/"+dir+"/"));
+        dirs.some(function (dir) {
+            var parts = parent.split(new RegExp('/' + dir + '/'));
             var found = parts.length > 1;
             if (found) {
                 parent = parts[1];
@@ -69,19 +76,17 @@ var requireTransform = transformTools.makeRequireTransform(
             return found;
         });
 
-        resolveInDirs(file, dirs, basedir, parent, function(err, finalPath) {
+        resolveInDirs(file, dirs, basedir, parent, function (err, finalPath) {
             if (!finalPath) {
                 return transformDone();
             }
-            return transformDone(null, "require('"+finalPath+"')");
+            return transformDone(null, "require('" + finalPath + "')");
         });
     }
 );
 
-function isExternalModule (file) {
-    var regexp = process.platform === 'win32' ?
-        /^(\.|\w:)/ :
-        /^[\/.]/;
+function isExternalModule(file) {
+    var regexp = process.platform === 'win32' ? /^(\.|\w:)/ : /^[\/.]/;
     return !regexp.test(file);
 }
 

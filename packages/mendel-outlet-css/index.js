@@ -10,12 +10,12 @@ module.exports = class CSSOutlet {
         this.outletOptions = options;
     }
 
-    perform({entries, options: bundleConfig}, variations) {
+    perform({ entries, options: bundleConfig }, variations) {
         const outfile = bundleConfig.outfile;
         const writeFiles = this.config.noout !== true && outfile;
         const plugins = !this.outletOptions.plugin
             ? []
-            : this.outletOptions.plugin.map(p => {
+            : this.outletOptions.plugin.map((p) => {
                   if (typeof p === 'string') return require(p);
                   // Option to plugin support
                   return require(p[0])(p[1]);
@@ -23,8 +23,8 @@ module.exports = class CSSOutlet {
 
         // TODO: Re-enable preprocess
         return Promise.resolve(this._filterVariations(entries, variations))
-            .then(entriesToCombine => combineCss(entriesToCombine, outfile))
-            .then(({source, map}) => {
+            .then((entriesToCombine) => combineCss(entriesToCombine, outfile))
+            .then(({ source, map }) => {
                 const postCssOptions = Object.assign(
                     {
                         from: undefined,
@@ -41,7 +41,7 @@ module.exports = class CSSOutlet {
                 delete postCssOptions.plugin;
 
                 return this._transform(source, plugins, postCssOptions).then(
-                    ({css, map}) => {
+                    ({ css, map }) => {
                         if (writeFiles) {
                             const mapfile = outfile + '.map';
                             const mapdata = JSON.stringify(map);
@@ -51,9 +51,7 @@ module.exports = class CSSOutlet {
                             debug(
                                 [
                                     `Wrote: ${outfile}, ${css.length} bytes`,
-                                    `Wrote: ${mapfile}, ${
-                                        mapdata.length
-                                    } bytes`,
+                                    `Wrote: ${mapfile}, ${mapdata.length} bytes`,
                                 ].join('\n')
                             );
                         } else {
@@ -82,7 +80,7 @@ module.exports = class CSSOutlet {
                 const entries = normalizedEntries[key];
                 let pick;
                 for (let i = 0; !pick && i < variations.length; i++) {
-                    pick = entries.find(_ => _.variation === variations[i]);
+                    pick = entries.find((_) => _.variation === variations[i]);
                 }
                 if (pick) {
                     variational.set(pick.id, pick);
@@ -106,17 +104,17 @@ module.exports = class CSSOutlet {
     _preprocess(entries) {
         const processedEntries = new Map();
         let promise = Promise.resolve();
-        entries.forEach(entry => {
-            const {deps, id, source, map} = entry;
+        entries.forEach((entry) => {
+            const { deps, id, source, map } = entry;
             const set = new Set();
 
             Object.keys(deps)
-                .filter(key => !deps[key] || deps[key].browser !== '_noop')
-                .forEach(key => set.add(key));
+                .filter((key) => !deps[key] || deps[key].browser !== '_noop')
+                .forEach((key) => set.add(key));
 
             if (set.size === 0) {
                 promise = promise.then(() => {
-                    return {css: entry.source};
+                    return { css: entry.source };
                 });
             } else {
                 promise = promise.then(() => {
@@ -125,15 +123,15 @@ module.exports = class CSSOutlet {
                 });
             }
 
-            promise = promise.then(({css}) => {
-                processedEntries.set(id, {id, css, map});
+            promise = promise.then(({ css }) => {
+                processedEntries.set(id, { id, css, map });
             });
         });
 
         return promise.then(() => processedEntries);
     }
 
-    _transform(source, plugins, options = {from: undefined}) {
+    _transform(source, plugins, options = { from: undefined }) {
         return postcss(plugins).process(source, options);
     }
 };
@@ -143,7 +141,7 @@ function combineCss(cssEntries, outputFileName = '') {
 
     Array.from(cssEntries.values())
         .sort((a, b) => a.order - b.order)
-        .forEach(({id, source, map}) => {
+        .forEach(({ id, source, map }) => {
             concat.add(id, source, map || null);
         });
 

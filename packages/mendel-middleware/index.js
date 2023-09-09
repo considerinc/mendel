@@ -16,7 +16,7 @@ function MendelMiddleware(opts) {
     var getPath = pathToRegexp.compile(route);
     var keys = [];
     var bundleRoute = pathToRegexp(route, keys);
-    var bundles = trees.config.bundles.reduce(function(acc, bundle) {
+    var bundles = trees.config.bundles.reduce(function (acc, bundle) {
         acc[bundle.id] = bundle;
         return acc;
     }, {});
@@ -24,20 +24,20 @@ function MendelMiddleware(opts) {
         parentModule: module.parent,
     });
 
-    return function(req, res, next) {
+    return function (req, res, next) {
         req.mendel = req.mendel || {
             bundleCache: {},
             variations: false,
         };
 
-        req.mendel.getBundleEntries = function(bundleId) {
+        req.mendel.getBundleEntries = function (bundleId) {
             const bundleDeps = trees.bundles[bundleId].bundles;
             return bundleDeps
-                .filter(dep =>  !!dep.expose || !!dep.entry)
-                .map(dep => dep.expose || dep.id);
+                .filter((dep) => !!dep.expose || !!dep.entry)
+                .map((dep) => dep.expose || dep.id);
         };
 
-        req.mendel.setVariations = function(variations) {
+        req.mendel.setVariations = function (variations) {
             if (req.mendel.variations === false) {
                 var varsAndChains = trees.variationsAndChains(variations);
                 req.mendel.variations = varsAndChains.matchingVariations;
@@ -46,27 +46,29 @@ function MendelMiddleware(opts) {
             return req.mendel.variations;
         };
 
-        req.mendel.getBundle = function(bundle) {
+        req.mendel.getBundle = function (bundle) {
             if (!req.mendel.variations) {
                 throw new Error('Please call req.mendel.setVariations first');
             }
 
-            if(!req.mendel.bundleCache[bundle]) {
+            if (!req.mendel.bundleCache[bundle]) {
                 var tree = trees.findTreeForVariations(
-                                            bundle, req.mendel.lookupChains);
+                    bundle,
+                    req.mendel.lookupChains
+                );
                 req.mendel.bundleCache[bundle] = tree;
             }
 
             return req.mendel.bundleCache[bundle];
         };
 
-        req.mendel.getURL = function(bundle, variations) {
+        req.mendel.getURL = function (bundle, variations) {
             if (!req.mendel.variations && variations) {
                 console.warn(
-                    '[DEPRECATED] Please replace use of '+
-                    'mendel.getURL(bundle, variations).'+
-                    '\nUse mendel.setVariations(variations) followed by'+
-                    ' mendel.getURL(bundle) instead.'
+                    '[DEPRECATED] Please replace use of ' +
+                        'mendel.getURL(bundle, variations).' +
+                        '\nUse mendel.setVariations(variations) followed by' +
+                        ' mendel.getURL(bundle) instead.'
                 );
                 req.mendel.setVariations(variations);
             }
@@ -74,13 +76,13 @@ function MendelMiddleware(opts) {
             return getPath({ bundle: bundle, hash: tree.hash });
         };
 
-        req.mendel.resolver = function(bundles, variations) {
+        req.mendel.resolver = function (bundles, variations) {
             if (!req.mendel.variations && variations) {
                 console.warn(
-                    '[DEPRECATED] Please replace use of '+
-                    'mendel.resolver(bundle, variations).'+
-                    '\nUse mendel.setVariations(variations) followed by'+
-                    ' mendel.resolver(bundle) instead.'
+                    '[DEPRECATED] Please replace use of ' +
+                        'mendel.resolver(bundle, variations).' +
+                        '\nUse mendel.setVariations(variations) followed by' +
+                        ' mendel.resolver(bundle) instead.'
                 );
                 req.mendel.setVariations(variations);
             }
@@ -96,17 +98,18 @@ function MendelMiddleware(opts) {
             return next();
         }
         var params = namedParams(keys, reqParams);
-        if (!(
-            params.bundle &&
-            params.hash &&
-            bundles[params.bundle]
-        )) {
+        if (!(params.bundle && params.hash && bundles[params.bundle])) {
             return next();
         }
 
         var decodedResults = trees.findTreeForHash(params.bundle, params.hash);
         if (!decodedResults || decodedResults.error) {
-            return bundleError(res, 404, decodedResults && decodedResults.error, params);
+            return bundleError(
+                res,
+                404,
+                decodedResults && decodedResults.error,
+                params
+            );
         }
 
         var bundle = bundles[params.bundle];
@@ -117,22 +120,27 @@ function MendelMiddleware(opts) {
             });
 
             decodedResults.deps
-            .sort((a, b) => a.order - b.order)
-            .forEach(function(dep) {
-                res.write(dep.source + '\n');
-            });
+                .sort((a, b) => a.order - b.order)
+                .forEach(function (dep) {
+                    res.write(dep.source + '\n');
+                });
 
             res.end();
         } else {
-            var pack = bpack({raw: true, hasExports: true});
+            var pack = bpack({ raw: true, hasExports: true });
             var modules = indexedDeps(decodedResults.deps.filter(Boolean));
 
             if (!modules.length) {
                 // Something wrong, modules shouldn't be zero
-                return bundleError(res, 500, {
-                    code: 'EMPTYBUNDLE',
-                    message: 'Tree contents are empty'
-                }, params);
+                return bundleError(
+                    res,
+                    500,
+                    {
+                        code: 'EMPTYBUNDLE',
+                        message: 'Tree contents are empty',
+                    },
+                    params
+                );
             }
 
             // Serve bundle
@@ -147,7 +155,6 @@ function MendelMiddleware(opts) {
             }
             pack.end();
         }
-
     };
 }
 
@@ -209,32 +216,31 @@ function indexedDeps(mods) {
     var newModIndex = [0];
 
     // indexes are created first, because deps can come unordered
-    mods.forEach(function(mod){
+    mods.forEach(function (mod) {
         if (!mod.expose) newModIndex.push(mod.id);
     });
 
     // create a new array of modified modules
-    return mods.map(function(oldMod) {
-        return Object.keys(oldMod).reduce(function(newMod, prop) {
-
-            if (prop === 'deps') { // deps needs to be reindexed
-                newMod.deps = Object.keys(oldMod.deps).reduce(
-                    function(newDeps, name) {
-                        var id = oldMod.deps[name];
-                        var index = newModIndex.indexOf(id);
-                        if (index > -1) {
-                            newDeps[name] = index;
-                        } else {
-                            // deps not indexed are exposed or external
-                            newDeps[name] = id;
-                        }
-                        return newDeps;
-                    },
-                {});
-            }
-
-
-            else if(prop === 'id') { // id needs to be reindexed
+    return mods.map(function (oldMod) {
+        return Object.keys(oldMod).reduce(function (newMod, prop) {
+            if (prop === 'deps') {
+                // deps needs to be reindexed
+                newMod.deps = Object.keys(oldMod.deps).reduce(function (
+                    newDeps,
+                    name
+                ) {
+                    var id = oldMod.deps[name];
+                    var index = newModIndex.indexOf(id);
+                    if (index > -1) {
+                        newDeps[name] = index;
+                    } else {
+                        // deps not indexed are exposed or external
+                        newDeps[name] = id;
+                    }
+                    return newDeps;
+                }, {});
+            } else if (prop === 'id') {
+                // id needs to be reindexed
                 var index = newModIndex.indexOf(oldMod.id);
                 if (index > -1) {
                     newMod.id = index;
@@ -242,9 +248,7 @@ function indexedDeps(mods) {
                     // unless it is entry or exposed
                     newMod.id = oldMod.expose || oldMod.id;
                 }
-            }
-
-            else {
+            } else {
                 // for all other props we just copy over
                 newMod[prop] = oldMod[prop];
             }
@@ -305,21 +309,28 @@ function indexedDeps(mods) {
 ****/
 
 function bundleError(res, statusCode, error, params) {
-    var message = "Mendel: ";
+    var message = 'Mendel: ';
     if (!error) {
-        message += (statusCode === 404 ? 'Bundle not found' : 'Unable to create Bundle');
+        message +=
+            statusCode === 404 ? 'Bundle not found' : 'Unable to create Bundle';
     } else {
         message += error.code + ' - ' + error.message;
     }
 
-    debug([(error ? error.code : 'UNKNOWN'), 'hash=' + params.hash, 'bundle=' + params.bundle].join(' '));
+    debug(
+        [
+            error ? error.code : 'UNKNOWN',
+            'hash=' + params.hash,
+            'bundle=' + params.bundle,
+        ].join(' ')
+    );
 
     res.status(statusCode).send(message);
 }
 
 function namedParams(keys, reqParams) {
-    return keys.reduce(function(params, param, index) {
-        params[param.name] = reqParams[index+1];
+    return keys.reduce(function (params, param, index) {
+        params[param.name] = reqParams[index + 1];
         return params;
     }, {});
 }

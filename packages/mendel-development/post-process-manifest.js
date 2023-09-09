@@ -18,34 +18,38 @@ function postProcessManifests(config, finish) {
     debug('start');
     var resolveProcessor = processorResolver.bind(null, config);
 
-    var processors = [
-        [loadManifests, config],
-    ].concat(config.manifestProcessors).concat([
-        [sortManifestProcessor, config],
-        [validateManifestProcessor, config],
-        [writeManifest, config],
-    ]).filter(Boolean);
+    var processors = [[loadManifests, config]]
+        .concat(config.manifestProcessors)
+        .concat([
+            [sortManifestProcessor, config],
+            [validateManifestProcessor, config],
+            [writeManifest, config],
+        ])
+        .filter(Boolean);
 
-    async.map(processors, resolveProcessor, function(err, processors) {
+    async.map(processors, resolveProcessor, function (err, processors) {
         // istanbul ignore if
         if (err) throw err;
         var input = config.bundles;
 
-        async.eachSeries(processors,
-        function(processorPair, doneStep) {
-            var processor = processorPair[0];
-            var opts = processorPair[1] || {};
-            debug('running ' + inspect(processor));
-            opts.mendelConfig = config;
-            try {
-                processor(input, opts, function(output) {
-                    input = output;
-                    doneStep();
-                });
-            } catch(e) {
-                doneStep(e);
-            }
-        }, finish);
+        async.eachSeries(
+            processors,
+            function (processorPair, doneStep) {
+                var processor = processorPair[0];
+                var opts = processorPair[1] || {};
+                debug('running ' + inspect(processor));
+                opts.mendelConfig = config;
+                try {
+                    processor(input, opts, function (output) {
+                        input = output;
+                        doneStep();
+                    });
+                } catch (e) {
+                    doneStep(e);
+                }
+            },
+            finish
+        );
     });
 }
 
@@ -72,7 +76,7 @@ function processorResolver(config, processorIn, doneProcessor) {
 }
 
 function loadManifests(bundles, config, next) {
-    var manifests = bundles.reduce(function(manifests, bundle) {
+    var manifests = bundles.reduce(function (manifests, bundle) {
         var file = path.join(config.outdir, bundle.manifest);
         delete require.cache[require.resolve(file)];
         manifests[bundle.bundleName] = require(file);
@@ -82,43 +86,33 @@ function loadManifests(bundles, config, next) {
 }
 
 function sortManifestProcessor(manifests, config, next) {
-    Object.keys(manifests).forEach(function(bundleName) {
-        manifests[bundleName] = (sortManifest(
+    Object.keys(manifests).forEach(function (bundleName) {
+        manifests[bundleName] = sortManifest(
             manifests[bundleName].indexes,
             manifests[bundleName].bundles
-        ));
+        );
     });
     next(manifests);
 }
 
 function validateManifestProcessor(manifests, config, next) {
-    Object.keys(manifests).forEach(function(bundleName) {
-        var filename = config.bundles.filter(function(bundle) {
+    Object.keys(manifests).forEach(function (bundleName) {
+        var filename = config.bundles.filter(function (bundle) {
             return bundle.bundleName === bundleName;
         })[0].manifest;
-        validateManifest(
-            manifests[bundleName],
-            filename,
-            'manifestProcessors'
-        );
+        validateManifest(manifests[bundleName], filename, 'manifestProcessors');
     });
     next(manifests);
 }
 
 function writeManifest(manifests, config, next) {
-    Object.keys(manifests).forEach(function(bundleName) {
-        var filename = config.bundles.filter(function(bundle) {
+    Object.keys(manifests).forEach(function (bundleName) {
+        var filename = config.bundles.filter(function (bundle) {
             return bundle.bundleName === bundleName;
         })[0].manifest;
         var file = path.join(config.outdir, filename);
-        fs.writeFileSync(
-            file,
-            JSON.stringify(manifests[bundleName], null, 2)
-        );
+        fs.writeFileSync(file, JSON.stringify(manifests[bundleName], null, 2));
         delete require.cache[require.resolve(file)];
     });
     next();
 }
-
-
-

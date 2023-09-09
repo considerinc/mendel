@@ -18,7 +18,7 @@ function getDependencies(filePath, source) {
     } else if (cssDependency.supports.has(ext)) {
         return cssDependency(source, filePath);
     }
-    return {imports: [], exports: []};
+    return { imports: [], exports: [] };
 }
 
 /**
@@ -32,11 +32,11 @@ function getDependencies(filePath, source) {
  *   "../baz.js": "./baz.js"
  * }
  */
-module.exports = function deps({file, resolver, source}) {
+module.exports = function deps({ file, resolver, source }) {
     return Promise.resolve()
         .then(() => getDependencies(file, source))
-        .then(({imports}) => {
-            const promises = imports.map(importLiteral => {
+        .then(({ imports }) => {
+            const promises = imports.map((importLiteral) => {
                 return resolver.resolve(importLiteral).catch(() => {
                     if (!builtInModules.includes(importLiteral)) {
                         console.warn(
@@ -47,7 +47,7 @@ module.exports = function deps({file, resolver, source}) {
                 });
             });
 
-            return Promise.all(promises).then(resolvedImports => {
+            return Promise.all(promises).then((resolvedImports) => {
                 const importMap = {};
                 resolvedImports.forEach((resolvedImport, index) => {
                     importMap[imports[index]] = resolvedImport;

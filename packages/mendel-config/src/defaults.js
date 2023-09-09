@@ -3,7 +3,7 @@
    See the accompanying LICENSE file for terms. */
 const path = require('path');
 
-module.exports = function() {
+module.exports = function () {
     const mendelEnv =
         process.env.MENDEL_ENV || process.env.NODE_ENV || 'development';
     const mendelIPC = process.env.MENDEL_IPC || '.mendelipc';
@@ -35,9 +35,7 @@ module.exports = function() {
         transforms: {},
         types: {
             node_modules: {
-                glob: [
-                    /.*\/node_modules\/.*/,
-                ],
+                glob: [/.*\/node_modules\/.*/],
                 isResource: false,
                 isBinary: false,
             },

@@ -23,13 +23,10 @@ class AnalyticsCollector {
     }
 
     record(message) {
-        if (
-            !this.options.printer ||
-            !message ||
-            message.type !== 'analytics'
-        ) return;
+        if (!this.options.printer || !message || message.type !== 'analytics')
+            return;
 
-        const {pid, name, after, before} = message;
+        const { pid, name, after, before } = message;
 
         this.data.push({
             name,
@@ -42,4 +39,6 @@ class AnalyticsCollector {
 }
 
 // Singleton
-module.exports = (function() {return new AnalyticsCollector();})();
+module.exports = (function () {
+    return new AnalyticsCollector();
+})();

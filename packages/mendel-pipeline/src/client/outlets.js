@@ -8,9 +8,9 @@ class MendelOutlets {
         this.outlets = options.outlets;
     }
 
-    perform(bundles, variations=[this.options.baseConfig.dir]) {
-        const promises = bundles.map(bundle => {
-            const outlet = this.outlets.find(outlet => {
+    perform(bundles, variations = [this.options.baseConfig.dir]) {
+        const promises = bundles.map((bundle) => {
+            const outlet = this.outlets.find((outlet) => {
                 return outlet.id === bundle.options.outlet;
             });
 
@@ -25,15 +25,15 @@ class MendelOutlets {
             }
 
             return Promise.resolve()
-            .then(analyze.tic.bind(analyze, outlet.id))
-            .then(() => plugin.perform(bundle, variations))
-            .catch(e => {
-                e.bundle = {id: bundle.id, options: bundle.options};
-                e.outletConfig = outlet;
-                throw e;
-            })
-            .then(analyze.toc.bind(analyze, outlet.id))
-            .then(output => bundle.output = output);
+                .then(analyze.tic.bind(analyze, outlet.id))
+                .then(() => plugin.perform(bundle, variations))
+                .catch((e) => {
+                    e.bundle = { id: bundle.id, options: bundle.options };
+                    e.outletConfig = outlet;
+                    throw e;
+                })
+                .then(analyze.toc.bind(analyze, outlet.id))
+                .then((output) => (bundle.output = output));
         });
         return Promise.all(promises);
     }

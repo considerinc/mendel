@@ -57,6 +57,3 @@ If you pass in multiple directories you can also do multiple variation inheritan
 This is the resulting resolution:
 
 [![multiple folder inheritance diagram](https://cdn.rawgit.com/yahoo/mendel/master/docs/Multiple-folder-inheritance-resolution.svg)](../../docs/Multiple-folder-inheritance-resolution.svg)
-
-
-

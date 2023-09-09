@@ -2,8 +2,8 @@
 
 Mendel Core is the brain behind `mendel-middleware`. It is used to resolve hundreds or even thousands of potential permutations of "application trees". It uses deterministic hashing to provide a two step resolving:
 
-  1. Given a variation array, it resolves which files should be used for a given user session. It outputs an "application tree" and a deterministic hash.
-  2. Given a hash generated in step 1, it can recover all file dependencies for the same user session, resulting in the same exact "application tree" as step 1.
+1. Given a variation array, it resolves which files should be used for a given user session. It outputs an "application tree" and a deterministic hash.
+2. Given a hash generated in step 1, it can recover all file dependencies for the same user session, resulting in the same exact "application tree" as step 1.
 
 Mendel Core works by loading [Mendel Manifests](../../docs/Design.md) on a per-process basis, and resolves "application trees" on a per request (or per user session) basis.
 
@@ -66,7 +66,6 @@ HTTP Request                |            |
 
 Dependencies are a list of filenames and their content. Dependencies can than be used to server-side render and the hash can be used to generate bundle URLs that are safe for CDN caching.
 
-
 ### Request Cycle: Hash resolution
 
 When a request comes in with a hash, Mendel Core is able to safely recover all the dependencies from the manifest:
@@ -99,7 +98,6 @@ HTTP Request                |            |
 
 This request will usually be used to serve a bundle. The request can come from a user or from a CDN or any other proxy/caching layers. It does not need cookies and won't need a "Vary" header to prevent it to be cached incorrectly by proxies. The hash is sufficient to consistently resolve the dependencies.
 
-
 #### Mendel Hashing algorithm
 
 The Mendel hash is a binary format encoded in URLSafeBase64 (RFC4648 section 5). The binary has the format below, where each number in parenthesis is the number of bytes used for a particular information:
@@ -131,7 +129,6 @@ The variations can be resolved in two ways: By an array of desired **variation n
 
 Because we need to make sure the contents are the same requested by user, the hash is calculated both when generating it for the first time (when generating HTML request) and when collecting the source code payload (when dynamically serving the bundle). If it is a match, the source code can be concatenated using `browser_pack`.
 
-
 ## Reference Usage
 
 Usually, you can use the `mendel-middleware` instead of using `mendel-core` directly. We also provide a [reference implementation](../../examples/full-example/) for the middleware use. In case you need advanced use of Mendel, the minimal server bellow should be enough for you to start your custom implementation.
@@ -155,11 +152,11 @@ function requestHandler(request, response) {
         const tree = trees.findTreeForVariations(bundle, variations);
         // bundle url can be wrapped in a cookie-less CDN url
         const src = '/' + bundle + '.' + tree.hash + '.js';
-        const script = '<script src="'+ src + '"></script>';
-        response.end('<html><head>'+ script + '</head></html>');
+        const script = '<script src="' + src + '"></script>';
+        response.end('<html><head>' + script + '</head></html>');
     } else {
         // if you have multiple bundles you will need routes based on bundle
-        const jsPath = new RegExp('/' + bundle + '\.(.*)\.js');
+        const jsPath = new RegExp('/' + bundle + '.(.*).js');
         if (jsPath.test(request.url)) {
             // your CDN can safely cache this url without cookies
             // and without "Vary" header
@@ -188,10 +185,10 @@ const bpack = require('browser-pack');
 // and replace the line `response.end(JSON.stringify(tree));` by:
 
 if (!tree || tree.error || tree.conflicts) {
-    return response.end('Error ' + tree && tree.error || tree.conflictList);
+    return response.end(('Error ' + tree && tree.error) || tree.conflictList);
 }
 
-const pack = bpack({raw: true, hasExports: true});
+const pack = bpack({ raw: true, hasExports: true });
 pack.pipe(response);
 
 const modules = tree.deps.filter(Boolean);

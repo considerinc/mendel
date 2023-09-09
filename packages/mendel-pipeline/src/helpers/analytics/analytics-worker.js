@@ -11,6 +11,6 @@ class AnalyticsForWorker extends Analytics {
     }
 }
 
-module.exports = function(name) {
+module.exports = function (name) {
     return new AnalyticsForWorker(name);
 };

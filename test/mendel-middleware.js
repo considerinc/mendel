@@ -32,16 +32,18 @@ tap.test('run build first', function (t) {
 
 var app = express();
 
-app.use(sut({
-    basedir: appPath,
-}));
+app.use(
+    sut({
+        basedir: appPath,
+    })
+);
 
 var server = app.listen('1337');
-tap.tearDown(function() {
+tap.tearDown(function () {
     server.close(process.exit);
 });
 
-app.get('/getURL_testA', function(req, res) {
+app.get('/getURL_testA', function (req, res) {
     req.mendel.setVariations(['test_A']);
     // this lines force that only the first setVariations is accounted for
     // also increase coverage meaninfully
@@ -51,103 +53,130 @@ app.get('/getURL_testA', function(req, res) {
     });
 });
 
-tap.test('getURL returns correct hash', function(t){
+tap.test('getURL returns correct hash', function (t) {
     t.plan(2);
 
-    request({
-        url: host+'/getURL_testA',
-        json:true,
-    }, function(error, response, json) {
-        if (error) t.bailout(error);
+    request(
+        {
+            url: host + '/getURL_testA',
+            json: true,
+        },
+        function (error, response, json) {
+            if (error) t.bailout(error);
 
-        t.match(response, {
-            statusCode: 200,
-        }, 'getURL without errors');
-        t.match(json, {
-            appBundle: appBundle,
-        }, 'getURL correct hash');
-    });
+            t.match(
+                response,
+                {
+                    statusCode: 200,
+                },
+                'getURL without errors'
+            );
+            t.match(
+                json,
+                {
+                    appBundle: appBundle,
+                },
+                'getURL correct hash'
+            );
+        }
+    );
 });
 
-app.get('/getURLDeprecated', function(req, res) {
+app.get('/getURLDeprecated', function (req, res) {
     res.json({
         appBundle: req.mendel.getURL('app', ['test_A']),
     });
 });
 
-tap.test('getURL still works with variations', function(t){
+tap.test('getURL still works with variations', function (t) {
     t.plan(3);
 
     var old = console.warn;
     var msg = null;
-    console.warn = function(a) {msg = a;};
+    console.warn = function (a) {
+        msg = a;
+    };
 
-    request({
-        url: host+'/getURLDeprecated',
-        json:true,
-    }, function(error, response, json) {
-        console.warn = old;
-        if (error) t.bailout(error);
+    request(
+        {
+            url: host + '/getURLDeprecated',
+            json: true,
+        },
+        function (error, response, json) {
+            console.warn = old;
+            if (error) t.bailout(error);
 
-        t.match(response, {
-            statusCode: 200,
-        }, 'serves javascript');
-        t.match(json, {
-            appBundle: appBundle,
-        });
-        t.contains(msg, '[DEPRECATED]', 'getURL show deprecated msg');
-    });
+            t.match(
+                response,
+                {
+                    statusCode: 200,
+                },
+                'serves javascript'
+            );
+            t.match(json, {
+                appBundle: appBundle,
+            });
+            t.contains(msg, '[DEPRECATED]', 'getURL show deprecated msg');
+        }
+    );
 });
 
-app.get('/resolver_testA', function(req, res) {
+app.get('/resolver_testA', function (req, res) {
     req.mendel.setVariations(['test_A']);
     res.json({
         result: req.mendel.resolver(['app']).require('index.js')(),
     });
 });
 
-tap.test('resolver require gets correct code', function(t){
+tap.test('resolver require gets correct code', function (t) {
     t.plan(2);
 
-    request({
-        url: host+'/resolver_testA',
-        json: true,
-    }, function(error, response, json) {
-        if (error) t.bailout(error);
+    request(
+        {
+            url: host + '/resolver_testA',
+            json: true,
+        },
+        function (error, response, json) {
+            if (error) t.bailout(error);
 
-        t.match(response, { statusCode: 200 }, 'resolver without errors');
-        t.match(json.result, -2, 'resolver with correct content');
-    });
+            t.match(response, { statusCode: 200 }, 'resolver without errors');
+            t.match(json.result, -2, 'resolver with correct content');
+        }
+    );
 });
 
-app.get('/resolverDeprecated', function(req, res) {
+app.get('/resolverDeprecated', function (req, res) {
     res.json({
         result: req.mendel.resolver(['app'], ['test_A']).require('index.js')(),
     });
 });
 
-tap.test('resolver still works with variations', function(t){
+tap.test('resolver still works with variations', function (t) {
     t.plan(3);
 
     var old = console.warn;
     var msg = null;
-    console.warn = function(a) {msg = a;};
+    console.warn = function (a) {
+        msg = a;
+    };
 
-    request({
-        url: host+'/resolverDeprecated',
-        json:true,
-    }, function(error, response, json) {
-        console.warn = old;
-        if (error) t.bailout(error);
+    request(
+        {
+            url: host + '/resolverDeprecated',
+            json: true,
+        },
+        function (error, response, json) {
+            console.warn = old;
+            if (error) t.bailout(error);
 
-        t.match(response, { statusCode: 200 }, 'serves javascript');
-        t.match(json.result, -2, 'resolver with correct content');
-        t.contains(msg, '[DEPRECATED]', 'resolver show deprecated message');
-    });
+            t.match(response, { statusCode: 200 }, 'serves javascript');
+            t.match(json.result, -2, 'resolver with correct content');
+            t.contains(msg, '[DEPRECATED]', 'resolver show deprecated message');
+        }
+    );
 });
 
-
-app.get('/getBundleIncorrect', function(req, res) {
+app.get('/getBundleIncorrect', function (req, res) {
     try {
         req.mendel.getBundle('app'); // this line throws
     } catch (e) {
@@ -156,31 +185,41 @@ app.get('/getBundleIncorrect', function(req, res) {
         });
         return;
     }
-    res.json({unreachable: 'prop'});
+    res.json({ unreachable: 'prop' });
 });
 
-
-tap.test('throws on incorrect use', function(t){
+tap.test('throws on incorrect use', function (t) {
     t.plan(2);
 
-    request({
-        url: host+'/getBundleIncorrect',
-        json:true,
-    }, function(error, response, json) {
-        if (error) t.bailout(error);
+    request(
+        {
+            url: host + '/getBundleIncorrect',
+            json: true,
+        },
+        function (error, response, json) {
+            if (error) t.bailout(error);
 
-        t.match(response, {
-            statusCode: 500,
-        }, 'serves javascript');
-        t.match(json, {
-            error: 'Please call req.mendel.setVariations first',
-        }, 'throws error when called in wrong order');
-    });
+            t.match(
+                response,
+                {
+                    statusCode: 500,
+                },
+                'serves javascript'
+            );
+            t.match(
+                json,
+                {
+                    error: 'Please call req.mendel.setVariations first',
+                },
+                'throws error when called in wrong order'
+            );
+        }
+    );
 });
 
-app.get('/getBundleCacheLoop', function(req, res) {
+app.get('/getBundleCacheLoop', function (req, res) {
     var fail = false;
-    var timer = setTimeout(function() {
+    var timer = setTimeout(function () {
         fail = true;
         res.sendStatus(500);
     }, 1000);
@@ -196,7 +235,7 @@ app.get('/getBundleCacheLoop', function(req, res) {
     for (var i = 0; i < 1000; i++) {
         calls.push(doIt);
     }
-    async.series(calls, function() {
+    async.series(calls, function () {
         if (!fail) {
             clearTimeout(timer);
             res.sendStatus(200);
@@ -204,15 +243,18 @@ app.get('/getBundleCacheLoop', function(req, res) {
     });
 });
 
-tap.test('getBundle cached per request', function(t) {
+tap.test('getBundle cached per request', function (t) {
     t.plan(1);
 
-    request({
-        url: host+'/getBundleCacheLoop',
-        json:true,
-    }, function(error, response) {
-        if (error) t.bailout(error);
+    request(
+        {
+            url: host + '/getBundleCacheLoop',
+            json: true,
+        },
+        function (error, response) {
+            if (error) t.bailout(error);
 
-        t.equal(response.statusCode, 200, 'looks cached based on timer');
-    });
+            t.equal(response.statusCode, 200, 'looks cached based on timer');
+        }
+    );
 });

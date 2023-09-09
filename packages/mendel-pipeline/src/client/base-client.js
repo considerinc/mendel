@@ -15,7 +15,7 @@ class BaseMendelClient extends EventEmitter {
             this.config = options;
         } else {
             this.config = mendelConfig(
-                Object.assign({defaultShim: DefaultShims}, options)
+                Object.assign({ defaultShim: DefaultShims }, options)
             );
         }
 
@@ -37,7 +37,7 @@ class BaseMendelClient extends EventEmitter {
 
     _setupClient() {
         this.client = new CacheClient(this.config, this.registry);
-        this.client.on('error', error => {
+        this.client.on('error', (error) => {
             if (error.code === 'ENOENT' || error.code === 'ECONNREFUSED') {
                 console.error(
                     [
@@ -51,7 +51,7 @@ class BaseMendelClient extends EventEmitter {
 
         this.client.on(
             'sync',
-            function() {
+            function () {
                 clearTimeout(this.initSyncMessage);
                 this.emit('ready');
                 this.synced = true;
@@ -62,7 +62,7 @@ class BaseMendelClient extends EventEmitter {
         );
         this.client.on(
             'unsync',
-            function() {
+            function () {
                 this.debug('file change detected...');
                 this.emit('change');
                 this.synced = false;
@@ -94,12 +94,12 @@ class BaseMendelClient extends EventEmitter {
             this.exit();
             callback.call(null);
         });
-        this.once('error', error => {
+        this.once('error', (error) => {
             console.error('[Mendel SEVERE] Outlet error', error);
             this.exit();
             callback.call(null, error);
         });
-        this.client.once('error', error => {
+        this.client.once('error', (error) => {
             this.exit();
             callback.call(null, error);
         });

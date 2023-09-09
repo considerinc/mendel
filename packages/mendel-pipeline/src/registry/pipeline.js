@@ -10,10 +10,10 @@ class MendelRegistry extends EventEmitter {
         // Parser can map a type to another type
         this._parserTypeConversion = new Map();
 
-        const {types, transforms} = config;
+        const { types, transforms } = config;
         this._transforms = transforms;
         this._types = types;
-        this._types.forEach(type => {
+        this._types.forEach((type) => {
             if (!type.parser || !type.parserToType) return;
             // TODO better cycle detection: cannot have cycle
             if (type.parserToType === type.name) return;
@@ -24,7 +24,7 @@ class MendelRegistry extends EventEmitter {
     emit(eventName, entry) {
         if (entry && entry.id) {
             verbose(eventName, entry.id);
-        } else if(entry) {
+        } else if (entry) {
             verbose(eventName, entry);
         } else {
             verbose(eventName);
@@ -49,7 +49,7 @@ class MendelRegistry extends EventEmitter {
         return this._mendelCache.hasEntry(filePath);
     }
 
-    addSource({id, source, deps, map}) {
+    addSource({ id, source, deps, map }) {
         if (!this._mendelCache.hasEntry(id)) this._mendelCache.addEntry(id);
         this._mendelCache.setSource(id, source, deps, map);
     }
@@ -91,9 +91,9 @@ class MendelRegistry extends EventEmitter {
             if (!entryIds) continue;
 
             const entries = entryIds
-                .map(entryId => this.getEntry(entryId))
+                .map((entryId) => this.getEntry(entryId))
                 .filter(Boolean);
-            entries.forEach(entry => {
+            entries.forEach((entry) => {
                 const depNorms = dependencyGetter(entry);
                 Array.prototype.push.apply(unvisitedNorms, depNorms);
             });

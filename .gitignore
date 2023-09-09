@@ -8,3 +8,4 @@ fixtures/
 mendel-build/
 build-requirify/
 *.log
+jsdom.js

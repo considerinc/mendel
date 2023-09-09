@@ -20,17 +20,19 @@ class CacheServer extends EventEmitter {
         this.cacheManager = cacheManager;
         this.initCache();
 
-        network.getServer(config.cacheConnection)
-        .then(server => {
-            this.server = server;
-            this.initServer();
+        network
+            .getServer(config.cacheConnection)
+            .then((server) => {
+                this.server = server;
+                this.initServer();
 
-            debug('listening', config.cacheConnection);
-            this.emit('ready');
-        }).catch(err => {
-            this.emit('error', err);
-            debug('Cache server could not come up', err);
-        });
+                debug('listening', config.cacheConnection);
+                this.emit('ready');
+            })
+            .catch((err) => {
+                this.emit('error', err);
+                debug('Cache server could not come up', err);
+            });
     }
 
     isReady() {
@@ -38,13 +40,11 @@ class CacheServer extends EventEmitter {
     }
 
     onExit() {
-        if (this.server)
-            this.server.close();
+        if (this.server) this.server.close();
     }
 
     onForceExit() {
-        if (this.server)
-            this.server.close();
+        if (this.server) this.server.close();
     }
 
     send(client, data) {
@@ -77,19 +77,18 @@ class CacheServer extends EventEmitter {
             client.on('data', (data) => {
                 try {
                     data = typeof data === 'object' ? data : JSON.parse(data);
-                } catch(e) {
+                } catch (e) {
                     error(e);
                 }
                 if (!data || !data.type) return;
 
                 switch (data.type) {
-                    case 'bootstrap':
-                        {
-                            this.emit('environmentRequested', data.environment);
-                            client.environment = data.environment;
-                            this.bootstrap(client);
-                            break;
-                        }
+                    case 'bootstrap': {
+                        this.emit('environmentRequested', data.environment);
+                        client.environment = data.environment;
+                        this.bootstrap(client);
+                        break;
+                    }
                     default:
                         return;
                 }
@@ -102,32 +101,39 @@ class CacheServer extends EventEmitter {
         this.cacheManager.on('doneEntry', (cache, entry) => {
             const size = cache.size();
             this.clients
-                .filter(c => c.environment === cache.environment)
-                .forEach(c => this._sendEntry(c, size, entry));
+                .filter((c) => c.environment === cache.environment)
+                .forEach((c) => this._sendEntry(c, size, entry));
         });
         this.cacheManager.on('entryRemoved', (cache, entryId) => {
             this.clients
-                .filter(client => client.environment === cache.environment)
-                .forEach(client => this._signalRemoval(client, entryId));
+                .filter((client) => client.environment === cache.environment)
+                .forEach((client) => this._signalRemoval(client, entryId));
         });
         this.cacheManager.on('entryErrored', (cache, desc) => {
             this.clients
-                .filter(client => client.environment === cache.environment)
-                .forEach(client => this._signalError(client, desc));
+                .filter((client) => client.environment === cache.environment)
+                .forEach((client) => this._signalError(client, desc));
         });
     }
 
     bootstrap(client) {
         const cache = this.cacheManager.getCache(client.environment);
-        cache.entries()
-            .filter(entry => entry.done)
-            .forEach(entry => this._sendEntry(client, cache.size(), entry));
+        cache
+            .entries()
+            .filter((entry) => entry.done)
+            .forEach((entry) => this._sendEntry(client, cache.size(), entry));
     }
 
     serializeEntry(entry) {
         const {
-            deps, source, map, type, runtime,
-            rawSource, id, normalizedId,
+            deps,
+            source,
+            map,
+            type,
+            runtime,
+            rawSource,
+            id,
+            normalizedId,
         } = entry;
 
         let variation = this.getVariationForEntry(entry);
@@ -137,20 +143,25 @@ class CacheServer extends EventEmitter {
         variation = variation.chain[0];
 
         return {
-            id, normalizedId,
+            id,
+            normalizedId,
             // Metadata
-            variation, type, runtime,
+            variation,
+            type,
+            runtime,
             // Dependency information
             // FIXME currently only puts dependencies in browser runtime
             deps,
             // Important source data
-            source, map, rawSource,
+            source,
+            map,
+            rawSource,
         };
     }
 
     getVariationForEntry(entry) {
         const variations = this.config.variationConfig.variations;
-        return variations.find(({id}) => id === entry.variation);
+        return variations.find(({ id }) => id === entry.variation);
     }
 
     _sendEntry(client, size, entry) {
@@ -171,7 +182,7 @@ class CacheServer extends EventEmitter {
         });
     }
 
-    _signalError(client, {id, error}) {
+    _signalError(client, { id, error }) {
         this.send(client, {
             error,
             type: 'errorEntry',

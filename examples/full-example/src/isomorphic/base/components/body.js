@@ -12,9 +12,9 @@ class Body extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            laoded: false
-        }
-        this.handleClick = this.handleClick.bind(this)
+            laoded: false,
+        };
+        this.handleClick = this.handleClick.bind(this);
     }
 
     handleClick() {
@@ -27,7 +27,7 @@ class Body extends React.Component {
                 function success(module) {
                     Lazy = module.default;
                     self.setState({
-                        loaded:true
+                        loaded: true,
                     });
                 },
                 function failure() {
@@ -41,9 +41,9 @@ class Body extends React.Component {
         let extras;
 
         if (this.state.loaded) {
-            extras = <Lazy />
+            extras = <Lazy />;
         } else {
-            extras = <Button onClick={this.handleClick}>Load</Button>
+            extras = <Button onClick={this.handleClick}>Load</Button>;
         }
 
         return (
@@ -61,7 +61,7 @@ function loadAsyncModule(requireModule, successCallback, failureCallback) {
         var module = requireModule();
         successCallback(module);
     } catch (error) {
-        asyncRequire(requireModule, function(error, payload) {
+        asyncRequire(requireModule, function (error, payload) {
             if (error) {
                 return failureCallback(error);
             }
@@ -72,46 +72,52 @@ function loadAsyncModule(requireModule, successCallback, failureCallback) {
 
 function asyncRequire(requireModule, callback) {
     var parentRequire = window.require;
-    window.require = function(path) {
+    window.require = function (path) {
         var self = this;
         try {
             var payload = parentRequire.apply(
-                this, Array.prototype.slice.call(arguments));
+                this,
+                Array.prototype.slice.call(arguments)
+            );
             callback(null, payload);
         } catch (error) {
             if (error.code !== 'MODULE_NOT_FOUND') {
                 return callback(error);
             }
-            loadScript(window._mendelEntryMap[path], function(){
+            loadScript(window._mendelEntryMap[path], function () {
                 var payload = parentRequire.call(self, path);
                 callback(null, payload);
             });
         }
-    }
+    };
     requireModule();
     window.require = parentRequire;
 }
 
 function loadScript(url, callback) {
-    var script = document.createElement("script")
-    script.type = "text/javascript";
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
 
-    if (script.readyState){  //IE
-        script.onreadystatechange = function(){
-            if (script.readyState == "loaded" ||
-                    script.readyState == "complete"){
+    if (script.readyState) {
+        //IE
+        script.onreadystatechange = function () {
+            if (
+                script.readyState == 'loaded' ||
+                script.readyState == 'complete'
+            ) {
                 script.onreadystatechange = null;
                 callback();
             }
         };
-    } else {  //Others
-        script.onload = function(){
+    } else {
+        //Others
+        script.onload = function () {
             callback();
         };
     }
 
     script.src = url;
-    document.getElementsByTagName("head")[0].appendChild(script);
+    document.getElementsByTagName('head')[0].appendChild(script);
 }
 
 export default Body;

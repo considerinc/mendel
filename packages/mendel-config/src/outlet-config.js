@@ -1,7 +1,7 @@
 var createValidator = require('./validator');
 var resolvePlugin = require('./resolve-plugin');
 
-function OutletConfig({id, plugin, options={}}, {projectRoot}) {
+function OutletConfig({ id, plugin, options = {} }, { projectRoot }) {
     this.id = id;
     this._plugin = plugin;
     this.options = options;
@@ -14,7 +14,9 @@ function OutletConfig({id, plugin, options={}}, {projectRoot}) {
         }
         this.options.plugin = this.options.plugin.map((plugin, index) => {
             if (typeof plugin !== 'string' && !Array.isArray(plugin)) {
-                throw new Error(`Expect 'options.plugin[${index}]' to be a String or an Array.`); // eslint-disable-line
+                throw new Error(
+                    `Expect 'options.plugin[${index}]' to be a String or an Array.`
+                ); // eslint-disable-line
             }
 
             if (typeof plugin === 'string')
@@ -29,8 +31,8 @@ function OutletConfig({id, plugin, options={}}, {projectRoot}) {
 }
 
 OutletConfig.validate = createValidator({
-    id: {required: true},
-    plugin: {required: true},
+    id: { required: true },
+    plugin: { required: true },
 });
 
 module.exports = OutletConfig;

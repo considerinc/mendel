@@ -1,22 +1,22 @@
 {
-  "name": "mendel-outlet-server-side-render",
-  "description": "Writes out server-side compatible files for mendel-middleware in production mode",
-  "version": "4.0.0-alpha.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Stephan Lee <stephanwlee@gmail.com>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/considerinc/mendel"
-  },
-  "dependencies": {
-    "debug": "^4.3.4",
-    "falafel": "^2.1.0",
-    "mendel-development": "^4.0.0-alpha.0",
-    "mendel-outlet-manifest": "^4.0.0-alpha.0",
-    "mkdirp": "^0.5.1"
-  }
+    "name": "mendel-outlet-server-side-render",
+    "description": "Writes out server-side compatible files for mendel-middleware in production mode",
+    "version": "4.0.0-alpha.0",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Stephan Lee <stephanwlee@gmail.com>",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/considerinc/mendel"
+    },
+    "dependencies": {
+        "debug": "^4.3.4",
+        "falafel": "^2.1.0",
+        "mendel-development": "^4.0.0-alpha.0",
+        "mendel-outlet-manifest": "^4.0.0-alpha.0",
+        "mkdirp": "^0.5.1"
+    }
 }

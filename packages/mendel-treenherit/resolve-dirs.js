@@ -13,24 +13,35 @@ function resolveInDirs(file, dirs, base, parent, callback) {
     parent = parent || './index.js';
 
     var finalPath, lastError;
-    async.detectSeries(dirs, function(dir, doneModule) {
-        var parentInsideIterateeDir = path.join(base, dir, parent);
-        var opts = {
-            filename: parentInsideIterateeDir,
-            extensions: [ ".js", ".coffee", ".coffee.md", ".litcoffee",
-                            ".jsx", ".es", ".es6"],
-        };
-        resolve(file, opts, function(err, path) {
-            if (!err) {
-                finalPath = path;
+    async.detectSeries(
+        dirs,
+        function (dir, doneModule) {
+            var parentInsideIterateeDir = path.join(base, dir, parent);
+            var opts = {
+                filename: parentInsideIterateeDir,
+                extensions: [
+                    '.js',
+                    '.coffee',
+                    '.coffee.md',
+                    '.litcoffee',
+                    '.jsx',
+                    '.es',
+                    '.es6',
+                ],
+            };
+            resolve(file, opts, function (err, path) {
+                if (!err) {
+                    finalPath = path;
+                }
+                lastError = err;
+                doneModule(!err);
+            });
+        },
+        function (moduleIn) {
+            if (!moduleIn) {
+                return callback(lastError);
             }
-            lastError = err;
-            doneModule(!err);
-        });
-    }, function(moduleIn) {
-        if (!moduleIn) {
-            return callback(lastError);
+            return callback(lastError, finalPath);
         }
-        return callback(lastError, finalPath);
-    });
+    );
 }

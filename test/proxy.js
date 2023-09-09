@@ -11,21 +11,21 @@ function Iface(name) {
 }
 
 Iface.prototype = {
-    publicMethod: function() {
+    publicMethod: function () {
         return this.name + ' publicMethod';
     },
-    _privateMethod: function() {
+    _privateMethod: function () {
         return this.name + ' _privateMethod';
     },
-    filteredMethod: function() {
+    filteredMethod: function () {
         return this.name + ' filteredMethod';
     },
 };
 
 function spy(obj, methods) {
-    methods.forEach(function(m) {
+    methods.forEach(function (m) {
         var o = obj[m];
-        var s = function() {
+        var s = function () {
             var args = Array.prototype.slice.call(arguments);
             var val = o.apply(obj, args);
             this[m].calls.push({

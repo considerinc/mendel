@@ -11,10 +11,7 @@ var rootDir = path.resolve(__dirname, './variation-samples/1/variations');
 
 process.chdir(rootDir);
 
-
-t.match(parseVariations({}), [],
-    'fails gracefully without variations');
-
+t.match(parseVariations({}), [], 'fails gracefully without variations');
 
 var config = {
     base: 'test_base',
@@ -23,30 +20,41 @@ var config = {
         doNotExist: null,
     },
 };
-var expected = [{
-    id: 'folder_A',
-    chain: ['folder_A', 'test_base'],
-}];
-t.match(parseVariations(config), expected,
-    'makes sure folders exists, honors config.base');
+var expected = [
+    {
+        id: 'folder_A',
+        chain: ['folder_A', 'test_base'],
+    },
+];
+t.match(
+    parseVariations(config),
+    expected,
+    'makes sure folders exists, honors config.base'
+);
 
 config.basetree = 'tree1';
 expected[0].chain[1] = 'tree1';
 
-t.match(parseVariations(config), expected,
-    'config.basetree preceedes config.base');
+t.match(
+    parseVariations(config),
+    expected,
+    'config.basetree preceedes config.base'
+);
 
 delete config.basetree;
 delete config.base;
 expected[0].chain[1] = rootDir;
 
-t.match(parseVariations(config), expected,
-    'fallback to basedir to current dir');
+t.match(
+    parseVariations(config),
+    expected,
+    'fallback to basedir to current dir'
+);
 
 rootDir = path.resolve(__dirname, './variation-samples/1/');
 process.chdir(rootDir);
 
-config =  {
+config = {
     basetree: 'base',
     variationsdir: 'variations',
     variations: {
@@ -59,24 +67,31 @@ config =  {
         experiment_D: ['folder_C', 'folder_A'],
     },
 };
-expected = [{
-    id: 'experiment_A',
-    chain: ['folder_A', 'base'],
-}, {
-    id: 'experiment_C',
-    chain: ['folder_C', 'base'],
-}, {
-    id: 'experiment_D',
-    chain: ['experiment_D', 'folder_C', 'folder_A', 'base'],
-}];
+expected = [
+    {
+        id: 'experiment_A',
+        chain: ['folder_A', 'base'],
+    },
+    {
+        id: 'experiment_C',
+        chain: ['folder_C', 'base'],
+    },
+    {
+        id: 'experiment_D',
+        chain: ['experiment_D', 'folder_C', 'folder_A', 'base'],
+    },
+];
 
-t.match(parseVariations(config), expected,
-    'grouped variation dirs complex example');
+t.match(
+    parseVariations(config),
+    expected,
+    'grouped variation dirs complex example'
+);
 
 rootDir = path.resolve(__dirname, './variation-samples/2/');
 process.chdir(rootDir);
 
-config =  {
+config = {
     base: 'default',
     basedir: 'src',
     basetree: '_default',
@@ -86,17 +101,19 @@ config =  {
         experiment_C: ['experiment_A'],
     },
 };
-expected = [{
-    id: 'experiment_A',
-    chain: ['experiment_A', '_default'],
-}, {
-    id: 'experiment_B',
-    chain: ['experiment_B', '_default'],
-}, {
-    id: 'experiment_C',
-    chain: ['experiment_C', 'experiment_A', '_default'],
-}];
+expected = [
+    {
+        id: 'experiment_A',
+        chain: ['experiment_A', '_default'],
+    },
+    {
+        id: 'experiment_B',
+        chain: ['experiment_B', '_default'],
+    },
+    {
+        id: 'experiment_C',
+        chain: ['experiment_C', 'experiment_A', '_default'],
+    },
+];
 
-t.match(parseVariations(config), expected,
-    'flat directory structure example');
-
+t.match(parseVariations(config), expected, 'flat directory structure example');

@@ -21,7 +21,7 @@ app.use(logger('tiny'));
 app.use(MendelMiddleware());
 app.set('query parser', 'simple');
 
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
     var variations = (req.query.variations || '')
         .trim()
         .split(',')
@@ -109,7 +109,7 @@ function entryMap(req, bundle) {
             '       window[nameSpace] = window[nameSpace] || {};',
             '       ' +
                 bundles
-                    .map(function(entry) {
+                    .map(function (entry) {
                         return (
                             'window[nameSpace]["' + entry + '"] = ' + ' url;'
                         );
@@ -126,7 +126,7 @@ function entryMap(req, bundle) {
 function concatDeps(req, bundleId) {
     const bundle = req.mendel.getBundle(bundleId);
 
-    return bundle.deps.map(dep => dep.source).join('\n');
+    return bundle.deps.map((dep) => dep.source).join('\n');
 }
 
 module.exports = app;

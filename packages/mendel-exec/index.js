@@ -13,7 +13,7 @@ function runEntryInVM(filename, source, sandbox, require) {
     }
 
     const exports = {};
-    const module = {exports};
+    const module = { exports };
     // Put the cache first so if return something even in the case when
     // cycle of dependencies happen.
     require.cache[filename] = module;
@@ -21,11 +21,9 @@ function runEntryInVM(filename, source, sandbox, require) {
     // the filename is only necessary for uncaught exception reports to point to the right file
     try {
         const unshebangedSource = source.replace(/^#!.*\n/, '');
-        const nodeSource = vm.runInContext(
-            m.wrap(unshebangedSource),
-            sandbox,
-            {filename}
-        );
+        const nodeSource = vm.runInContext(m.wrap(unshebangedSource), sandbox, {
+            filename,
+        });
         // function (exports, require, module, __filename, __dirname)
         nodeSource(
             exports,
@@ -46,7 +44,7 @@ function matchVar(norm, entries, variations, runtime) {
     // variations are variation configurations based on request.
     // How entries resolve in mutltivariate case is a little bit different
     // from variation inheritance, thus this flattening with a caveat.
-    const multiVariations = variations.reduce((reduced, {chain}, index) => {
+    const multiVariations = variations.reduce((reduced, { chain }, index) => {
         if (variations.length === index + 1) return reduced.concat(chain);
         // remove base which is part of every chain
         return reduced.concat(chain.slice(0, chain.length - 1));
@@ -54,26 +52,28 @@ function matchVar(norm, entries, variations, runtime) {
 
     for (let i = 0; i < multiVariations.length; i++) {
         const varId = multiVariations[i];
-        const found = entries.find(entry => {
-            return entry.variation === varId &&
-                (
-                    entry.runtime === 'isomorphic' ||
+        const found = entries.find((entry) => {
+            return (
+                entry.variation === varId &&
+                (entry.runtime === 'isomorphic' ||
                     entry.runtime === runtime ||
-                    entry.runtime === 'package'
-                );
+                    entry.runtime === 'package')
+            );
         });
         if (found) return found;
     }
 
-    throw new RangeError([
-        `Could not find entries with norm "${norm}" that matches`,
-        `"${JSON.stringify(variations)}"`,
-        'in the list of entries',
-        `[${entries.map(({id}) => id)}]`,
-    ].join(' '));
+    throw new RangeError(
+        [
+            `Could not find entries with norm "${norm}" that matches`,
+            `"${JSON.stringify(variations)}"`,
+            'in the list of entries',
+            `[${entries.map(({ id }) => id)}]`,
+        ].join(' ')
+    );
 }
 
-function exec(fileName, source, {sandbox = {}, resolver}) {
+function exec(fileName, source, { sandbox = {}, resolver }) {
     if (!sandbox) sandbox = {};
     if (!sandbox.cache) sandbox.cache = {};
     vm.createContext(sandbox);
@@ -110,7 +110,7 @@ function exec(fileName, source, {sandbox = {}, resolver}) {
 }
 
 module.exports = {
-    execWithRegistry(registry, mainId, variations, sandbox, runtime='main') {
+    execWithRegistry(registry, mainId, variations, sandbox, runtime = 'main') {
         function resolve(norm) {
             const entries = registry.getExecutableEntries(norm);
             if (!entries) return null;
@@ -132,14 +132,18 @@ module.exports = {
                     const parent = registry.getEntry(from);
 
                     if (!parent.deps[depLiteral])
-                        throw new Error('Any form of dynamic require is not supported by Mendel'); // eslint-disable-line max-len
+                        throw new Error(
+                            'Any form of dynamic require is not supported by Mendel'
+                        ); // eslint-disable-line max-len
 
                     let normId = parent.deps[depLiteral][runtime];
                     if (typeof normId === 'object') normId = normId[runtime];
 
                     // If we get _noop from cache, this depLiteral doesn't exist
                     if (normId === '_noop')
-                        throw new Error(`Cannot find ${depLiteral} from ${mainEntry.id}`); // eslint-disable-line max-len
+                        throw new Error(
+                            `Cannot find ${depLiteral} from ${mainEntry.id}`
+                        ); // eslint-disable-line max-len
 
                     return resolve(normId);
                 },

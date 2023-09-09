@@ -1,7 +1,7 @@
 class Entry {
     static getTypeForConfig(typeConfigs, id) {
         if (isNodeModule(id)) return 'node_modules';
-        const type = typeConfigs.find(type => type.test(id));
+        const type = typeConfigs.find((type) => type.test(id));
         return type ? type.name : '_others';
     }
 
@@ -30,7 +30,6 @@ class Entry {
         // Other metadata
         this.error; // If there is an error
         this.done; // Whether entry went through upto GST step in pipeline
-
 
         this.reset();
     }

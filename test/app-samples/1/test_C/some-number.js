@@ -2,6 +2,6 @@
    Copyrights licensed under the MIT License.
    See the accompanying LICENSE file for terms. */
 
-module.exports = function() {
-  return 11;
+module.exports = function () {
+    return 11;
 };

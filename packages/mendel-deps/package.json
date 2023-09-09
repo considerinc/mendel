@@ -1,30 +1,30 @@
 {
-  "name": "mendel-deps",
-  "version": "4.0.0-alpha.0",
-  "description": "Depedency detector based on AST. Supports custom cache and custom resolver.",
-  "main": "src/index.js",
-  "scripts": {
-    "test": "tap test/*.js"
-  },
-  "author": "Stephan Lee <stephanwlee@gmail.com>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/considerinc/mendel"
-  },
-  "dependencies": {
-    "acorn": "^8.10.0",
-    "acorn-jsx": "^5.3.2",
-    "ast-types": "^0.14.2",
-    "css": "^3.0.0",
-    "debug": "^4.3.4"
-  },
-  "devDependencies": {
-    "glob": "^10.3.3",
-    "mendel-resolver": "^4.0.0-alpha.0",
-    "tap": "^16.3.8"
-  },
-  "files": [
-    "src/*"
-  ]
+    "name": "mendel-deps",
+    "version": "4.0.0-alpha.0",
+    "description": "Depedency detector based on AST. Supports custom cache and custom resolver.",
+    "main": "src/index.js",
+    "scripts": {
+        "test": "tap test/*.js"
+    },
+    "author": "Stephan Lee <stephanwlee@gmail.com>",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/considerinc/mendel"
+    },
+    "dependencies": {
+        "acorn": "^8.10.0",
+        "acorn-jsx": "^5.3.2",
+        "ast-types": "^0.14.2",
+        "css": "^3.0.0",
+        "debug": "^4.3.4"
+    },
+    "devDependencies": {
+        "glob": "^10.3.3",
+        "mendel-resolver": "^4.0.0-alpha.0",
+        "tap": "^16.3.8"
+    },
+    "files": [
+        "src/*"
+    ]
 }

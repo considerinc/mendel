@@ -9,9 +9,15 @@ class DepsManager extends MultiProcessMaster {
     /**
      * @param {String} config.projectRoot
      */
-    constructor({projectRoot, baseConfig, variationConfig, shim}, mendelCache) {
+    constructor(
+        { projectRoot, baseConfig, variationConfig, shim },
+        mendelCache
+    ) {
         // For higher cache hit rate, do not utilize "all cores".
-        super(path.join(__dirname, 'worker.js'), {name: 'deps', numWorker: 2});
+        super(path.join(__dirname, 'worker.js'), {
+            name: 'deps',
+            numWorker: 2,
+        });
 
         this._mendelCache = mendelCache;
         this._projectRoot = projectRoot;
@@ -27,9 +33,8 @@ class DepsManager extends MultiProcessMaster {
     detect(entryId, source) {
         if (!mendelDeps.isSupported(path.extname(entryId))) {
             // there are no dependency
-            return Promise.resolve({id: entryId, deps: {}});
+            return Promise.resolve({ id: entryId, deps: {} });
         }
-
 
         return this.dispatchJob({
             filePath: entryId,
@@ -38,7 +43,7 @@ class DepsManager extends MultiProcessMaster {
             projectRoot: this._projectRoot,
             baseConfig: this._baseConfig,
             variationConfig: this._variationConfig,
-        }).then(({filePath, deps}) => this.resolve(filePath, deps));
+        }).then(({ filePath, deps }) => this.resolve(filePath, deps));
     }
 
     resolve(entryId, rawDeps) {
@@ -48,15 +53,15 @@ class DepsManager extends MultiProcessMaster {
         // main: false so we don't include node packages into Mendel pipeline
         // browser: path to the shim -- this will make pipeline include such shims
         Object.keys(deps)
-        .filter(literal => this._shim[literal])
-        .forEach(literal => {
-            deps[literal] = {
-                main: deps[literal].main || this._shim[literal],
-                browser: this._shim[literal],
-            };
-        });
+            .filter((literal) => this._shim[literal])
+            .forEach((literal) => {
+                deps[literal] = {
+                    main: deps[literal].main || this._shim[literal],
+                    browser: this._shim[literal],
+                };
+            });
 
-        return {id: entryId, deps};
+        return { id: entryId, deps };
     }
 
     /**
@@ -64,9 +69,9 @@ class DepsManager extends MultiProcessMaster {
      */
     subscribe() {
         return {
-            has: ({filePath}, sender) => {
+            has: ({ filePath }, sender) => {
                 const value = this._mendelCache.hasEntry(filePath);
-                sender('has', {value, filePath});
+                sender('has', { value, filePath });
             },
         };
     }

@@ -13,31 +13,28 @@ t.equal(sut.constructor, TreeSerialiser, 'correct constructor');
 sut = createPredictable();
 
 sut.pushBranch(2);
-sut.pushFileHash(Buffer.from('f8968ed58fa6f771df78e0be89be5a97c5d3fb59', 'hex'));
+sut.pushFileHash(
+    Buffer.from('f8968ed58fa6f771df78e0be89be5a97c5d3fb59', 'hex')
+);
 
 var expected = 'bWVuZGVsAQAC_wIACwymnXS-hyyRSwbove5neRfo6fI';
 
 t.equal(sut.result(), expected, 'Hash matches');
 t.equal(sut.result(), expected, 'Can call result multiple times');
 
-t.throws(
-function() {
+t.throws(function () {
     sut._metadata();
-},
-'Can\'t re-init _metadata');
+}, "Can't re-init _metadata");
 
-t.throws(
-function() {
+t.throws(function () {
     sut.pushBranch(1);
-},
-'Throws if pushBranch after result');
+}, 'Throws if pushBranch after result');
 
-t.throws(
-function() {
+t.throws(function () {
     sut.pushFileHash(
-        Buffer.from('f790b83d19df02e79d50eeb84590a32b966f8e13', 'hex'));
-},
-'Throws if pushFileHash after result');
+        Buffer.from('f790b83d19df02e79d50eeb84590a32b966f8e13', 'hex')
+    );
+}, 'Throws if pushFileHash after result');
 
 function createPredictable() {
     var sut = new TreeSerialiser();
@@ -53,27 +50,40 @@ var bogus = createPredictable();
 
 bogus.pushFileHash('not a Buffer');
 
-t.equal(sut.result(), bogus.result(), 'Don\'t pushFileHash if it\'s not a Buffer');
+t.equal(
+    sut.result(),
+    bogus.result(),
+    "Don't pushFileHash if it's not a Buffer"
+);
 
 var sut1 = createPredictable();
 var sut2 = createPredictable();
 
 sut1.pushBranch(1);
 sut2.pushBranch(1);
-sut1.pushFileHash(Buffer.from('f790b83d19df02e79d50eeb84590a32b966f8e13','hex'));
-sut2.pushFileHash(Buffer.from('f790b83d19df02e79d50eeb84590a32b966f8e13','hex'));
+sut1.pushFileHash(
+    Buffer.from('f790b83d19df02e79d50eeb84590a32b966f8e13', 'hex')
+);
+sut2.pushFileHash(
+    Buffer.from('f790b83d19df02e79d50eeb84590a32b966f8e13', 'hex')
+);
 
-t.equal(sut1.result(), sut2.result(),
-    'Consistent result if same files pushed');
+t.equal(sut1.result(), sut2.result(), 'Consistent result if same files pushed');
 
 sut1 = createPredictable();
 sut2 = createPredictable();
 
 sut1.pushBranch(1);
 sut2.pushBranch(1);
-sut1.pushFileHash(Buffer.from('f790b83d19df02e79d50eeb84590a32b966f8e13','hex'));
-sut2.pushFileHash(Buffer.from('b84590a32b966f8e13f790b83d19df02e79d50ee','hex'));
+sut1.pushFileHash(
+    Buffer.from('f790b83d19df02e79d50eeb84590a32b966f8e13', 'hex')
+);
+sut2.pushFileHash(
+    Buffer.from('b84590a32b966f8e13f790b83d19df02e79d50ee', 'hex')
+);
 
-t.notEqual(sut1.result(), sut2.result(),
-    'different result if different hahses pushed');
-
+t.notEqual(
+    sut1.result(),
+    sut2.result(),
+    'different result if different hahses pushed'
+);

@@ -3,7 +3,7 @@
    Copyrights licensed under the MIT License.
    See the accompanying LICENSE file for terms. */
 
-var util = require("util");
+var util = require('util');
 var MendelVariationWalker = require('./tree-variation-walker');
 
 util.inherits(MendelServerVariationWalker, MendelVariationWalker);
@@ -19,7 +19,7 @@ function MendelServerVariationWalker(_lookupChains, _base) {
     this._variationMap = {};
 }
 
-MendelServerVariationWalker.prototype.find = function(module) {
+MendelServerVariationWalker.prototype.find = function (module) {
     var fileId = module.id;
     var resolved;
 
@@ -41,7 +41,7 @@ MendelServerVariationWalker.prototype.find = function(module) {
     return resolved;
 };
 
-MendelServerVariationWalker.prototype.found = function() {
+MendelServerVariationWalker.prototype.found = function () {
     // This walker doesn't care about deps index nor hashes
     return this._variationMap;
 };

@@ -11,16 +11,19 @@ module.exports = class ManifestOutlet {
         // Mendel config
         this.config = config;
         // outlet options
-        this.options = Object.assign({
-            envify: true,
-            uglify: true,
-            runtime: 'browser',
-        }, options);
+        this.options = Object.assign(
+            {
+                envify: true,
+                uglify: true,
+                runtime: 'browser',
+            },
+            options
+        );
         this.runtime = this.options.runtime;
     }
 
-    perform({entries, options}) {
-        debug({perBundleOptions: options});
+    perform({ entries, options }) {
+        debug({ perBundleOptions: options });
         const manifestFileName = options.manifest;
         let envify = this.options.envify;
         let uglify = this.options.uglify;
@@ -41,17 +44,14 @@ module.exports = class ManifestOutlet {
         if (envify) manifest = this.envify(manifest);
         if (uglify) manifest = this.uglify(manifest);
 
-        fs.writeFileSync(
-            manifestFileName,
-            JSON.stringify(manifest, null, 2)
-        );
+        fs.writeFileSync(manifestFileName, JSON.stringify(manifest, null, 2));
 
         debug(`Outputted: ${manifestFileName}`);
     }
 
     dataFromItem(item) {
         const deps = {};
-        Object.keys(item.deps).forEach(key => {
+        Object.keys(item.deps).forEach((key) => {
             const dep = item.deps[key][this.runtime];
             deps[key] = dep;
         });
@@ -72,7 +72,7 @@ module.exports = class ManifestOutlet {
     }
 
     removeProcess(entries) {
-        Array.from(entries.keys()).forEach(key => {
+        Array.from(entries.keys()).forEach((key) => {
             const entry = entries.get(key);
             if (!entry) return;
 
@@ -81,11 +81,11 @@ module.exports = class ManifestOutlet {
     }
 
     envify(manifest) {
-        manifest.bundles.map(row => {
-            row.data.forEach(data => {
+        manifest.bundles.map((row) => {
+            row.data.forEach((data) => {
                 if (!data.deps.process) return;
 
-                const {code} = babelCore.transform(data.source, {
+                const { code } = babelCore.transform(data.source, {
                     filename: data.id,
                     plugins: [inliner],
                 });
@@ -98,18 +98,24 @@ module.exports = class ManifestOutlet {
     }
 
     uglify(manifest) {
-        manifestUglify([manifest], {
-            // `compress` and `mangle` are set to `true` on uglifyify
-            // just making sure we have the same defaults
-            uglifyOptions: {
-                root: this.config.baseConfig.dir,
-                compress: this.options.compress ? this.options.compress : true,
-                mangle: this.options.mangle ? this.options.mangle : true
+        manifestUglify(
+            [manifest],
+            {
+                // `compress` and `mangle` are set to `true` on uglifyify
+                // just making sure we have the same defaults
+                uglifyOptions: {
+                    root: this.config.baseConfig.dir,
+                    compress: this.options.compress
+                        ? this.options.compress
+                        : true,
+                    mangle: this.options.mangle ? this.options.mangle : true,
+                },
             },
-        }, ([uglifiedManifest]) => {
-            // happens immediately
-            manifest = uglifiedManifest;
-        });
+            ([uglifiedManifest]) => {
+                // happens immediately
+                manifest = uglifiedManifest;
+            }
+        );
 
         return manifest;
     }
@@ -122,52 +128,55 @@ module.exports = class ManifestOutlet {
 
         const errors = [];
 
-        Array.from(entries.keys()).sort()
-        .forEach(key => {
-            const item = entries.get(key);
-            const id = item.normalizedId;
+        Array.from(entries.keys())
+            .sort()
+            .forEach((key) => {
+                const item = entries.get(key);
+                const id = item.normalizedId;
 
-            try {
-                if (!Object.getOwnPropertyDescriptor(manifest.indexes, id)) {
-                    const data = this.dataFromItem(item);
-                    const newEntry = {
-                        id: item.normalizedId,
-                        index: null,
-                        variations: [data.variation],
-                        data: [data],
-                    };
+                try {
+                    if (
+                        !Object.getOwnPropertyDescriptor(manifest.indexes, id)
+                    ) {
+                        const data = this.dataFromItem(item);
+                        const newEntry = {
+                            id: item.normalizedId,
+                            index: null,
+                            variations: [data.variation],
+                            data: [data],
+                        };
 
-                    if (data.entry) newEntry.entry = data.entry;
-                    if (data.expose) newEntry.expose = data.expose;
-                    manifest.bundles.push(newEntry);
-                    const index = manifest.bundles.indexOf(newEntry);
+                        if (data.entry) newEntry.entry = data.entry;
+                        if (data.expose) newEntry.expose = data.expose;
+                        manifest.bundles.push(newEntry);
+                        const index = manifest.bundles.indexOf(newEntry);
 
-                    manifest.indexes[id] = index;
-                    newEntry.index = index;
-                } else {
-                    const index = manifest.indexes[id];
-                    const existing = manifest.bundles[index];
-                    const newData = this.dataFromItem(item);
-                    if (existing.variations.includes(newData.variation)) {
-                        return debug(
-                            `${existing.file}|${existing.variations}  `,
-                            `${item.id}|${item.variation}`,
-                            'WARN: normalizedId and variation collision'
-                        );
+                        manifest.indexes[id] = index;
+                        newEntry.index = index;
+                    } else {
+                        const index = manifest.indexes[id];
+                        const existing = manifest.bundles[index];
+                        const newData = this.dataFromItem(item);
+                        if (existing.variations.includes(newData.variation)) {
+                            return debug(
+                                `${existing.file}|${existing.variations}  `,
+                                `${item.id}|${item.variation}`,
+                                'WARN: normalizedId and variation collision'
+                            );
+                        }
+                        existing.variations.push(newData.variation);
+                        existing.data.push(newData);
+
+                        if (newData.entry) existing.entry = newData.entry;
+                        if (newData.expose) existing.expose = newData.expose;
                     }
-                    existing.variations.push(newData.variation);
-                    existing.data.push(newData);
-
-                    if (newData.entry) existing.entry = newData.entry;
-                    if (newData.expose) existing.expose = newData.expose;
+                } catch (e) {
+                    e.item = { id: item.id, normalizedId: item.normalizedId };
+                    errors.push(e);
                 }
-            } catch(e) {
-                e.item = {id: item.id, normalizedId: item.normalizedId};
-                errors.push(e);
-            }
-        });
+            });
 
-        if(errors.length > 0) {
+        if (errors.length > 0) {
             throw errors;
         }
 

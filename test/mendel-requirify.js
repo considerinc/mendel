@@ -42,7 +42,7 @@ function run(t, outDir, outFile, cb) {
         }
 
         // wait for file to be written
-        setTimeout(function() {
+        setTimeout(function () {
             var src;
             try {
                 src = fs.readFileSync(outFile, 'utf-8');
@@ -55,9 +55,13 @@ function run(t, outDir, outFile, cb) {
 
             var wrapper = requireTransform.wrapper;
             t.equal(src.indexOf(wrapper[0]), 0, 'wrapper prelude pos');
-            t.equal(src.indexOf(wrapper[1]), src.length - wrapper[1].length, 'wrapper epilogue pos');
+            t.equal(
+                src.indexOf(wrapper[1]),
+                src.length - wrapper[1].length,
+                'wrapper epilogue pos'
+            );
 
-            temp.cleanup(function() {
+            temp.cleanup(function () {
                 if (cb) {
                     return cb(t);
                 }

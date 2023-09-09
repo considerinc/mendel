@@ -6,7 +6,7 @@
 const path = require('path');
 const inspect = require('util').inspect;
 const debug = require('debug')('mendel:config');
-const {undash} = require('./util');
+const { undash } = require('./util');
 
 const defaultConfig = require('./defaults');
 const TransformConfig = require('./transform-config');
@@ -21,7 +21,7 @@ const ShimConfig = require('./shim-config');
 
 let oneLogPerProcessLogged = false;
 
-module.exports = function(rawConfig) {
+module.exports = function (rawConfig) {
     const defaults = defaultConfig();
     const pureConfig = onlyKeys(rawConfig, Object.keys(defaults));
     const fullConfig = deepMerge(defaults, pureConfig);
@@ -41,34 +41,34 @@ module.exports = function(rawConfig) {
     config.projectRoot = path.resolve(config.projectRoot);
     config.baseConfig = BaseConfig(config);
     config.variationConfig = VariationConfig(config);
-    config.types = Object.keys(config.types).map(typeName => {
+    config.types = Object.keys(config.types).map((typeName) => {
         return new TypesConfig(typeName, config.types[typeName], config);
     });
 
     // utility function for types as we almost always do this
-    (function(types) {
+    (function (types) {
         const map = new Map();
-        types.forEach(type => map.set(type.name, type));
+        types.forEach((type) => map.set(type.name, type));
         types.get = (name) => map.get(name);
     })(config.types);
 
-    config.transforms = Object.keys(config.transforms).map(id => {
+    config.transforms = Object.keys(config.transforms).map((id) => {
         return new TransformConfig(id, config.transforms[id], config);
     });
 
     const only = rawConfig.only || [];
     config.bundles = Object.keys(config.bundles)
-        .filter(bundleId => only.length === 0 || only.includes(bundleId))
-        .map(function(bundleId) {
+        .filter((bundleId) => only.length === 0 || only.includes(bundleId))
+        .map(function (bundleId) {
             return new BundleConfig(bundleId, config.bundles[bundleId], config);
         });
-    config.generators = config.generators.map(g => {
+    config.generators = config.generators.map((g) => {
         return new GeneratorConfig(g, config);
     });
-    config.postgenerators = config.postgenerators.map(g => {
+    config.postgenerators = config.postgenerators.map((g) => {
         return new PostGeneratorConfig(g, config);
     });
-    config.outlets = config.outlets.map(o => {
+    config.outlets = config.outlets.map((o) => {
         return new OutletConfig(o, config);
     });
 
@@ -77,10 +77,12 @@ module.exports = function(rawConfig) {
     validateTypesAndTransforms(config);
 
     if (oneLogPerProcessLogged === false) {
-        debug(inspect(config, {
-            colors: true,
-            depth: null,
-        }));
+        debug(
+            inspect(config, {
+                colors: true,
+                depth: null,
+            })
+        );
         oneLogPerProcessLogged = true;
     }
 
@@ -109,7 +111,7 @@ function deepMerge(dest, src) {
 }
 
 function isObject(obj) {
-    return ({}).toString.call(obj).slice(8, -1).toLowerCase() === 'object';
+    return {}.toString.call(obj).slice(8, -1).toLowerCase() === 'object';
 }
 
 /**
@@ -121,35 +123,41 @@ function validateTypesAndTransforms(config) {
     const error = [];
     const transformMap = new Map();
     const typeConversation = new Map();
-    config.transforms.forEach(xform => transformMap.set(xform.id, xform));
-    config.types.forEach(type => typeConversation.set(type.name, type.parserToType));
+    config.transforms.forEach((xform) => transformMap.set(xform.id, xform));
+    config.types.forEach((type) =>
+        typeConversation.set(type.name, type.parserToType)
+    );
 
-    config.types.forEach(type => {
+    config.types.forEach((type) => {
         type.transforms
-        .filter(transformId => !transformMap.has(transformId))
-        .forEach(transformId => {
-            error.push([
-                `Type "${type.id}" defines transform [${transformId}]`,
-                `that does not exist in transforms declaration.`,
-            ].join(' '));
-        });
+            .filter((transformId) => !transformMap.has(transformId))
+            .forEach((transformId) => {
+                error.push(
+                    [
+                        `Type "${type.id}" defines transform [${transformId}]`,
+                        `that does not exist in transforms declaration.`,
+                    ].join(' ')
+                );
+            });
 
         if (type.parser) {
             const badTransforms = type.transforms
-            .filter(xformId => transformMap.has(xformId))
-            .filter(xformId => transformMap.get(xformId).kind === 'gst');
+                .filter((xformId) => transformMap.has(xformId))
+                .filter((xformId) => transformMap.get(xformId).kind === 'gst');
 
             if (badTransforms.length) {
-                error.push([
-                    `Type "${type.id}" cannot define graph source transform`,
-                    `[${badTransforms.join(', ')}] when it has a parser.`,
-                ].join(' '));
+                error.push(
+                    [
+                        `Type "${type.id}" cannot define graph source transform`,
+                        `[${badTransforms.join(', ')}] when it has a parser.`,
+                    ].join(' ')
+                );
             }
         }
     });
 
     // Walk parser type conversion to detect cycles
-    Array.from(typeConversation.keys()).forEach(key => {
+    Array.from(typeConversation.keys()).forEach((key) => {
         let currentType = key;
         const visited = new Set();
 
@@ -160,17 +168,19 @@ function validateTypesAndTransforms(config) {
 
         // If currentType does not exist, it means there is no conversion for previous type
         if (currentType) {
-            error.push([
-                `Type "${key}" leads to circular type conversion that has`,
-                `a chain of [${Array.from(visited.keys()).join(', ')}]`,
-            ].join(' '));
+            error.push(
+                [
+                    `Type "${key}" leads to circular type conversion that has`,
+                    `a chain of [${Array.from(visited.keys()).join(', ')}]`,
+                ].join(' ')
+            );
         }
     });
 
     if (error.length) {
         throw new Error(
             error.filter(Boolean).reduce((reduced, error) => {
-                return reduced += 'x ' + error + '\n';
+                return (reduced += 'x ' + error + '\n');
             }, '[Bad configuration] Configuration is not valid:\n')
         );
     }

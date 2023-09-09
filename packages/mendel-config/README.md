@@ -36,15 +36,15 @@ Configuration parsing happens in 3 steps:
 
 Configuration precedence is, from order to strongest to weakest:
 
-  1. Passing configuration as an JavaScript object
-  2. Configuration on `.mendelrc` or `package.json`
-  3. Mendel defaults
+1. Passing configuration as an JavaScript object
+2. Configuration on `.mendelrc` or `package.json`
+3. Mendel defaults
 
 The only exception is `basedir`. `basedir` has different meanings depending on where you declare it:
 
-  1. If `basedir` is passed programmatically it is meant as a configuration lookup folder
-  2. If any of `.mendelrc` or `package.json` is found, basedir is forced to be the folder that contains the config file, even if you provide one as property of the configuration object.
-  3. All other path entries that are not absolute will be relative to `basedir`
+1. If `basedir` is passed programmatically it is meant as a configuration lookup folder
+2. If any of `.mendelrc` or `package.json` is found, basedir is forced to be the folder that contains the config file, even if you provide one as property of the configuration object.
+3. All other path entries that are not absolute will be relative to `basedir`
 
 ### 2. Merging by environment
 
@@ -67,139 +67,138 @@ build-dir: ./build
 
 # Base/default variation configuration
 base-config:
-  id: base
-  dir: ./src/master
+    id: base
+    dir: ./src/master
 
 variation-config:
-  variation-dirs:
-    - ./src/environments
-    - ./src/settings
-    - ./src/experiments
-    - ./src/themes
-  # dir names should be unique across all roots or mendel throws
-  variations:
-    # id of variation
-    button_color:
-      # name of the folder
-      - blue_button
+    variation-dirs:
+        - ./src/environments
+        - ./src/settings
+        - ./src/experiments
+        - ./src/themes
+    # dir names should be unique across all roots or mendel throws
+    variations:
+        # id of variation
+        button_color:
+            # name of the folder
+            - blue_button
 
 route-config:
-  variation: /mendel/:variations/:bundle
-  hash: /mendel/:hash/:bundle
+    variation: /mendel/:variations/:bundle
+    hash: /mendel/:hash/:bundle
 
 transforms: # a list of all available transforms for all envs and types
-  babelify-dev:
-    plugin: mendel-babelify
-    options:
-      plugins:
-        -
-          - react-intl
-          - messagesDir: ./tmp/strings/
-            enforceDescriptions: true
-  babelify-prod:
-    plugin: mendel-babelify
-    options:
-      plugins:
-        - react-intl-remove-description
-        - transform-react-remove-prop-types
-        -
-          - react-intl
-          - messagesDir: ./tmp/strings/
-            enforceDescriptions: true
-  custom-transform:
-    plugin: ./transforms/custom.js
-  envify-dev:
-    options:
-      NODE_ENV: development
-  envify-prod:
-    options:
-      NODE_ENV: production
-  minify:
-    plugin: mendel-uglify-js
-  coverage:
-    plugin: mendel-istanbul
-  post-css:
-    plugin: mendel-post-css
-    options:
-      foo: bar # auto-prefixex, rtl-css
+    babelify-dev:
+        plugin: mendel-babelify
+        options:
+            plugins:
+                - - react-intl
+                  - messagesDir: ./tmp/strings/
+                    enforceDescriptions: true
+    babelify-prod:
+        plugin: mendel-babelify
+        options:
+            plugins:
+                - react-intl-remove-description
+                - transform-react-remove-prop-types
+                - - react-intl
+                  - messagesDir: ./tmp/strings/
+                    enforceDescriptions: true
+    custom-transform:
+        plugin: ./transforms/custom.js
+    envify-dev:
+        options:
+            NODE_ENV: development
+    envify-prod:
+        options:
+            NODE_ENV: production
+    minify:
+        plugin: mendel-uglify-js
+    coverage:
+        plugin: mendel-istanbul
+    post-css:
+        plugin: mendel-post-css
+        options:
+            foo: bar # auto-prefixex, rtl-css
 
 types:
-  css:
-    transforms:
-      - post-css
-    outlet:
-      plugin: mendel-css-pack
-  javascript:
-    outlet:
-      plugin: mendel-bundle-browser-pack
-    transforms:
-      - envify-dev
-      - babelify-dev
-    extensions:
-      - .js
-      - .json
-      - .jsx
-  node_modules:
-    transforms:
-      - envify-dev
+    css:
+        transforms:
+            - post-css
+        outlet:
+            plugin: mendel-css-pack
+    javascript:
+        outlet:
+            plugin: mendel-bundle-browser-pack
+        transforms:
+            - envify-dev
+            - babelify-dev
+        extensions:
+            - .js
+            - .json
+            - .jsx
+    node_modules:
+        transforms:
+            - envify-dev
 
 env:
-  production:
-    types:
-      javascript:
-        outlet:
-          plugin: mendel-bundle-rollup
-        transforms:
-          - envify-prod
-          - babelify-dev
-          - minify
-        node_modules:
-          - envify-prod
-          - minify
-  unit-test:
-    types:
-      javascript:
-        transforms:
-          - envify-dev
-          - babelify-dev
-          - coverage
+    production:
+        types:
+            javascript:
+                outlet:
+                    plugin: mendel-bundle-rollup
+                transforms:
+                    - envify-prod
+                    - babelify-dev
+                    - minify
+                node_modules:
+                    - envify-prod
+                    - minify
+    unit-test:
+        types:
+            javascript:
+                transforms:
+                    - envify-dev
+                    - babelify-dev
+                    - coverage
 
 # Order is relevant. E.g.,
 # if extract-bundles comes first, we can generate lazy bundle specific css
 # if css comes first, css file includes rules from files on lazy bundles
 # if node-modules is last, we can use lazy-bundle as optional input (see below)
 generators: # AKA graph transforms - or graph operations
-  - id: extract-bundles
-    plugin: mendel-extract-bundles
-  - id: node-modules-generator
-    plugin: mendel-extract-node-modules
+    - id: extract-bundles
+      plugin: mendel-extract-bundles
+    - id: node-modules-generator
+      plugin: mendel-extract-node-modules
 
 # "outfile" is optional and only needed for single layer generation
 bundles:
-  main:
-    outfile: app.js
-    entries:
-      - /apps/main
-  lazy-group-1:
-    outfile: lazy1.js
-    generator: extract-bundles
-    from: main
-    extract-entries:
-      - /apps/lazy
-  deps:
-    outfile: vendor.js
-    generator: node-modules-generator
-    all-bundles: true # expects only 1 bundle to apply this generator, or throws
-                      # look for node_modules in every other bundle
-    # alternative configuration
-    # if the array don't contain lazy, the node_modules only used on lazy would
-    # be kept on lazy_bundle
-    # bundles:
-    #   - mail_app
-    #   - compose_app
-  css:
-    outfile: app.css
-    generator: atomic-css-generator
-    entries:
-      - /apps/main
+    main:
+        outfile: app.js
+        entries:
+            - /apps/main
+    lazy-group-1:
+        outfile: lazy1.js
+        generator: extract-bundles
+        from: main
+        extract-entries:
+            - /apps/lazy
+    deps:
+        outfile: vendor.js
+        generator: node-modules-generator
+        all-bundles:
+            true # expects only 1 bundle to apply this generator, or throws
+            # look for node_modules in every other bundle
+        # alternative configuration
+        # if the array don't contain lazy, the node_modules only used on lazy would
+        # be kept on lazy_bundle
+        # bundles:
+        #   - mail_app
+        #   - compose_app
+    css:
+        outfile: app.css
+        generator: atomic-css-generator
+        entries:
+            - /apps/main
 ```

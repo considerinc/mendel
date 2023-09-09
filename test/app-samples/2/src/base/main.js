@@ -7,13 +7,8 @@ var complexWord = require('./complex');
 var lateWord = require('./get_late');
 
 function printWith(printFunction) {
-    lateWord(function(resolvedWord) {
-        var string = [
-            easyWord(),
-            complexWord(),
-            'or',
-            resolvedWord,
-        ].join(' ');
+    lateWord(function (resolvedWord) {
+        var string = [easyWord(), complexWord(), 'or', resolvedWord].join(' ');
         printFunction(string);
     });
 }

@@ -34,7 +34,7 @@ class Analytics {
     }
 }
 
-module.exports = function(name) {
+module.exports = function (name) {
     return new Analytics(name);
 };
 

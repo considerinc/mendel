@@ -1,16 +1,16 @@
 {
-  "name": "mendel-generator-prune",
-  "version": "4.0.0-alpha.0",
-  "description": "Mendel post-generator that cleans up dangling dependencies and normalizes paths.",
-  "main": "index.js",
-  "scripts": {},
-  "author": "Stephan Lee <stephanwlee@gmail.com>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/considerinc/mendel"
-  },
-  "dependencies": {
-    "debug": "^4.3.4"
-  }
+    "name": "mendel-generator-prune",
+    "version": "4.0.0-alpha.0",
+    "description": "Mendel post-generator that cleans up dangling dependencies and normalizes paths.",
+    "main": "index.js",
+    "scripts": {},
+    "author": "Stephan Lee <stephanwlee@gmail.com>",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/considerinc/mendel"
+    },
+    "dependencies": {
+        "debug": "^4.3.4"
+    }
 }

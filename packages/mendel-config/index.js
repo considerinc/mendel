@@ -39,8 +39,8 @@ function loadFromYaml(path) {
     return yaml.safeLoad(fs.readFileSync(path, 'utf8'));
 }
 
-module.exports = function(config) {
-    if (typeof config === 'string') config = {projectRoot: config};
+module.exports = function (config) {
+    if (typeof config === 'string') config = { projectRoot: config };
     if (typeof config !== 'object') config = {};
 
     var projectRoot = config.projectRoot || config.basedir || process.cwd();

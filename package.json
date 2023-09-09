@@ -1,74 +1,80 @@
 {
-  "name": "mendel-monorepo",
-  "private": true,
-  "description": "Build toolchain for experimentation on isomorphic web applications with tree-inheritance and multivariate support.",
-  "keywords": [
-    "testing",
-    "a/b",
-    "bucket",
-    "multivariate",
-    "experiments",
-    "evaluation",
-    "build-tools",
-    "build"
-  ],
-  "author": "Irae Carvalho <irae@irae.pro.br>",
-  "contributors": [
-    {
-      "name": "David Gomez",
-      "email": "david.garcia.mx@gmail.com"
+    "name": "mendel-monorepo",
+    "private": true,
+    "description": "Build toolchain for experimentation on isomorphic web applications with tree-inheritance and multivariate support.",
+    "keywords": [
+        "testing",
+        "a/b",
+        "bucket",
+        "multivariate",
+        "experiments",
+        "evaluation",
+        "build-tools",
+        "build"
+    ],
+    "author": "Irae Carvalho <irae@irae.pro.br>",
+    "contributors": [
+        {
+            "name": "David Gomez",
+            "email": "david.garcia.mx@gmail.com"
+        },
+        {
+            "name": "Rafael Martins",
+            "email": "snit.ram@gmail.com"
+        },
+        {
+            "name": "Stephan Lee",
+            "email": "stephanwlee@gmail.com"
+        }
+    ],
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/considerinc/mendel"
     },
-    {
-      "name": "Rafael Martins",
-      "email": "snit.ram@gmail.com"
+    "workspaces": [
+        "packages/*"
+    ],
+    "engines": {
+        "npm": ">= 9.0.0",
+        "node": ">= 20.0.0"
     },
-    {
-      "name": "Stephan Lee",
-      "email": "stephanwlee@gmail.com"
+    "scripts": {
+        "prepare": "husky install",
+        "test": "DEBUG='' rimraf test/**/build* && rimraf test/**/.mendelipc && npm run unit && npm run lint",
+        "lint": "eslint .",
+        "unit": "DEBUG='' tap test/*.js",
+        "unit-file": "DEBUG='' tap",
+        "coverage": "DEBUG='' tap test/*.js --coverage --nyc-arg=--all",
+        "coverage-file": "DEBUG='' tap --coverage --coverage-report=lcov",
+        "coverage-html": "DEBUG='' tap test/*.js --coverage --nyc-arg=--all --coverage-report=lcov",
+        "coverage-all-individualy": "DEBUG='' for test in $(find test -name *.js -depth 1); do tap $test --coverage ; done",
+        "commitlint": "commitlint --edit"
+    },
+    "nyc": {
+        "exclude": [
+            "examples/**",
+            "coverage/**",
+            "test/**"
+        ]
+    },
+    "devDependencies": {
+        "@commitlint/cli": "^17.7.1",
+        "@commitlint/config-conventional": "^17.7.0",
+        "async": "^3.2.4",
+        "browserify": "^17.0.0",
+        "debug": "^4.3.4",
+        "eslint": "^8.46.0",
+        "eslint-plugin-react": "^7.33.1",
+        "express": "^4.18.2",
+        "husky": "^8.0.3",
+        "lerna": "^7.1.4",
+        "lint-staged": "^14.0.1",
+        "mkdirp": "^3.0.1",
+        "prettier": "3.0.3",
+        "rimraf": "^5.0.1",
+        "tap": "^16.3.8",
+        "temp": "^0.9.4",
+        "tmp": "^0.2.1"
     }
-  ],
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/considerinc/mendel"
-  },
-  "workspaces": [
-    "packages/*"
-  ],
-  "scripts": {
-    "prepare": "husky install",
-    "test": "DEBUG='' rimraf test/**/build* && rimraf test/**/.mendelipc && npm run unit && npm run lint",
-    "lint": "eslint .",
-    "unit": "DEBUG='' tap test/*.js",
-    "unit-file": "DEBUG='' tap",
-    "coverage": "DEBUG='' tap test/*.js --coverage --nyc-arg=--all",
-    "coverage-file": "DEBUG='' tap --coverage --coverage-report=lcov",
-    "coverage-html": "DEBUG='' tap test/*.js --coverage --nyc-arg=--all --coverage-report=lcov",
-    "coverage-all-individualy": "DEBUG='' for test in $(find test -name *.js -depth 1); do tap $test --coverage ; done",
-    "commitlint": "commitlint --edit"
-  },
-  "nyc": {
-    "exclude": [
-      "examples/**",
-      "coverage/**",
-      "test/**"
-    ]
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^17.7.1",
-    "@commitlint/config-conventional": "^17.7.0",
-    "async": "^3.2.4",
-    "browserify": "^17.0.0",
-    "debug": "^4.3.4",
-    "eslint": "^8.46.0",
-    "eslint-plugin-react": "^7.33.1",
-    "express": "^4.18.2",
-    "husky": "^8.0.3",
-    "lerna": "^7.1.4",
-    "mkdirp": "^3.0.1",
-    "rimraf": "^5.0.1",
-    "tap": "^16.3.8",
-    "temp": "^0.9.4",
-    "tmp": "^0.2.1"
-  }
 }

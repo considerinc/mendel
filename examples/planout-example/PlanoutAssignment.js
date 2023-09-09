@@ -3,10 +3,9 @@
    Contributed by Shalom Volchok <shalom@digitaloptgroup.com>
    See the accompanying LICENSE file for terms. */
 
-var Planout = require("planout");
+var Planout = require('planout');
 
 class PlanoutAssignment extends Planout.Experiment {
-
     configureLogger() {
         return;
     }
@@ -36,27 +35,30 @@ class PlanoutAssignment extends Planout.Experiment {
         the visitorId, Planout concatenates the params name ('layer_1' or 'layer_2')
         with the visitorId to assure that selections are not correlated across params.
         */
-        params.set('layer_1', new Planout.Ops.Random.UniformChoice({
+        params.set(
+            'layer_1',
+            new Planout.Ops.Random.UniformChoice({
                 choices: [
                     false, // if selected will show base
-                    "layer_1_bucket_A",
-                    "layer_1_bucket_B"
+                    'layer_1_bucket_A',
+                    'layer_1_bucket_B',
                 ],
-                unit: args.visitorId
+                unit: args.visitorId,
             })
         );
-        params.set('layer_2', new Planout.Ops.Random.UniformChoice({
-                choices:  [
+        params.set(
+            'layer_2',
+            new Planout.Ops.Random.UniformChoice({
+                choices: [
                     false, // if selected will show base
-                    "layer_2_bucket_A",
-                    "layer_2_bucket_B",
-                    "layer_2_bucket_C"
+                    'layer_2_bucket_A',
+                    'layer_2_bucket_B',
+                    'layer_2_bucket_C',
                 ],
-                unit: args.visitorId
+                unit: args.visitorId,
             })
         );
     }
-
 }
 
 module.exports = PlanoutAssignment;

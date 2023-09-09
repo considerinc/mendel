@@ -61,18 +61,18 @@ You may also append query parameters to request specific combinations directly f
 
 The following is a complete list of all 12 valid permutations that can result from the two layers implemented in this example.
 
-- all from base
-- layer_1_bucket_A
-- layer_1_bucket_B
-- layer_2_bucket_A
-- layer_2_bucket_B
-- layer_2_bucket_C
-- layer_1_bucket_A, layer_2_bucket_A
-- layer_1_bucket_A, layer_2_bucket_B
-- layer_1_bucket_A, layer_2_bucket_C
-- layer_1_bucket_B, layer_2_bucket_A
-- layer_1_bucket_B, layer_2_bucket_B
-- layer_1_bucket_B, layer_2_bucket_C
+-   all from base
+-   layer_1_bucket_A
+-   layer_1_bucket_B
+-   layer_2_bucket_A
+-   layer_2_bucket_B
+-   layer_2_bucket_C
+-   layer_1_bucket_A, layer_2_bucket_A
+-   layer_1_bucket_A, layer_2_bucket_B
+-   layer_1_bucket_A, layer_2_bucket_C
+-   layer_1_bucket_B, layer_2_bucket_A
+-   layer_1_bucket_B, layer_2_bucket_B
+-   layer_1_bucket_B, layer_2_bucket_C
 
 To run this example go to it's root directory and run `npm install`.
 
@@ -81,6 +81,6 @@ For Mendel 1.x, you can run:
     $ npm run build
     $ npm run development
 
-*TBD: We should add .mendelrc_v2 file and update package.json for this example.*
+_TBD: We should add .mendelrc_v2 file and update package.json for this example._
 
 And view in your browser at `localhost:3000`

@@ -3,7 +3,7 @@ const chokidar = require('chokidar');
 const FS_CHANGE_DELAY = process.env.MENDEL_FS_CHANGE_DELAY || 100;
 
 class FsWatcher {
-    constructor({projectRoot, ignore}, cacheManager) {
+    constructor({ projectRoot, ignore }, cacheManager) {
         this.cacheManager = cacheManager;
         // Default ignore .dot files.
         this.ignored = (ignore || []).concat([/[\/\\]\./]);
@@ -20,47 +20,47 @@ class FsWatcher {
         });
 
         this.watcher
-        .on('change', (path) => {
-            path = withPrefix(path);
-            this._changeSet.add(path);
-            if (!this._changeDelay) {
-                this._changeDelay = setTimeout(() => {
-                    for (let path of this._changeSet.keys()) {
-                        this.cacheManager.removeEntry(path);
-                        this.cacheManager.addEntry(path);
-                    }
-                    this._changeDelay = null;
-                    this._changeSet.clear();
-                }, FS_CHANGE_DELAY);
-            }
-        })
-        .on('unlink', (path) => {
-            this.cacheManager.removeEntry(withPrefix(path));
-        })
-        .on('add', (path, stats) => {
-            path = withPrefix(path);
-            if (!this.isInitialized) {
-                this.initialProrityQueue.push({
-                    path,
-                    size: stats.size,
-                });
-            } else {
-                this.cacheManager.addEntry(path);
-            }
-        })
-        .once('ready', () => {
-            this.isInitialized = true;
-
-            this.initialProrityQueue
-                .sort(({size: aSize}, {size: bSize}) => bSize - aSize)
-                .sort((a, b) => packageJsonSort(b) - packageJsonSort(a))
-                .forEach(({path}) => {
+            .on('change', (path) => {
+                path = withPrefix(path);
+                this._changeSet.add(path);
+                if (!this._changeDelay) {
+                    this._changeDelay = setTimeout(() => {
+                        for (let path of this._changeSet.keys()) {
+                            this.cacheManager.removeEntry(path);
+                            this.cacheManager.addEntry(path);
+                        }
+                        this._changeDelay = null;
+                        this._changeSet.clear();
+                    }, FS_CHANGE_DELAY);
+                }
+            })
+            .on('unlink', (path) => {
+                this.cacheManager.removeEntry(withPrefix(path));
+            })
+            .on('add', (path, stats) => {
+                path = withPrefix(path);
+                if (!this.isInitialized) {
+                    this.initialProrityQueue.push({
+                        path,
+                        size: stats.size,
+                    });
+                } else {
                     this.cacheManager.addEntry(path);
-                });
+                }
+            })
+            .once('ready', () => {
+                this.isInitialized = true;
 
-            // Cleanup the queue afterwards
-            this.initialProrityQueue = [];
-        });
+                this.initialProrityQueue
+                    .sort(({ size: aSize }, { size: bSize }) => bSize - aSize)
+                    .sort((a, b) => packageJsonSort(b) - packageJsonSort(a))
+                    .forEach(({ path }) => {
+                        this.cacheManager.addEntry(path);
+                    });
+
+                // Cleanup the queue afterwards
+                this.initialProrityQueue = [];
+            });
 
         this.cacheManager.on('entryRequested', (path) => {
             // Adding entry upfront avoids filesystem async nature to make hard
@@ -93,7 +93,7 @@ class FsWatcher {
 
 function withPrefix(path) {
     if (/^\w[^:]/.test(path)) {
-        path = './'+path;
+        path = './' + path;
     }
     return path;
 }

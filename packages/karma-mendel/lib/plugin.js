@@ -10,7 +10,7 @@ var File = require('karma/lib/file');
 const { createHash } = require('crypto');
 var configLoader = require('mendel-config');
 var MendelClient = require('mendel-pipeline/client');
-var {SourceMapGenerator, SourceMapConsumer} = require('source-map');
+var { SourceMapGenerator, SourceMapConsumer } = require('source-map');
 
 var INLINE_MAP_PREFIX = '//# sourceMappingURL=data:application/json;base64,';
 var BRIDGE_FILE_PATH = path.normalize(
@@ -36,7 +36,7 @@ async function initMendelFramework(logger, emitter, fileList, karmaConfig) {
 
     var log = logger.create('framework:mendel');
     var client = new MendelClient(
-        Object.assign({}, configMendel, {noout: true})
+        Object.assign({}, configMendel, { noout: true })
     );
     client.run();
     var config = configLoader(configMendel);
@@ -70,14 +70,13 @@ async function initMendelFramework(logger, emitter, fileList, karmaConfig) {
         debug('file_list_modified');
         // karma will swallow errors without this try/catch
         try {
-
-            await new Promise(function waiter (resolve) {
-                if(globalClient.isSynced()) {
+            await new Promise(function waiter(resolve) {
+                if (globalClient.isSynced()) {
                     return resolve();
                 }
                 debug('file_list_modified hold');
-                setTimeout(()=> waiter(resolve), 100);
-            })
+                setTimeout(() => waiter(resolve), 100);
+            });
 
             debug('file_list_modified continue');
 
@@ -123,7 +122,7 @@ async function initMendelFramework(logger, emitter, fileList, karmaConfig) {
             Array.from(entryModules.values()).forEach((module) => {
                 client.registry.walk(
                     module.normalizedId,
-                    {types: config.types.map((_) => _.name)},
+                    { types: config.types.map((_) => _.name) },
                     (dep) => {
                         if (collectedModules.has(dep.id)) return false;
                         collectedModules.set(dep.id, dep);
@@ -132,8 +131,8 @@ async function initMendelFramework(logger, emitter, fileList, karmaConfig) {
             });
 
             var servedFiles = files.served;
-            var injectedModules = await Promise.all(Array.from(collectedModules.values()).map(
-                async (mod) => {
+            var injectedModules = await Promise.all(
+                Array.from(collectedModules.values()).map(async (mod) => {
                     var filepath = path.join(root, mod.id);
                     for (
                         var i = 0, length = servedFiles.length;
@@ -162,18 +161,25 @@ async function initMendelFramework(logger, emitter, fileList, karmaConfig) {
                     // integrity is used on the <script> tag to prevent loading the wrong file
                     var integrity = sha256(contents);
 
-                    var externalFile = new File(filepath, modificationTime, doNotCache, type, isBinary, integrity);
+                    var externalFile = new File(
+                        filepath,
+                        modificationTime,
+                        doNotCache,
+                        type,
+                        isBinary,
+                        integrity
+                    );
 
                     externalFile.content = contents;
                     // sha is used in URL request to prevent http caching
                     externalFile.sha = integrity;
-                    
+
                     servedFiles.push(externalFile);
                     // files.included.push(externalFile);
                     log.debug('added (preprocessed) dependency ', mod.id);
                     return externalFile;
-                }
-            ));
+                })
+            );
 
             files.included = [globalModule]
                 .concat(injectedModules)
@@ -203,10 +209,7 @@ var createPreprocesor = function (logger) {
 
         if (!globalClient.isSynced() || debounce) {
             debounce = false;
-            setTimeout(
-                () => getFile(content, file, done, 'logged'),
-                250
-            );
+            setTimeout(() => getFile(content, file, done, 'logged'), 250);
             return;
         }
 
@@ -297,7 +300,7 @@ async function wrapMendelModule(module) {
 
     var output = parts[0] + module.source + parts[1];
 
-    var newSourceMap = new SourceMapGenerator({file: module.id});
+    var newSourceMap = new SourceMapGenerator({ file: module.id });
     var finalMap;
     if (module.map) {
         // remap existing map summing our module padding
@@ -326,10 +329,7 @@ async function wrapMendelModule(module) {
                 source,
                 name,
             };
-            if (
-                null === originalLine ||
-                null === originalColumn
-            ) {
+            if (null === originalLine || null === originalColumn) {
                 add.original = null;
             }
             newSourceMap.addMapping(add);
@@ -373,7 +373,7 @@ async function wrapMendelModule(module) {
         'src/isomorphic/base/components/_test_/button_test.js',
     ];
 
-    if(logModules.some(_ => module.id.indexOf(_)!==-1)) {
+    if (logModules.some((_) => module.id.indexOf(_) !== -1)) {
         verbose(output);
     }
 
@@ -381,10 +381,10 @@ async function wrapMendelModule(module) {
 }
 
 function sha256(string) {
-    const enc = "utf8";
-    const algorithm = 'sha256'
+    const enc = 'utf8';
+    const algorithm = 'sha256';
     const hash = createHash(algorithm).update(string, enc);
-    const sha  = hash.digest("base64");
+    const sha = hash.digest('base64');
 
     return `${algorithm}-${sha}`;
 }

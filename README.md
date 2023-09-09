@@ -23,15 +23,15 @@ It is meant to be simple and easy to use on a daily basis. It works very well fo
 
 Mendel supports:
 
-* JavaScript bundle generation (similar to Webpack/Browserify) for each variation/experiment/bucket
-* Isomorphic applications (a.k.a. server side rendering, such as ReactDOMServer or Ember Fastboot)
-* Multivariate testing and/or Multilayer experimentation
-* Variation/experiment/bucket inheritance that enables code-reuse across different experiments.
+-   JavaScript bundle generation (similar to Webpack/Browserify) for each variation/experiment/bucket
+-   Isomorphic applications (a.k.a. server side rendering, such as ReactDOMServer or Ember Fastboot)
+-   Multivariate testing and/or Multilayer experimentation
+-   Variation/experiment/bucket inheritance that enables code-reuse across different experiments.
 
 Mendel does not support:
 
-* Experiment resolution: Mendel does not provide [random assignment](https://en.wikipedia.org/wiki/Random_assignment) of users into experiments
-* Experiments measurement: Mendel does not provide a way to track performance of experiments based on user actions
+-   Experiment resolution: Mendel does not provide [random assignment](https://en.wikipedia.org/wiki/Random_assignment) of users into experiments
+-   Experiments measurement: Mendel does not provide a way to track performance of experiments based on user actions
 
 Both of the above are covered by existing open source tools, such as [PlanOut](http://facebook.github.io/planout/), [Open Web Analytics](http://www.openwebanalytics.com), [Piwik](https://piwik.org) and [many others](https://www.google.com/#q=open+source+web+analytics).
 
@@ -39,9 +39,9 @@ Both of the above are covered by existing open source tools, such as [PlanOut](h
 
 Mendel is built on top of solid [design principles](docs/Design.md) and is hardened by years of using the same strategy inside Yahoo, from teams ranging from 3 to 30+ developers contributing daily to large applications. Here are a few of the advantages of using Mendel:
 
-  * **Maintainability**: All variation/experimentation code is organized and compiled in a way to be immediately disposable, impose no maintenance overhead, and be very easy to debug and analyze.
-  * **Performance**: Server side resolution is synchronous and fast, and client side code will have no payload overhead.
-  * **Security**: Bundle URL and client-side compiled code does not contain variation/experiment information. Only the packages that are absolutely needed are included in the bundle.
+-   **Maintainability**: All variation/experimentation code is organized and compiled in a way to be immediately disposable, impose no maintenance overhead, and be very easy to debug and analyze.
+-   **Performance**: Server side resolution is synchronous and fast, and client side code will have no payload overhead.
+-   **Security**: Bundle URL and client-side compiled code does not contain variation/experiment information. Only the packages that are absolutely needed are included in the bundle.
 
 Mendel also has a clear development flow. All other experimentation we could find lacked built in support for a smooth development workflow. In Mendel, fast development cycles are a first-class citizen.
 
@@ -50,7 +50,6 @@ Mendel also has a clear development flow. All other experimentation we could fin
 Mendel uses files to create differences for each experiment you want to run for your users. With Mendel you don't create conditionals such as `if(myExperimentRunning) { /* do something different */ }`. You just copy the file you need to be slightly different and change your code.
 
 For example, let's say your application has a `controllers` directory and a `views` directory, and for a given experiment you will change how display ads are rendered. You then create the following structure **in addition** to your application code.
-
 
 ```
 bash> tree
@@ -69,8 +68,8 @@ Next, you add the experiment to your configuration. Each experiment is called a 
 ```yaml
 variationsdir: experiments
 variations:
-  new_ad_on_sidebar: ## experiment id is inferred from this key
-    - new_ad_format  ## directory name (if not same as id)
+    new_ad_on_sidebar: ## experiment id is inferred from this key
+        - new_ad_format ## directory name (if not same as id)
 ```
 
 That's it, with two simple steps, you now have have an experiment ready to run. The default code is usually called `base` and does not need to be declared. Mendel will then generate bundles for each of your variations.
@@ -114,7 +113,6 @@ from "src/" tree.
 ## Stability and Roadmap
 
 The way Mendel experiments are built has been quite stable since mid 2014, and Mendel implementation just improves how it is compiled and adds several features, like multi-layer. Mendel 1.x can be considered stable and is used by production applications at Yahoo. We are also [building Mendel 2.x](docs/Roadmap.md), in which experiment/variations creation will be exactly the same, production middleware API is also considered stable and only file configuration format and development middleware will have breaking changes in 2.0.
-
 
 Since documentation is still short of ideal, we recommend you start with the "examples" directory. It is a sample application and there is a [small Readme file](examples/README.md) to get you started.
 

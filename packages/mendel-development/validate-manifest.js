@@ -15,14 +15,14 @@ function validateManifest(manifest, originalPath, stepName) {
     var multilineComments = /\/\*(?:\n|.)*\*\//gm;
     var endOfLineComments = /\/\/\*.*/g;
 
-    manifest.bundles.forEach(function(bundle) {
-        bundle.data.forEach(function(row) {
+    manifest.bundles.forEach(function (bundle) {
+        bundle.data.forEach(function (row) {
             var depNames = Object.keys(row.deps);
 
             // Find require() on source that don't have a key in deps
             var noCommentsSource = row.source
-                                      .replace(multilineComments, '')
-                                      .replace(endOfLineComments, '');
+                .replace(multilineComments, '')
+                .replace(endOfLineComments, '');
             var match;
             while ((match = requires.exec(noCommentsSource)) !== null) {
                 if (-1 === depNames.indexOf(match[1])) {
@@ -33,22 +33,22 @@ function validateManifest(manifest, originalPath, stepName) {
             }
 
             // Find dependencies not included in the manifest
-            depNames.forEach(function(key) {
+            depNames.forEach(function (key) {
                 var externalModule = row.deps[key] === false;
                 var existsInManifest = row.deps[key] in manifest.indexes;
 
                 if (!externalModule && !existsInManifest) {
                     errors.push(
-                        key + ":" + row.deps[key] +
-                                        ' missing from '+ bundle.id);
+                        key + ':' + row.deps[key] + ' missing from ' + bundle.id
+                    );
                 }
             });
         });
     });
 
     if (errors.length) {
-        console.log('\n'+stepName+' manifest errors: \n');
-        errors.forEach(function(log){
+        console.log('\n' + stepName + ' manifest errors: \n');
+        errors.forEach(function (log) {
             console.log('  ' + log);
         });
 
@@ -59,7 +59,7 @@ function validateManifest(manifest, originalPath, stepName) {
 
         console.log('\n' + destination + ' written \n');
         var e = new Error('Invalid manifest');
-        e.code = "INVALID_MANIFEST";
+        e.code = 'INVALID_MANIFEST';
         throw e;
     }
 }

@@ -8,7 +8,7 @@ const rimraf = require('rimraf');
 
 process.env.MENDELRC = '.extract.mendelrc';
 
-tap.test('Build the extraction app', function(t) {
+tap.test('Build the extraction app', function (t) {
     t.plan(2);
     rimraf.sync(appBuildPath);
     rimraf.sync(path.join(appPath, '**/*/.mendelipc'));
@@ -22,16 +22,24 @@ tap.test('Build the extraction app', function(t) {
         const main = require(path.join(appBuildPath, 'main.manifest.json'));
         const lazy = require(path.join(appBuildPath, 'lazy.manifest.json'));
 
-        t.matches(main.indexes, {
-            './': /\d/,
-            './math': /\d/,
-            './some-number': /\d/,
-        }, 'indices have all normalizedId expected in main');
-        t.matches(lazy.indexes, {
-            './another-number': /\d/,
-            './number-list': /\d/,
-            './util': /\d/,
-            './third-number': /\d/,
-        }, 'indices have all normalizedId expected in lazy');
+        t.matches(
+            main.indexes,
+            {
+                './': /\d/,
+                './math': /\d/,
+                './some-number': /\d/,
+            },
+            'indices have all normalizedId expected in main'
+        );
+        t.matches(
+            lazy.indexes,
+            {
+                './another-number': /\d/,
+                './number-list': /\d/,
+                './util': /\d/,
+                './third-number': /\d/,
+            },
+            'indices have all normalizedId expected in lazy'
+        );
     });
 });

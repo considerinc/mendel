@@ -54,7 +54,7 @@ function mendelifyTransformStream(variations, bundle) {
             row.source = mendelifyRequireTransform(
                 row.file,
                 row.source,
-                function(requirePath) {
+                function (requirePath) {
                     return keyValue(requirePath, variations, bundle);
                 }
             );
@@ -72,7 +72,7 @@ function keyValue(key, variations, bundle) {
 
 function avoidMendelify(file) {
     var isExternal = file === false;
-    var isNodeModule = -1 !== (file||'').indexOf("node_modules");
+    var isNodeModule = -1 !== (file || '').indexOf('node_modules');
 
     return isExternal || isNodeModule;
 }
@@ -143,7 +143,7 @@ function someArrayItemEndsWith(stringArray, partialString) {
 
 function exposeKey(expose, file) {
     var exposedModule = false;
-    Object.keys(expose).forEach(function(key) {
+    Object.keys(expose).forEach(function (key) {
         var value = expose[key];
         if (file === value) {
             exposedModule = key;

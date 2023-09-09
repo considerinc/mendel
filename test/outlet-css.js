@@ -15,7 +15,7 @@ test('mendel-outlet-css sanity test', function (t) {
     process.env.MENDELRC = '.mendelrc';
 
     const mendel = new MendelV2();
-    mendel.run(function(error) {
+    mendel.run(function (error) {
         if (error) {
             console.error(error);
             return t.bailout('should create manifest but failed');

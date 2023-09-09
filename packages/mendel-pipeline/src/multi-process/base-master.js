@@ -1,6 +1,6 @@
 const analyticsCollector = require('../helpers/analytics/analytics-collector');
 const analyzeIpc = require('../helpers/analytics/analytics')('ipc');
-const {fork} = require('child_process');
+const { fork } = require('child_process');
 // After 4, there is a diminishing marginal utility at cost of memory.
 const RECOMMENDED_CPUS = Math.max(2, Math.min(4, require('os').cpus().length));
 const Protocol = require('./protocol');
@@ -11,19 +11,20 @@ class BaseMasterProcess {
         return Protocol;
     }
 
-    constructor(workerFileName, options={}) {
+    constructor(workerFileName, options = {}) {
         this._name = options.name || 'unamed_multi_process';
-        this._workers = Array.from(Array(options.numWorker || RECOMMENDED_CPUS))
-            .map(() => {
-                return fork(
-                    path.join(__dirname, 'worker.js'),
-                    [this._name, workerFileName].concat(options.workerArgs),
-                    {stdio:'inherit'}
-                );
-            });
-        this._workers.forEach(cp => analyticsCollector.connectProcess(cp));
-        this._workers.forEach(cp => {
-            const {pid} = cp;
+        this._workers = Array.from(
+            Array(options.numWorker || RECOMMENDED_CPUS)
+        ).map(() => {
+            return fork(
+                path.join(__dirname, 'worker.js'),
+                [this._name, workerFileName].concat(options.workerArgs),
+                { stdio: 'inherit' }
+            );
+        });
+        this._workers.forEach((cp) => analyticsCollector.connectProcess(cp));
+        this._workers.forEach((cp) => {
+            const { pid } = cp;
             cp.once('close', () => {
                 console.error('[Mendel] Worker process unexpectedly exited.');
                 this._workers.splice(this._workers.indexOf(cp), 1);
@@ -32,7 +33,7 @@ class BaseMasterProcess {
         });
 
         // Queues
-        this._idleWorkers = this._workers.map(({pid}) => pid);
+        this._idleWorkers = this._workers.map(({ pid }) => pid);
         this._jobs = [];
 
         // Get Listeners from subclass
@@ -40,7 +41,7 @@ class BaseMasterProcess {
     }
 
     _exit() {
-        this._workers.forEach(w => w.kill());
+        this._workers.forEach((w) => w.kill());
     }
 
     onExit() {
@@ -54,7 +55,7 @@ class BaseMasterProcess {
     subscribe() {
         throw new Error(
             'Required "subscribe" method is not implemented for ' +
-            this.constructor.name
+                this.constructor.name
         );
     }
 
@@ -63,13 +64,13 @@ class BaseMasterProcess {
         return new Promise((resolve, reject) => {
             this._jobs.push({
                 args,
-                promise: {resolve, reject},
+                promise: { resolve, reject },
             });
         });
     }
 
     sendAll(type, args) {
-        this._workers.forEach(worker => worker.send({type, args}));
+        this._workers.forEach((worker) => worker.send({ type, args }));
     }
 
     _next() {
@@ -77,9 +78,9 @@ class BaseMasterProcess {
 
         const self = this;
 
-        const {args, promise} = this._jobs.shift();
+        const { args, promise } = this._jobs.shift();
         const workerId = this._idleWorkers.shift();
-        const worker = this._workers.find(({pid}) => workerId === pid);
+        const worker = this._workers.find(({ pid }) => workerId === pid);
 
         // Since we didn't put the workerId back to the idle queue, it
         // should never be used.
@@ -89,7 +90,7 @@ class BaseMasterProcess {
             return this._next();
         }
 
-        worker.on('message', function onMessage({type, message}) {
+        worker.on('message', function onMessage({ type, message }) {
             setImmediate(() => self._next());
             if (type === Protocol.ERROR || type === Protocol.DONE) {
                 // No longer needed

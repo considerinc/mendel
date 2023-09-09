@@ -1,27 +1,27 @@
 {
-  "name": "mendel-core",
-  "version": "4.0.0-alpha.0",
-  "description": "Mendel shared dependencies production use",
-  "main": "trees.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "mendel"
-  ],
-  "author": "Irae Carvalho <irae@irae.pro.br>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/considerinc/mendel"
-  },
-  "dependencies": {
-    "concentrate": "^0.2.3",
-    "debug": "^4.3.4",
-    "dissolve": "^0.2.1",
-    "mendel-config": "^4.0.0-alpha.0",
-    "stream-browserify": "^2.0.1",
-    "urlsafe-base64": "^1.0.0",
-    "xtend": "^4.0.1"
-  }
+    "name": "mendel-core",
+    "version": "4.0.0-alpha.0",
+    "description": "Mendel shared dependencies production use",
+    "main": "trees.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "mendel"
+    ],
+    "author": "Irae Carvalho <irae@irae.pro.br>",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/considerinc/mendel"
+    },
+    "dependencies": {
+        "concentrate": "^0.2.3",
+        "debug": "^4.3.4",
+        "dissolve": "^0.2.1",
+        "mendel-config": "^4.0.0-alpha.0",
+        "stream-browserify": "^2.0.1",
+        "urlsafe-base64": "^1.0.0",
+        "xtend": "^4.0.1"
+    }
 }

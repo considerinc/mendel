@@ -10,15 +10,15 @@ const RUNTIME = ['main', 'browser', 'module'];
 const resolveCache = new Map();
 let resolver;
 
-module.exports = function(done) {
+module.exports = function (done) {
     return {
         start(payload, sender) {
             const {
-               filePath,
-               source,
-               projectRoot,
-               baseConfig,
-               variationConfig,
+                filePath,
+                source,
+                projectRoot,
+                baseConfig,
+                variationConfig,
             } = payload;
             debug(`Detecting dependencies for ${filePath}`);
 
@@ -36,43 +36,42 @@ module.exports = function(done) {
                     variationConfig,
                     recordPackageJson: true,
                     has(filePath) {
-                        return new Promise(resolve => {
+                        return new Promise((resolve) => {
                             if (!pendingInquiry.has(filePath))
                                 pendingInquiry.set(filePath, []);
 
                             pendingInquiry.get(filePath).push(resolve);
-                            sender('has', {filePath});
+                            sender('has', { filePath });
                         });
                     },
                 });
             } else {
-                resolver.setBaseDir(path.resolve(
-                    projectRoot,
-                    path.dirname(filePath)
-                ));
+                resolver.setBaseDir(
+                    path.resolve(projectRoot, path.dirname(filePath))
+                );
             }
 
             debug(`Detecting dependencies for ${filePath}`);
-            dep({file: filePath, source, resolver})
-            // mendel-resolver throws in case nothing was found
-            .catch(() => {
-                return RUNTIME.reduce((reduced, name) => {
-                    reduced[name] = false;
-                    return reduced;
-                }, {});
-            })
-            .then(deps => {
-                analytics.toc();
-                verbose({filePath, deps});
-                debug(`Dependencies for ${filePath} found!`);
-                done({filePath, deps});
-            });
+            dep({ file: filePath, source, resolver })
+                // mendel-resolver throws in case nothing was found
+                .catch(() => {
+                    return RUNTIME.reduce((reduced, name) => {
+                        reduced[name] = false;
+                        return reduced;
+                    }, {});
+                })
+                .then((deps) => {
+                    analytics.toc();
+                    verbose({ filePath, deps });
+                    debug(`Dependencies for ${filePath} found!`);
+                    done({ filePath, deps });
+                });
         },
 
         has(payload) {
-            const {value, filePath} = payload;
+            const { value, filePath } = payload;
             const pendingResolves = pendingInquiry.get(filePath);
-            pendingResolves.forEach(resolve => resolve(value));
+            pendingResolves.forEach((resolve) => resolve(value));
         },
 
         onExit() {

@@ -1,27 +1,27 @@
 {
-  "name": "mendel-mocha-runner",
-  "version": "4.0.0-alpha.0",
-  "description": "Mocha for Mendel. Mendel gains control of how sources are transformed and when and how to execute test",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Stephan Lee <stephanwlee@gmail.com>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/considerinc/mendel"
-  },
-  "dependencies": {
-    "commander": "^2.9.0",
-    "debug": "^4.3.4",
-    "dissolve": "0.2.1",
-    "mendel-exec": "^4.0.0-alpha.0",
-    "mendel-pipeline": "^4.0.0-alpha.0",
-    "mocha": "^10.2.0",
-    "resolve": "^1.2.0"
-  },
-  "bin": {
-    "mendel-mocha": "cli.js"
-  }
+    "name": "mendel-mocha-runner",
+    "version": "4.0.0-alpha.0",
+    "description": "Mocha for Mendel. Mendel gains control of how sources are transformed and when and how to execute test",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Stephan Lee <stephanwlee@gmail.com>",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/considerinc/mendel"
+    },
+    "dependencies": {
+        "commander": "^2.9.0",
+        "debug": "^4.3.4",
+        "dissolve": "0.2.1",
+        "mendel-exec": "^4.0.0-alpha.0",
+        "mendel-pipeline": "^4.0.0-alpha.0",
+        "mocha": "^10.2.0",
+        "resolve": "^1.2.0"
+    },
+    "bin": {
+        "mendel-mocha": "cli.js"
+    }
 }

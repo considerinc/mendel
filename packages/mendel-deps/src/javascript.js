@@ -6,7 +6,7 @@ const GLOBAL_WHITELIST = ['global', 'process'];
 //     exports: ['helloWorld', 'cruelWorld']
 // }
 function _depFinder(ast) {
-    const {visit} = require('ast-types');
+    const { visit } = require('ast-types');
     const imports = {};
     const exports = {};
     const globals = {};
@@ -51,14 +51,14 @@ function _depFinder(ast) {
 
             if (!node.declaration && node.specifiers.length) {
                 node.specifiers
-                    .filter(({type}) => type === 'ExportSpecifier')
-                    .forEach(({exported}) => (exports[exported.name] = []));
+                    .filter(({ type }) => type === 'ExportSpecifier')
+                    .forEach(({ exported }) => (exports[exported.name] = []));
             } else if (node.declaration) {
                 if (node.declaration.type === 'FunctionDeclaration') {
                     exportName = node.declaration.id.name;
                 } else if (node.declaration.type === 'VariableDeclaration') {
                     const declarator = node.declaration.declarations.find(
-                        ({type}) => type === 'VariableDeclarator'
+                        ({ type }) => type === 'VariableDeclarator'
                     );
                     exportName = declarator && declarator.id.name;
                 }
@@ -102,32 +102,32 @@ const acorn = require('acorn');
 const jsx = require('acorn-jsx');
 const JSXParser = acorn.Parser.extend(jsx());
 module.exports = function jsDependency(source, filePath) {
-        let ast;
+    let ast;
 
-        try {
-            ast = JSXParser.parse(source, {
-                ecmaVersion: 'latest',
-                sourceType: 'module',
-                allowReturnOutsideFunction: true,
-                allowHashBang: true,
-                allowAwaitOutsideFunction: true,
-                allowImportExportEverywhere: true,
-            });
-        } catch(e) {
-            const {message, loc: {line, column} = {}} = e;
+    try {
+        ast = JSXParser.parse(source, {
+            ecmaVersion: 'latest',
+            sourceType: 'module',
+            allowReturnOutsideFunction: true,
+            allowHashBang: true,
+            allowAwaitOutsideFunction: true,
+            allowImportExportEverywhere: true,
+        });
+    } catch (e) {
+        const { message, loc: { line, column } = {} } = e;
 
-            if(message && line && column) {
-                console.error(
-                    `[Mendel] (acorn) ${message} ${filePath}:${line}:${column}`
-                );
-            } else {
-                console.error(e);
-            }
-
-            return false;
+        if (message && line && column) {
+            console.error(
+                `[Mendel] (acorn) ${message} ${filePath}:${line}:${column}`
+            );
+        } else {
+            console.error(e);
         }
 
-        return _depFinder(ast);
+        return false;
+    }
+
+    return _depFinder(ast);
 };
 
 module.exports.supports = new Set(['.js', '.jsx', '.esnext']);

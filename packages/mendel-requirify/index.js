@@ -13,32 +13,34 @@ function requirify(b, opts) {
     var dirs = opts.dirs || (b.variation && b.variation.chain) || [];
 
     function addHooks() {
-        b.pipeline.get('label').push(through.obj(function(row, enc, next) {
-            var that = this;
+        b.pipeline.get('label').push(
+            through.obj(function (row, enc, next) {
+                var that = this;
 
-            function done() {
-                that.push(row);
-                next();
-            }
+                function done() {
+                    that.push(row);
+                    next();
+                }
 
-            var file = row.file || row.id;
-            var nm = file.split('/node_modules/')[1];
+                var file = row.file || row.id;
+                var nm = file.split('/node_modules/')[1];
 
-            if (nm) {
-                // ignore node_modules
-                return done();
-            }
+                if (nm) {
+                    // ignore node_modules
+                    return done();
+                }
 
-            var match = variationMatches([{chain: dirs}], file);
+                var match = variationMatches([{ chain: dirs }], file);
 
-            if (match) {
-                var dest = path.join(outdir, match.dir, match.file);
-                var out = fs.createOutputStream(dest);
-                var src = row.rawSource || row.source;
-                out.end(mendelRequireTransform(dest, src, dirs, true));
-            }
-            done();
-        }));
+                if (match) {
+                    var dest = path.join(outdir, match.dir, match.file);
+                    var out = fs.createOutputStream(dest);
+                    var src = row.rawSource || row.source;
+                    out.end(mendelRequireTransform(dest, src, dirs, true));
+                }
+                done();
+            })
+        );
     }
 
     b.on('reset', addHooks);

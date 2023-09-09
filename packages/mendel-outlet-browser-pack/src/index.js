@@ -1,12 +1,12 @@
 const debug = require('debug')('mendel:outlet:browserpack');
 const fs = require('fs');
-const {Transform} = require('stream');
-const {Buffer} = require('buffer');
+const { Transform } = require('stream');
+const { Buffer } = require('buffer');
 const browserpack = require('browser-pack');
 const INLINE_MAP_PREFIX = '//# sourceMappingURL=data:application/json;base64,';
 
 class PaddedStream extends Transform {
-    constructor({prelude='', appendix=''}, options) {
+    constructor({ prelude = '', appendix = '' }, options) {
         super(options);
         this.prelude = prelude;
         this.appendix = appendix;
@@ -30,7 +30,7 @@ class PaddedStream extends Transform {
 function matchVar(entries, multiVariations) {
     for (let i = 0; i < multiVariations.length; i++) {
         const varId = multiVariations[i];
-        const found = entries.find(entry => {
+        const found = entries.find((entry) => {
             return entry.variation === varId && entry.runtime !== 'main';
         });
         if (found) return found;
@@ -38,10 +38,10 @@ function matchVar(entries, multiVariations) {
 }
 
 function entriesHaveGlobalDep(entryMap, globalName) {
-    return Array.from(entryMap.values()).some(({deps}) => {
+    return Array.from(entryMap.values()).some(({ deps }) => {
         return Object.keys(deps)
-            .map(key => deps[key])
-            .some(dep => dep.browser === globalName);
+            .map((key) => deps[key])
+            .some((dep) => dep.browser === globalName);
     });
 }
 module.exports = class BrowserPackOutlet {
@@ -49,7 +49,7 @@ module.exports = class BrowserPackOutlet {
         this.config = options;
     }
 
-    perform({entries, options, id}, variations) {
+    perform({ entries, options, id }, variations) {
         return new Promise((resolve, reject) => {
             // globals like, "process", handling
             const hasProcess = entriesHaveGlobalDep(entries, 'process');
@@ -57,16 +57,16 @@ module.exports = class BrowserPackOutlet {
 
             const bundles = this.getPackJSON(entries);
 
-            debug(bundles.map(({data}) => `[${id}] ${data[0].file} - ${data[0].runtime}`));
-            const pack = browserpack(
-                Object.assign(
-                    {},
-                    options.browserPackOptions,
-                    {
-                        raw: true, // since we pass Object instead of JSON string
-                        hasExports: true, // exposes `require` globally. Required for multi-bundles.
-                    }
+            debug(
+                bundles.map(
+                    ({ data }) => `[${id}] ${data[0].file} - ${data[0].runtime}`
                 )
+            );
+            const pack = browserpack(
+                Object.assign({}, options.browserPackOptions, {
+                    raw: true, // since we pass Object instead of JSON string
+                    hasExports: true, // exposes `require` globally. Required for multi-bundles.
+                })
             );
 
             let prelude = '';
@@ -83,7 +83,7 @@ module.exports = class BrowserPackOutlet {
                 let source = '';
                 // If `outfile` exists, output it to appropriate file
                 pack.on('error', reject);
-                pack.on('data', buf => source += buf.toString());
+                pack.on('data', (buf) => (source += buf.toString()));
                 pack.on('end', () => {
                     source += appendix;
                     fs.writeFileSync(options.outfile, source);
@@ -92,13 +92,13 @@ module.exports = class BrowserPackOutlet {
             } else {
                 // Return a stream back if outfile is not declared.
                 // You can pipe it or do whatever with it.
-                const stream = new PaddedStream({appendix, prelude});
+                const stream = new PaddedStream({ appendix, prelude });
                 pack.pipe(stream);
                 setImmediate(() => resolve(stream));
             }
 
             const arrData = bundles
-                .map(({data}) => matchVar(data, variations))
+                .map(({ data }) => matchVar(data, variations))
                 // There can be bundle that does not pertain to certain variational chain (and no entry on base var)
                 .filter(Boolean);
             this.writeToStream(pack, arrData);
@@ -128,18 +128,18 @@ module.exports = class BrowserPackOutlet {
 
     dataFromItem(item) {
         const deps = {};
-        Object.keys(item.deps).forEach(literal => {
+        Object.keys(item.deps).forEach((literal) => {
             deps[literal] = item.deps[literal]['browser'];
         });
         if (item.map) {
-            item.map.sources = item.map.sources.map(_ => {
+            item.map.sources = item.map.sources.map((_) => {
                 return _.replace(/^\.\//, '');
             });
         }
-        
-        const sourceMapLine = INLINE_MAP_PREFIX + Buffer.from(
-            JSON.stringify(item.map)
-        ).toString('base64');
+
+        const sourceMapLine =
+            INLINE_MAP_PREFIX +
+            Buffer.from(JSON.stringify(item.map)).toString('base64');
 
         const data = {
             id: item.normalizedId,
@@ -170,7 +170,7 @@ module.exports = class BrowserPackOutlet {
         const groupedByNorm = new Map();
         const depToData = new Map();
 
-        entries.forEach(item => {
+        entries.forEach((item) => {
             const id = item.normalizedId;
             const data = this.dataFromItem(item);
             const entry = groupedByNorm.get(id) || {
@@ -180,11 +180,13 @@ module.exports = class BrowserPackOutlet {
             };
 
             if (entry.variations.includes(data.variation)) {
-                return debug([
-                    `${entry.variations} vs.`,
-                    `${item.id}|${item.variation}`,
-                    'WARN: normalizedId and variation collision',
-                ].join(' '));
+                return debug(
+                    [
+                        `${entry.variations} vs.`,
+                        `${item.id}|${item.variation}`,
+                        'WARN: normalizedId and variation collision',
+                    ].join(' ')
+                );
             }
 
             entry.data.push(data);
@@ -196,10 +198,10 @@ module.exports = class BrowserPackOutlet {
 
             // this will be used when we shorten internal module's id
             // to index
-            Object.keys(data.deps).forEach(literal => {
+            Object.keys(data.deps).forEach((literal) => {
                 const norm = data.deps[literal];
                 if (!depToData.has(norm)) depToData.set(norm, []);
-                depToData.get(norm).push({deps: data.deps, literal});
+                depToData.get(norm).push({ deps: data.deps, literal });
             });
         });
 
@@ -208,9 +210,9 @@ module.exports = class BrowserPackOutlet {
             if (!internal) return entry;
 
             const norm = entry.id;
-            entry.data.forEach(d => d.id = index);
+            entry.data.forEach((d) => (d.id = index));
             if (depToData.has(norm)) {
-                depToData.get(norm).forEach(({deps, literal}) => {
+                depToData.get(norm).forEach(({ deps, literal }) => {
                     deps[literal] = index;
                 });
             }

@@ -16,7 +16,7 @@ class BuildOnDemand extends BaseClient {
     }
 
     build(bundleId, variations) {
-        const bundle = this.config.bundles.find(({id}) => id === bundleId);
+        const bundle = this.config.bundles.find(({ id }) => id === bundleId);
         if (!bundle) {
             throw new Error(
                 `Could not find any bundle id ${bundleId} from mendelrc`
@@ -32,7 +32,7 @@ class BuildOnDemand extends BaseClient {
             const request = {
                 id: bundleId,
                 variations,
-                promise: {resolve, reject},
+                promise: { resolve, reject },
             };
             this._requests.push(request);
             if (this.synced) this._perform();
@@ -49,31 +49,31 @@ class BuildOnDemand extends BaseClient {
             // `this._bundles` are actual bundle
             // @see bundles/bundle.js
             this._bundles = this.generators.performAll(
-                this.config.bundles.map(opts => new Bundle(opts))
+                this.config.bundles.map((opts) => new Bundle(opts))
             );
         }
 
-        this._requests.forEach(({id, variations, promise}) => {
-            const bundle = this._bundles.find(b => b.id === id);
+        this._requests.forEach(({ id, variations, promise }) => {
+            const bundle = this._bundles.find((b) => b.id === id);
             Promise.resolve()
-            .then(() => this.outlets.perform([bundle], variations))
-            .then(([output]) => {
-                const key = this.getCacheKey(bundle.id, variations);
-                if (output instanceof Stream) {
-                    let data = '';
-                    output.on('data', (d) => data += d.toString());
-                    output.on('end', () => {
-                        this._bundleCache.set(key, data);
-                    });
-                } else {
-                    this._bundleCache.set(key, output);
-                }
-                promise.resolve(output);
-            })
-            .catch(e => {
-                promise.reject(e);
-                throw e;
-            });
+                .then(() => this.outlets.perform([bundle], variations))
+                .then(([output]) => {
+                    const key = this.getCacheKey(bundle.id, variations);
+                    if (output instanceof Stream) {
+                        let data = '';
+                        output.on('data', (d) => (data += d.toString()));
+                        output.on('end', () => {
+                            this._bundleCache.set(key, data);
+                        });
+                    } else {
+                        this._bundleCache.set(key, output);
+                    }
+                    promise.resolve(output);
+                })
+                .catch((e) => {
+                    promise.reject(e);
+                    throw e;
+                });
         });
         this._requests = [];
     }

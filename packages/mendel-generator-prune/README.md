@@ -3,6 +3,7 @@
 This generator removes dangling files, such as files required initially and later not used because of some transformation (examples would be `requires` removed after `envify` and some CSS-in-JS dependency. It also assigns `NORMALIZED_ID` to files exposed in other bundles. `NORMALIZED_ID` is the relative path to either base or any variation.
 
 ## Example
+
 Assume that we have 2 bundles. First bundle(the main bundle) has 3 files
 
 ```

@@ -1,8 +1,8 @@
 const path = require('path');
 const createValidator = require('./validator');
 const validate = createValidator({
-    id: {required: true},
-    dir: {required: true},
+    id: { required: true },
+    dir: { required: true },
 });
 
 function BaseConfig(config) {
@@ -18,6 +18,5 @@ function BaseConfig(config) {
 
     return baseConfig;
 }
-
 
 module.exports = BaseConfig;

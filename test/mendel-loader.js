@@ -16,7 +16,7 @@ var srcDir = path.resolve(__dirname, './app-samples/1');
 var buildDir = temp.mkdirSync('mendel-loader');
 var mountDir = path.join(buildDir, 'server');
 
-test('mendel-loader-server', function(t){
+test('mendel-loader-server', function (t) {
     t.plan(12);
     temp.track();
 
@@ -36,14 +36,14 @@ test('mendel-loader-server', function(t){
         outdir: mountDir,
     });
 
-    b.bundle(function(err) {
+    b.bundle(function (err) {
         if (err) {
-            return temp.cleanup(function() {
+            return temp.cleanup(function () {
                 t.fail(err.message || err);
             });
         }
         //TODO: Remove setTimeout once mendel-browserify exposes its stream events.
-        setTimeout(function() {
+        setTimeout(function () {
             var tree = new Tree({
                 basedir: srcDir,
                 outdir: buildDir,
@@ -51,46 +51,65 @@ test('mendel-loader-server', function(t){
             });
             var loader = new Loader(tree);
 
-            var inputs = [{
-                variations: ['test_B'],
-                expect: 7,
-            }, {
-                variations: ['test_C'],
-                expect: 11,
-            }, {
-                variations: ['test_B', 'test_C'],
-                expect: 7,
-            }, {
-                variations: ['test_C', 'test_B'],
-                expect: 7,
-            }];
+            var inputs = [
+                {
+                    variations: ['test_B'],
+                    expect: 7,
+                },
+                {
+                    variations: ['test_C'],
+                    expect: 11,
+                },
+                {
+                    variations: ['test_B', 'test_C'],
+                    expect: 7,
+                },
+                {
+                    variations: ['test_C', 'test_B'],
+                    expect: 7,
+                },
+            ];
 
             inputs.forEach(function (i) {
-                var resolver = loader.resolver(['app'], tree.variationsAndChains(i.variations).lookupChains);
+                var resolver = loader.resolver(
+                    ['app'],
+                    tree.variationsAndChains(i.variations).lookupChains
+                );
                 var variation = i.variations.join(',');
 
                 var someNumber = resolver.require('some-number.js');
-                t.equal(someNumber(), i.expect, 'some-number.js ' + variation + ' variation');
+                t.equal(
+                    someNumber(),
+                    i.expect,
+                    'some-number.js ' + variation + ' variation'
+                );
 
                 var numberList = resolver.require('number-list.js');
-                t.equal(numberList()[0], i.expect, 'number-list.js ' + variation + ' variation');
+                t.equal(
+                    numberList()[0],
+                    i.expect,
+                    'number-list.js ' + variation + ' variation'
+                );
 
-                t.throws(function() {
-                    var throwyFile = resolver.require('throws.js'); // eslint-disable-line no-unused-vars
-                }, {
-                    name: 'Error',
-                    message: 'Intentional error',
-                });
+                t.throws(
+                    function () {
+                        var throwyFile = resolver.require('throws.js'); // eslint-disable-line no-unused-vars
+                    },
+                    {
+                        name: 'Error',
+                        message: 'Intentional error',
+                    }
+                );
             });
 
-            temp.cleanup(function() {
+            temp.cleanup(function () {
                 t.end();
             });
         }, 1000);
     });
 });
 
-test('mendel-loader-server-syntax-error', function(t){
+test('mendel-loader-server-syntax-error', function (t) {
     t.plan(2);
 
     var prevDir = process.cwd();
@@ -105,15 +124,21 @@ test('mendel-loader-server-syntax-error', function(t){
         });
         // test without 'new'
         var loader = Loader(tree);
-        var resolver = loader.resolver(['app'], tree.variationsAndChains(['test_B']).lookupChains);
+        var resolver = loader.resolver(
+            ['app'],
+            tree.variationsAndChains(['test_B']).lookupChains
+        );
 
         var invalidFile = path.join(srcDir, 'app/syntax-error.js');
-        t.throws(function() {
-            resolver.require(invalidFile);
-        }, {
-            name: 'ReferenceError',
-            message: 'yes is not defined',
-        });
+        t.throws(
+            function () {
+                resolver.require(invalidFile);
+            },
+            {
+                name: 'ReferenceError',
+                message: 'yes is not defined',
+            }
+        );
 
         t.ok(Module._cache[invalidFile] === undefined);
     } finally {

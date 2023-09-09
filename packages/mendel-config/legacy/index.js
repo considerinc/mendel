@@ -3,11 +3,11 @@
    Copyrights licensed under the MIT License.
    See the accompanying LICENSE file for terms. */
 
-var path = require("path");
-var xtend = require("xtend");
+var path = require('path');
+var xtend = require('xtend');
 var defaultConfig = require('./defaults');
 
-module.exports = function(config) {
+module.exports = function (config) {
     var defaults = defaultConfig();
 
     // merge by priority
@@ -49,16 +49,18 @@ function parseBundles(bundles) {
     var bundlesArray = Object.keys(bundles).filter(Boolean);
     if (!bundlesArray.length) return bundlesArray;
 
-    return bundlesArray.map(function(bundleName) {
-        var bundle = bundles[bundleName];
+    return bundlesArray
+        .map(function (bundleName) {
+            var bundle = bundles[bundleName];
 
-        bundle.id = bundleName;
-        bundle.bundleName = bundleName;
-        bundle.manifest = bundleName + '.manifest.json';
-        flattenFilenameArrays(bundle);
+            bundle.id = bundleName;
+            bundle.bundleName = bundleName;
+            bundle.manifest = bundleName + '.manifest.json';
+            flattenFilenameArrays(bundle);
 
-        return bundle;
-    }).filter(Boolean);
+            return bundle;
+        })
+        .filter(Boolean);
 }
 
 function mergeRecursive(dest, src) {
@@ -76,25 +78,26 @@ function mergeRecursive(dest, src) {
 }
 
 function flattenFilenameArrays(bundle) {
-    ['entries', 'require', 'external', 'exclude', 'ignore']
-    .forEach(function(param) {
-        var inputArray = bundle[param];
-        if (!Array.isArray(inputArray)) return;
+    ['entries', 'require', 'external', 'exclude', 'ignore'].forEach(
+        function (param) {
+            var inputArray = bundle[param];
+            if (!Array.isArray(inputArray)) return;
 
-        var i = 0;
-        while (i <= inputArray.length) {
-            var item = inputArray[i];
-            if (Array.isArray(item)) {
-                Array.prototype.splice.apply(
-                    inputArray,
-                    [i, 1].concat(item)
-                );
+            var i = 0;
+            while (i <= inputArray.length) {
+                var item = inputArray[i];
+                if (Array.isArray(item)) {
+                    Array.prototype.splice.apply(
+                        inputArray,
+                        [i, 1].concat(item)
+                    );
+                }
+                i++;
             }
-            i++;
         }
-    });
+    );
 }
 
 function isObject(obj) {
-    return ({}).toString.call(obj).slice(8, -1).toLowerCase() === 'object';
+    return {}.toString.call(obj).slice(8, -1).toLowerCase() === 'object';
 }

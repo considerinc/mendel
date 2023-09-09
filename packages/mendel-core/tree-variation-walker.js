@@ -23,7 +23,7 @@ function MendelVariationWalker(_lookupChains, _base, _hash) {
     this.conflictList = {};
 }
 
-MendelVariationWalker.prototype._resolveBranch = function(module) {
+MendelVariationWalker.prototype._resolveBranch = function (module) {
     var fileId = module.id;
     var resolved;
     var foundIn = 0;
@@ -31,7 +31,7 @@ MendelVariationWalker.prototype._resolveBranch = function(module) {
     for (var i = 0; i < this._lookupChains.length; i++) {
         for (var j = 0; j < this._lookupChains[i].length; j++) {
             var index = module.variations.indexOf(this._lookupChains[i][j]);
-            if(-1 !== index) {
+            if (-1 !== index) {
                 if (!foundIn) {
                     // keep first match, priority by .mendelrc entry order
                     resolved = module.data[index];
@@ -45,7 +45,7 @@ MendelVariationWalker.prototype._resolveBranch = function(module) {
             }
         }
     }
-    if (foundIn>1) {
+    if (foundIn > 1) {
         this.conflicts++;
         this.conflictList[fileId] = true;
     }
@@ -55,7 +55,7 @@ MendelVariationWalker.prototype._resolveBranch = function(module) {
     };
 };
 
-MendelVariationWalker.prototype.found = function() {
+MendelVariationWalker.prototype.found = function () {
     return xtend(MendelWalker.prototype.found.call(this), {
         conflicts: this.conflicts,
         conflictList: this.conflictList,

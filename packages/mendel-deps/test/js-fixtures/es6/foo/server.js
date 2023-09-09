@@ -1,1 +1,1 @@
-import {test} from 'tap';
+import { test } from 'tap';

@@ -1,10 +1,10 @@
 var createValidator = require('./validator');
 var nodeResolve = require('resolve').sync;
 
-function GeneratorConfig({id, plugin}, {projectRoot}) {
+function GeneratorConfig({ id, plugin }, { projectRoot }) {
     this.id = id;
     try {
-        this.plugin = nodeResolve(plugin, {basedir: projectRoot});
+        this.plugin = nodeResolve(plugin, { basedir: projectRoot });
     } catch (e) {
         if (e.code !== 'MODULE_NOT_FOUND') throw e;
         this.plugin = false;
@@ -14,8 +14,8 @@ function GeneratorConfig({id, plugin}, {projectRoot}) {
 }
 
 GeneratorConfig.validate = createValidator({
-    id: {required: true},
-    plugin: {required: true},
+    id: { required: true },
+    plugin: { required: true },
 });
 
 module.exports = GeneratorConfig;

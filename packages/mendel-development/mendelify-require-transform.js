@@ -15,12 +15,12 @@ function mendelifyRequireTransform(filename, src, transformerFn) {
     if (!regexExt.test(filename)) {
         return src;
     }
-    return falafel(src, opts, function(node) {
+    return falafel(src, opts, function (node) {
         if (isRequire(node)) {
             var value = node.arguments[0].value;
             var newValue = transformerFn(value);
             if (newValue !== value) {
-                node.update('require(\'' + newValue + '\')');
+                node.update("require('" + newValue + "')");
             }
         }
     }).toString();

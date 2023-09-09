@@ -6,7 +6,7 @@
 const UnixSocket = require('./network/unix-socket');
 
 function validate(options) {
-    const {type} = options;
+    const { type } = options;
     if (type !== 'unix') {
         throw new Error(`[${type}] not supported.`);
     }
@@ -16,14 +16,14 @@ module.exports = {
     getServer(connectionOptions) {
         validate(connectionOptions);
         return Promise.resolve()
-        .then(() => UnixSocket.getServer(connectionOptions))
-        .then(server => {
-            server.once('error', (err) => {
-                console.error('[Mendel] Unrecoverable Server Error', err);
-                process.exit(1);
+            .then(() => UnixSocket.getServer(connectionOptions))
+            .then((server) => {
+                server.once('error', (err) => {
+                    console.error('[Mendel] Unrecoverable Server Error', err);
+                    process.exit(1);
+                });
+                return server;
             });
-            return server;
-        });
     },
 
     getClient(connectionOptions) {

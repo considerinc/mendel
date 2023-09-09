@@ -21,17 +21,17 @@ function MendelTrees(opts) {
     this.variations = config.variationConfig.variations;
     this._loadBundles();
 
-    this.ssrOutlet = this.config.outlets.find(outletConfig => {
+    this.ssrOutlet = this.config.outlets.find((outletConfig) => {
         return outletConfig._plugin === 'mendel-outlet-server-side-render';
     });
     if (this.ssrOutlet) {
-        this.ssrBundle = this.config.bundles.find(bundleConfig => {
+        this.ssrBundle = this.config.bundles.find((bundleConfig) => {
             return bundleConfig.outlet === this.ssrOutlet.id;
         });
     }
 }
 
-MendelTrees.prototype.findTreeForVariations = function(bundle, lookupChains) {
+MendelTrees.prototype.findTreeForVariations = function (bundle, lookupChains) {
     var finder = new MendelVariationWalker(
         lookupChains,
         this.config.baseConfig.dir
@@ -42,7 +42,10 @@ MendelTrees.prototype.findTreeForVariations = function(bundle, lookupChains) {
     return finder.found();
 };
 
-MendelTrees.prototype.findServerVariationMap = function(bundles, lookupChains) {
+MendelTrees.prototype.findServerVariationMap = function (
+    bundles,
+    lookupChains
+) {
     if (!this.ssrBundle)
         throw new Error(
             [
@@ -58,7 +61,7 @@ MendelTrees.prototype.findServerVariationMap = function(bundles, lookupChains) {
     return variationMap;
 };
 
-MendelTrees.prototype.findTreeForHash = function(bundle, hash) {
+MendelTrees.prototype.findTreeForHash = function (bundle, hash) {
     var finder = new MendelHashWalker(hash);
 
     this._walkTree(bundle, finder);
@@ -66,34 +69,39 @@ MendelTrees.prototype.findTreeForHash = function(bundle, hash) {
     return finder.found();
 };
 
-MendelTrees.prototype._loadBundles = function() {
+MendelTrees.prototype._loadBundles = function () {
     var self = this;
     this.bundles = {};
     var confBundles = self.config.bundles;
 
-    confBundles.filter(bundle => bundle.manifest).forEach(function(bundle) {
-        var bundlePath = bundle.manifest;
-        try {
-            self.bundles[bundle.id] = require(path.resolve(bundlePath));
-        } catch (error) {
-            var newError = new Error();
-            newError.code = error.code;
-            if (error.code === 'MODULE_NOT_FOUND' || error.code === 'ENOENT') {
-                newError.message =
-                    'Could not find "' +
-                    bundle.id +
-                    '" bundle at path ' +
-                    bundlePath;
-            } else {
-                newError.message =
-                    'Invalid bundle file at path ' + bundle.manifest;
+    confBundles
+        .filter((bundle) => bundle.manifest)
+        .forEach(function (bundle) {
+            var bundlePath = bundle.manifest;
+            try {
+                self.bundles[bundle.id] = require(path.resolve(bundlePath));
+            } catch (error) {
+                var newError = new Error();
+                newError.code = error.code;
+                if (
+                    error.code === 'MODULE_NOT_FOUND' ||
+                    error.code === 'ENOENT'
+                ) {
+                    newError.message =
+                        'Could not find "' +
+                        bundle.id +
+                        '" bundle at path ' +
+                        bundlePath;
+                } else {
+                    newError.message =
+                        'Invalid bundle file at path ' + bundle.manifest;
+                }
+                throw newError;
             }
-            throw newError;
-        }
-    });
+        });
 };
 
-MendelTrees.prototype._walkTree = function(bundle, finder) {
+MendelTrees.prototype._walkTree = function (bundle, finder) {
     var tree = this.bundles[bundle];
 
     for (var i = 0; i < tree.bundles.length; i++) {
@@ -104,7 +112,7 @@ MendelTrees.prototype._walkTree = function(bundle, finder) {
     }
 };
 
-MendelTrees.prototype.variationsAndChains = function(lookFor) {
+MendelTrees.prototype.variationsAndChains = function (lookFor) {
     var lookupChains = [];
     var matchingVariations = [];
     // perf: for loop instead of forEach

@@ -1,7 +1,7 @@
 const path = require('path');
-const {transform} = require('buble');
+const { transform } = require('buble');
 
-module.exports = function({source, filename}, options) {
+module.exports = function ({ source, filename }, options) {
     options = options || {};
     const defaults = {
         source: filename,
@@ -10,12 +10,12 @@ module.exports = function({source, filename}, options) {
     const transformOptions = Object.assign(defaults, options);
 
     transformOptions.transforms = Object.assign(
-        {modules: false},
+        { modules: false },
         options.transforms
     );
     transformOptions.target = Object.assign({}, options.target);
 
-    const {code, map} = transform(source, transformOptions);
+    const { code, map } = transform(source, transformOptions);
 
-    return {source: code, map};
+    return { source: code, map };
 };

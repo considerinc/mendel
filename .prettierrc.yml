@@ -1,13 +1,14 @@
-
 # For docs, see
 # https://github.com/prettier/prettier/blob/master/README.md#configuration-file
 
+printWidth: 80
 tabWidth: 4
 useTabs: false
-printWidth: 80
-singleQuote: true
-trailingComma: es5
 semi: true
-bracketSpacing: false
-jsxBracketSameLine: false
-parser: babylon
+singleQuote: true
+quoteProps: as-needed
+jsxSingleQuote: false
+trailingComma: es5
+bracketSpacing: true
+bracketSameLine: false
+arrowParens: always

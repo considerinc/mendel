@@ -1,4 +1,3 @@
-
 class Bundle {
     constructor(options) {
         this.id = options.id;

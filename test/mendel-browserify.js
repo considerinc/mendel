@@ -16,46 +16,57 @@ test('mendel-browserify', function (t) {
     t.plan(3);
     var calls;
 
-
     function Bro(opts) {
         calls.push(opts);
         this._options = opts;
         this._transforms = [];
-        this.transform = function(){};
+        this.transform = function () {};
         this.pipeline = {
-            get: function(){
+            get: function () {
                 return [];
             },
         };
-        this.on = function(){};
+        this.on = function () {};
         return this;
     }
 
     calls = [];
-    mendelPlugin(new Bro({
-        plugin: [mendelPlugin],
-    }), {basedir: './'});
-    var callsWithPlugins = calls.filter(function(opts) {
+    mendelPlugin(
+        new Bro({
+            plugin: [mendelPlugin],
+        }),
+        { basedir: './' }
+    );
+    var callsWithPlugins = calls.filter(function (opts) {
         return opts.plugin.length;
     });
     t.equal(callsWithPlugins.length, 1);
 
     calls = [];
 
-    mendelPlugin(new Bro({
-        plugin: ['mendel-browserify', 2],
-    }), {basedir: './'});
-    callsWithPlugins = calls.filter(function(opts) {
+    mendelPlugin(
+        new Bro({
+            plugin: ['mendel-browserify', 2],
+        }),
+        { basedir: './' }
+    );
+    callsWithPlugins = calls.filter(function (opts) {
         return opts.plugin.length >= 2;
     });
     t.equal(callsWithPlugins.length, 1);
 
     calls = [];
 
-    mendelPlugin(new Bro({
-        plugin: [ ['mendel-browserify', {}], [mendelPlugin, {}]],
-    }), {basedir: './'});
-    callsWithPlugins = calls.filter(function(opts) {
+    mendelPlugin(
+        new Bro({
+            plugin: [
+                ['mendel-browserify', {}],
+                [mendelPlugin, {}],
+            ],
+        }),
+        { basedir: './' }
+    );
+    callsWithPlugins = calls.filter(function (opts) {
         return opts.plugin.length >= 2;
     });
     t.equal(callsWithPlugins.length, 1);

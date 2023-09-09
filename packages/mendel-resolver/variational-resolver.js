@@ -32,7 +32,7 @@ class VariationalModuleResolver extends ModuleResolver {
         this.variationChain = [this.baseVarDir];
         const match = variationMatches(this.variationList, basedir);
         if (match) {
-            const absChain = match.variation.chain.map(varDir => {
+            const absChain = match.variation.chain.map((varDir) => {
                 return path.resolve(path.resolve(this.projectRoot, varDir));
             });
             this.variationChain = absChain.concat([this.baseVarDir]);
@@ -52,7 +52,7 @@ class VariationalModuleResolver extends ModuleResolver {
     }
 
     isNonProjectSource(modulePath) {
-        return this.varDirs.every(dir => {
+        return this.varDirs.every((dir) => {
             return modulePath.indexOf(dir) === -1;
         });
     }
@@ -65,7 +65,6 @@ class VariationalModuleResolver extends ModuleResolver {
         ) {
             return super.resolveFile(modulePath);
         }
-
 
         const moduleId = this.getModuleId(modulePath);
         return this.variationChain.reduce((promise, variation) => {
@@ -80,39 +79,52 @@ class VariationalModuleResolver extends ModuleResolver {
         // we won't merge base's and variation's package.json so this package.json
         // MUST contain complete information that resolves perfectly.
         const resolveFiles = this.runtimes
-            .filter(name => pkg[name])
-            .map(name => {
-                return this.resolveFile(path.join(moduleName, pkg[name]))
-                    // `resolveFile` returns Object with all values the same and that is useless for us.
-                    .then(fileResolved => ({name, path: fileResolved[name]}))
-                    // Even if file does not resolve, let's not make the promise all fail fast.
-                    .catch(() => {});
+            .filter((name) => pkg[name])
+            .map((name) => {
+                return (
+                    this.resolveFile(path.join(moduleName, pkg[name]))
+                        // `resolveFile` returns Object with all values the same and that is useless for us.
+                        .then((fileResolved) => ({
+                            name,
+                            path: fileResolved[name],
+                        }))
+                        // Even if file does not resolve, let's not make the promise all fail fast.
+                        .catch(() => {})
+                );
             });
 
-        return Promise.all(resolveFiles).then(resolves => {
+        return Promise.all(resolveFiles).then((resolves) => {
             const resolved = {};
             // for failed case, we returned undefined in the catch above so lets filter that out.
-            resolves.filter(Boolean).forEach(({name, path}) => {
+            resolves.filter(Boolean).forEach(({ name, path }) => {
                 resolved[name] = path;
             });
-            this.runtimes.filter(name => !resolved[name]).forEach(name => resolved[name] = resolved.main);
+            this.runtimes
+                .filter((name) => !resolved[name])
+                .forEach((name) => (resolved[name] = resolved.main));
             return resolved;
         });
     }
 
     resolveDir(moduleName) {
-        if (this.isBasePath(moduleName) || isNodeModule(moduleName)) return super.resolveDir(moduleName);
+        if (this.isBasePath(moduleName) || isNodeModule(moduleName))
+            return super.resolveDir(moduleName);
 
         const moduleId = this.getModuleId(moduleName);
         let promise = Promise.reject();
-        this.variationChain.forEach(variation => {
+        this.variationChain.forEach((variation) => {
             const packagePath = path.join(variation, moduleId, '/package.json');
             promise = promise.catch(() => {
-                return this.readPackageJson(packagePath).then(varPackageJson => this._processPackageJson(moduleName, varPackageJson));
+                return this.readPackageJson(packagePath).then(
+                    (varPackageJson) =>
+                        this._processPackageJson(moduleName, varPackageJson)
+                );
             });
         });
 
-        return promise.catch(() => this.resolveFile(path.join(moduleName, 'index')));
+        return promise.catch(() =>
+            this.resolveFile(path.join(moduleName, 'index'))
+        );
     }
 }
 

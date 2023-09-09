@@ -13,7 +13,7 @@ class MendelGenerators {
             colWidths: [15, 25, 15],
         });
 
-        this.generators = options.generators.map(generator => {
+        this.generators = options.generators.map((generator) => {
             return Object.assign({}, generator, {
                 plugin: require(generator.plugin),
             });
@@ -26,7 +26,7 @@ class MendelGenerators {
             plugin: DefaultGenerator,
         });
 
-        this.postgenerators = options.postgenerators.map(generator => {
+        this.postgenerators = options.postgenerators.map((generator) => {
             return Object.assign({}, generator, {
                 plugin: require(generator.plugin),
             });
@@ -34,15 +34,18 @@ class MendelGenerators {
     }
 
     _perform(bundle, doneBundles) {
-        const {id, plugin} = this.generators.find(gen => {
-            return gen.id === bundle.options.generator;
-        }) || {};
+        const { id, plugin } =
+            this.generators.find((gen) => {
+                return gen.id === bundle.options.generator;
+            }) || {};
         if (!plugin) return;
 
         analyze.tic(id);
         const resultBundle = plugin(
-            bundle, doneBundles,
-            this.registry, this.options
+            bundle,
+            doneBundles,
+            this.registry,
+            this.options
         );
         analyze.toc(id);
 
@@ -50,11 +53,13 @@ class MendelGenerators {
         // class, or alternativelly refactor bundle to POJO and use
         // validator right here instead.
         if (resultBundle && resultBundle.entries) {
-            debug([
-                `"${bundle.options.generator}" collected`,
-                `${resultBundle.entries.size} entries for`,
-                `bundle, "${bundle.options.id}"`,
-            ].join(' '));
+            debug(
+                [
+                    `"${bundle.options.generator}" collected`,
+                    `${resultBundle.entries.size} entries for`,
+                    `bundle, "${bundle.options.id}"`,
+                ].join(' ')
+            );
 
             this.table.push([
                 bundle.options.id,
@@ -66,27 +71,27 @@ class MendelGenerators {
     }
 
     _performBundleless(generator, doneBundles) {
-        const {plugin, id} = generator;
+        const { plugin, id } = generator;
 
         analyze.tic(id);
         // First argument is not needed; conforming to generator API
-        plugin(
-            {}, doneBundles,
-            this.registry, generator
-        );
+        plugin({}, doneBundles, this.registry, generator);
         analyze.toc(id);
     }
 
     performAll(bundles) {
         bundles = bundles.slice().sort((a, b) => {
-            return this.generators.findIndex(g => g.id === a.options.generator)
-                - this.generators.findIndex(g => g.id === b.options.generator);
+            return (
+                this.generators.findIndex((g) => g.id === a.options.generator) -
+                this.generators.findIndex((g) => g.id === b.options.generator)
+            );
         });
 
         const doneBundles = [];
-        bundles.forEach(bundle => this._perform(bundle, doneBundles));
-        this.postgenerators
-            .forEach(g => this._performBundleless(g, doneBundles));
+        bundles.forEach((bundle) => this._perform(bundle, doneBundles));
+        this.postgenerators.forEach((g) =>
+            this._performBundleless(g, doneBundles)
+        );
 
         // Print number of entries collected by each generator.
         verbose(this.table.toString());

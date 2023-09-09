@@ -4,6 +4,6 @@
 
 var complicator = require('./complicator');
 
-module.exports = function() {
+module.exports = function () {
     return complicator('normal');
 };

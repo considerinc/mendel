@@ -5,13 +5,16 @@
 var path = require('path');
 var Module = require('module');
 
-var natives = Object.keys(process.binding('natives')).reduce(function(res, name){
+var natives = Object.keys(process.binding('natives')).reduce(function (
+    res,
+    name
+) {
     res[name] = true;
     return res;
 }, {});
 
 var NativeModule = {
-    exists: function(name) {
+    exists: function (name) {
         return natives[name] === true;
     },
     require: require,
@@ -84,7 +87,7 @@ MendelResolver.prototype.require = function (name) {
     return modExports;
 };
 
-MendelResolver.prototype.resolve = function(name) {
+MendelResolver.prototype.resolve = function (name) {
     var parent = this._parentModule;
 
     if (!this._resolveCache[name]) {

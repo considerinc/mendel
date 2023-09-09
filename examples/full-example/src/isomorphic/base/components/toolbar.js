@@ -12,9 +12,13 @@ class Toolbar extends React.Component {
                 <div>Toolbar</div>
                 <nav className="toolbar">
                     <Button onClick={this.handleClick}>Button</Button>
-                    <Button onClick={() => {
+                    <Button
+                        onClick={() => {
                             throw new Error('I was thrown');
-                        }}>Throw me</Button>
+                        }}
+                    >
+                        Throw me
+                    </Button>
                     <Button>Button</Button>
                 </nav>
             </div>

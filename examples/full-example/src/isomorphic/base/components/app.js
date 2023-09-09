@@ -9,15 +9,15 @@ import Footer from './footer';
 import './about';
 
 class App extends React.Component {
-  render() {
-    return (
-        <div className="app">
-            <Header />
-            <Body />
-            <Footer />
-        </div>
-    );
-  }
+    render() {
+        return (
+            <div className="app">
+                <Header />
+                <Body />
+                <Footer />
+            </div>
+        );
+    }
 }
 
 export default App;

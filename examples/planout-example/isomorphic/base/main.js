@@ -11,7 +11,7 @@ if (typeof document !== 'undefined') {
     var main = document.querySelector('#main');
     ReactDOM.render(<App data={window.data} />, main);
 } else {
-    module.exports = function(data) {
+    module.exports = function (data) {
         return <App data={data} />;
-    }
+    };
 }

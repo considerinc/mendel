@@ -14,15 +14,15 @@ function MendelLoader(trees, opts) {
 
     var config = trees.config;
 
-    this._serveroutdir = trees.ssrOutlet ?
-        path.join(config.baseConfig.outdir, trees.ssrOutlet.options.dir) :
-        process.cwd();
+    this._serveroutdir = trees.ssrOutlet
+        ? path.join(config.baseConfig.outdir, trees.ssrOutlet.options.dir)
+        : process.cwd();
 
     this._parentModule = opts.parentModule || module.parent;
 
     var bundles = opts.bundles;
     if (!bundles) {
-        bundles = config.bundles.map(function(b) {
+        bundles = config.bundles.map(function (b) {
             return b.id;
         });
     }
@@ -30,12 +30,16 @@ function MendelLoader(trees, opts) {
     this._ssrReady = true;
 }
 
-MendelLoader.prototype.resolver = function(bundles, variations) {
+MendelLoader.prototype.resolver = function (bundles, variations) {
     var variationMap = this._trees.findServerVariationMap(bundles, variations);
-    return new MendelResolver(this._parentModule, variationMap, this._serveroutdir);
+    return new MendelResolver(
+        this._parentModule,
+        variationMap,
+        this._serveroutdir
+    );
 };
 
-MendelLoader.prototype.isSsrReady = function() {
+MendelLoader.prototype.isSsrReady = function () {
     return this._ssrReady;
 };
 

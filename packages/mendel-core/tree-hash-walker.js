@@ -26,7 +26,7 @@ function MendelHashWalker(inputHash) {
     this.pathCount = 0;
 }
 
-MendelHashWalker.prototype._resolveBranch = function(module) {
+MendelHashWalker.prototype._resolveBranch = function (module) {
     if (this.error) return {};
 
     var nextPath;
@@ -47,12 +47,12 @@ MendelHashWalker.prototype._resolveBranch = function(module) {
     };
 };
 
-MendelHashWalker.prototype._error = function(msg) {
+MendelHashWalker.prototype._error = function (msg) {
     this.error = this.error || new Error(msg);
-    this.error.code = "TRVRSL";
+    this.error.code = 'TRVRSL';
 };
 
-MendelHashWalker.prototype.found = function() {
+MendelHashWalker.prototype.found = function () {
     this._result = MendelWalker.prototype.found.call(this);
 
     if (!this.error && this._result.hash !== this.inputHash) {

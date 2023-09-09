@@ -1,21 +1,20 @@
-Mendel Design
-=============
+# Mendel Design
 
 # Principles
 
 Mendel has some opinionated design principles that serve as strict guidelines on the remainder of this document and on its implementation. Some of those principles are what makes Mendel different from other experimentation or A/B testing frameworks.
 
-* **Variation Performance**
-    * **No payload overhead**: no client-side code for any non-active or alternative variation should be transfered to the client
-    * **Synchronous and fast variation resolution**: no http or file-system access during runtime in order to resolve bundle URLs or bundle payload.
-* **Variation Maintainability**
-    * **Immediately disposable**: disposing of variations should be simple, straightforward - specially for bulk disposal
-    * **No maintenance overhead: **keep variations updated with minimal developer effort
-    * **Mnemonic source-code**: only human-readable and meaningful variation names should be committed to the source-code repository
-    * **Analyzable**: comparison between variations code is essential. Developers should be able to `diff` variations easily – without guesswork or source code parsers
-* **Variation Security**
-    * client-side compiled code should not contain variation information
-    * client-side asset URI should not contain variation information
+-   **Variation Performance**
+    -   **No payload overhead**: no client-side code for any non-active or alternative variation should be transfered to the client
+    -   **Synchronous and fast variation resolution**: no http or file-system access during runtime in order to resolve bundle URLs or bundle payload.
+-   **Variation Maintainability**
+    -   **Immediately disposable**: disposing of variations should be simple, straightforward - specially for bulk disposal
+    -   **No maintenance overhead: **keep variations updated with minimal developer effort
+    -   **Mnemonic source-code**: only human-readable and meaningful variation names should be committed to the source-code repository
+    -   **Analyzable**: comparison between variations code is essential. Developers should be able to `diff` variations easily – without guesswork or source code parsers
+-   **Variation Security**
+    -   client-side compiled code should not contain variation information
+    -   client-side asset URI should not contain variation information
 
 # Additional Goals
 
@@ -29,35 +28,35 @@ Here are some highlights:
 
 ### Development time Mendel features
 
-* Source Maps are required in development
-    * Might be useful in production if we can have it be external and separate routes that can have extra security in case consumer don't want to be available for visiting users
-* Fast code reload: once one file is saved, regardless of how many implemented variations there are in the project, one should be able to see changes in browser (including server-side rendered markup) in under a second
-* Select/override which variation (as any other configuration) to be loaded in browser via many different methods, including (but not restricted to) query string, developer box local configuration and cookies
-* "Development only variations": When creating a variation, a developer should not need access or try out his new code without resorting to external configuration systems
+-   Source Maps are required in development
+    -   Might be useful in production if we can have it be external and separate routes that can have extra security in case consumer don't want to be available for visiting users
+-   Fast code reload: once one file is saved, regardless of how many implemented variations there are in the project, one should be able to see changes in browser (including server-side rendered markup) in under a second
+-   Select/override which variation (as any other configuration) to be loaded in browser via many different methods, including (but not restricted to) query string, developer box local configuration and cookies
+-   "Development only variations": When creating a variation, a developer should not need access or try out his new code without resorting to external configuration systems
 
 ### Expected differences when inspecting code in production or development
 
-* In development it should be easy and straightforward to spot variation code as opposed to __base variation__ (the code that exists in all variations)
-* In production we should obscure variations as much as possible, for security and privacy reasons, but this should not happen in development
+-   In development it should be easy and straightforward to spot variation code as opposed to **base variation** (the code that exists in all variations)
+-   In production we should obscure variations as much as possible, for security and privacy reasons, but this should not happen in development
 
 ## Performance requirements
 
 ### Production Performance
 
-Production performance is non-negotiable — we should not make trade-offs sacrificing production performance. Therefore, Mendel implementation should aim to have zero bytes added to client-side code when a variation is created. Any new code or code changes a variation contain should be only delivered to users on this variation and not to the __base variation__. Also we should not have latency increased for users on any variation and any performance optimizations, like SSR (server-side rendering).
+Production performance is non-negotiable — we should not make trade-offs sacrificing production performance. Therefore, Mendel implementation should aim to have zero bytes added to client-side code when a variation is created. Any new code or code changes a variation contain should be only delivered to users on this variation and not to the **base variation**. Also we should not have latency increased for users on any variation and any performance optimizations, like SSR (server-side rendering).
 
 Those are the important performance goals for client side:
 
-* No byte size overhead
-* No extra network requests when the user is on a variation
+-   No byte size overhead
+-   No extra network requests when the user is on a variation
 
 Those are the important goals for server-side:
 
-* Close to zero milliseconds variation resolution time in production
-    * no network or file system operations after application startup/warm up
-    * any runtime configuration update should be done with background polling/fetching/push to not impact request time
-* Server-side rendering should work correctly when switching variations
-    * server needs to serve isomorphic code on a per-request basis
+-   Close to zero milliseconds variation resolution time in production
+    -   no network or file system operations after application startup/warm up
+    -   any runtime configuration update should be done with background polling/fetching/push to not impact request time
+-   Server-side rendering should work correctly when switching variations
+    -   server needs to serve isomorphic code on a per-request basis
 
 ### Development Performance
 
@@ -65,12 +64,12 @@ Developer Productivity is also important for any team and is proportionally more
 
 Here are some important goals for development cycle:
 
-* Mendel should avoid slowing down development server startup time
-    * It is OK to increase CI/CD timings, although it would be ideal to keep the same
-* When saving a file, it is expected that the developer is able to see the changes within 300 milliseconds or less, be it client-side or server side changes.
-    * Also, although a full automated refresh is not required, in case the developer reloads the page manually, server-side rendering must match and work as intended within this boundary
-* Live-reload or hot-loading is desirable, as well as keeping application state if possible
-* When using the Web-Inspector (browser tools) it is desirable to be able to tell apart code that is default from code that is on a given experiment
+-   Mendel should avoid slowing down development server startup time
+    -   It is OK to increase CI/CD timings, although it would be ideal to keep the same
+-   When saving a file, it is expected that the developer is able to see the changes within 300 milliseconds or less, be it client-side or server side changes.
+    -   Also, although a full automated refresh is not required, in case the developer reloads the page manually, server-side rendering must match and work as intended within this boundary
+-   Live-reload or hot-loading is desirable, as well as keeping application state if possible
+-   When using the Web-Inspector (browser tools) it is desirable to be able to tell apart code that is default from code that is on a given experiment
 
 ## Security
 
@@ -84,11 +83,11 @@ Mendel uses file system folders for variation resolution. The first part of this
 
 ## Conditional versus separate built packages
 
-There are different cases in which code may differ from the __base variation__ or "default" experience:
+There are different cases in which code may differ from the **base variation** or "default" experience:
 
-* Experiments, also know as variations (ofter referred as "buckets" or A/B tests)
-* Conditional features (configuration based "feature flipper")
-* Partners customization (white labeling)
+-   Experiments, also know as variations (ofter referred as "buckets" or A/B tests)
+-   Conditional features (configuration based "feature flipper")
+-   Partners customization (white labeling)
 
 There are mainly two ways of creating this differences for such variations: Conditionals to be evaluated in runtime and code selection at build time.
 
@@ -115,7 +114,6 @@ There are mainly two ways of creating this differences for such variations: Cond
                                            |           |
                                            +-----------+
 ```
-
 
 There is also two parts of Front-End responsibilities for an isomorphic project to serve features to users, the server-side and client-side portions. In React applications we have a lot of code that is isomorphic and will be used in both environments.
 
@@ -161,7 +159,6 @@ The above flowchart does not discuss transport. This simplification allows for b
 During implementation we might also choose to have a common package that does not contain any conditionals or any experiment code. The only benefit of this approach is caching, allowing a user that is assigned to a bucket to be unassigned and avoiding a whole application package to be re-fetched.
 Since we have continuous deployment, this will be a minor consideration, since every deploy will invalidate a number of packages. We will aim for being able to deploy daily and experiments usually run for at least 5 days, any performance improvements regarding deployment cache will benefit bucket testing caching strategies directly.
 ```
-
 
 ### Server-side Design
 
@@ -229,10 +226,7 @@ bash> tree
             └── list.test.js
 ```
 
-
 For each client-side (or isomorphic) file that will have code differences between control and a particular variation, we will create a folder with duplicate of files for each file that we need differences. For this particular application, all isomorphic code is on the /ui/ folder, therefore we will replicate the /ui/ folder structure and only controllers/sidebar.js and views/ads.js will have differences, we will create the following tree:
-
-
 
 **Sample new bucket filesystem tree**
 
@@ -248,7 +242,6 @@ bash> tree
 ...
 ```
 
-
 Note: "experiments" is just an arbitrary name, but “features”, “buckets” or “variations”, etc are good choices as well.
 
 **IMPORTANT**: No files that will be exactly the same as the default experience will need to be duplicated. The build process and development server will take care of reusing the files.
@@ -258,7 +251,6 @@ Note: "experiments" is just an arbitrary name, but “features”, “buckets”
 Since the experiments tree should follow exactly the same folder structure as the reference tree, any missing file is used from the default folder.
 
 **Schema for filesystem experiments tree resolution**
-
 
 ```
 src/ui/                    experiments/new_ad_format/  resolved/new_ad_format/
@@ -282,19 +274,18 @@ src/ui/                    experiments/new_ad_format/  resolved/new_ad_format/
     └── sidebar_item.js                         +-+        └── sidebar_item.js
 ```
 
-
 Notice that all files that don’t exist on the /experiments/new_ad_format/ folder will be used from the default paths. The /resolved/ tree is not part of the code base, it only exists during runtime.
 
 ### Fulfilling the Maintainability goals
 
 Let’s go over our Design Principles to understand why this design achieves all the required traits so far.
 
-* **Immediately disposable:** Delete the /new_ad_format/ folder and the experiment is gone.
-* **Upfront costs:** It is possible to write tests against different variations (more on that later on this document). Also conflicts can be detected and solved at development time, as opposed to runtime exceptions and combinations developers forgot, or were time constrained to test
-* **Mnemonic source-code:** The folder name can be mnemonic (new_ad_format as example above or logo_short below)
-* **Analyzable:**
-    * There are many folder diff tools available (and we can include some on our build tools)
-    * By spotting the number of files in a folder any developer can have a grasp of how complex this experiment is.
+-   **Immediately disposable:** Delete the /new_ad_format/ folder and the experiment is gone.
+-   **Upfront costs:** It is possible to write tests against different variations (more on that later on this document). Also conflicts can be detected and solved at development time, as opposed to runtime exceptions and combinations developers forgot, or were time constrained to test
+-   **Mnemonic source-code:** The folder name can be mnemonic (new_ad_format as example above or logo_short below)
+-   **Analyzable:**
+    -   There are many folder diff tools available (and we can include some on our build tools)
+    -   By spotting the number of files in a folder any developer can have a grasp of how complex this experiment is.
 
 ![visualization of development tree and source maps in different browsers](design_0.png)
 
@@ -344,13 +335,13 @@ diff src/client/default/less/searchbox.less src/client/logo_short/less/searchbox
 
 Besides or design principles, let’s go over some additional benefits of experiments on a folder:
 
-* **Separates complexity:** When understanding a component, source code will not be mixed up with different implementations, and permutations are kept away.
-    * Decreases "fear of a file being complex" as compared to conditionals in the code
-    * Decreases the "this component will be hard to maintain, as there are other combinations already" if we nest files in the same tree
-* **Composable experiments:** A large new feature might be implemented as a folder, and extra experiments can *inherit *code in a declarative chain. More on that on "Variation Inheritance" later.
-* **Friendly to developer tools:** Any developer can "grep" the main src/ui/ tree to find uses of a class, get ideas for refactor, and generally reason about the application without dealing with conditionals or duplicated similar files on the same tree. The experiment folder can be hidden in code editor when giving talks and many small quality of life sugar for developers.
-* **Any filetype:** Conditionals are great for Javascript, but CSS and other files would need extra syntax for creating variations, with the file system approach even JSON configuration can be tweaked per variation
-* **Predictable combinations:** When dealing with multiple variations, if the same file is used for many experiments, more than one conditional will be introduced and the order they are implemented might not be consistent with other files that also have multiple variations. With file system folders, there is always only one predictable file that will be used.
+-   **Separates complexity:** When understanding a component, source code will not be mixed up with different implementations, and permutations are kept away.
+    -   Decreases "fear of a file being complex" as compared to conditionals in the code
+    -   Decreases the "this component will be hard to maintain, as there are other combinations already" if we nest files in the same tree
+-   **Composable experiments:** A large new feature might be implemented as a folder, and extra experiments can *inherit *code in a declarative chain. More on that on "Variation Inheritance" later.
+-   **Friendly to developer tools:** Any developer can "grep" the main src/ui/ tree to find uses of a class, get ideas for refactor, and generally reason about the application without dealing with conditionals or duplicated similar files on the same tree. The experiment folder can be hidden in code editor when giving talks and many small quality of life sugar for developers.
+-   **Any filetype:** Conditionals are great for Javascript, but CSS and other files would need extra syntax for creating variations, with the file system approach even JSON configuration can be tweaked per variation
+-   **Predictable combinations:** When dealing with multiple variations, if the same file is used for many experiments, more than one conditional will be introduced and the order they are implemented might not be consistent with other files that also have multiple variations. With file system folders, there is always only one predictable file that will be used.
 
 ### Variation Inheritance (or: sharing experiment code)
 
@@ -370,7 +361,6 @@ experiments/
     └── views
         └── ads.js
 ```
-
 
 If we now want to make slight variations on top of this experiment, we should not need to duplicate again the new controller, the sidebar placement or the vendor library. We should be able for variations to declare only the differences over a main implementation variation. We will only need to duplicate the views/ads.js file across all variations, for that, lets rename the full implementation to "new_ad_format_main":
 
@@ -400,11 +390,11 @@ experiments/
 
 In order for this to work, we will need to configure the chain of inheritance, which can be done in application level configuration or in a Mendel configuration file, but eventually we want to achieve the following combination:
 
-* default (baseline)
-* new_ad_format_main → default
-* new_ad_format_big → new ad_format_main → default
-* new_ad_format_colorful → new ad_format_main → default
-* new_ad_format_discreet → new ad_format_main → default
+-   default (baseline)
+-   new_ad_format_main → default
+-   new_ad_format_big → new ad_format_main → default
+-   new_ad_format_colorful → new ad_format_main → default
+-   new_ad_format_discreet → new ad_format_main → default
 
 Tree resolution would work the same way, where all files present on each step of inheritance takes precedence over files on the folder it is inheriting from:
 
@@ -476,38 +466,38 @@ variations:
     - new_video_module
 ```
 
-
 Notice that news_and_video won't receive new_ads implicitly. This is very important to create complex scenarios, and the above example is a simplification of real use cases that happened in Yahoo Search products before. This is a code sharing pattern intended for developers, it was a consequence of multivariate test requirements that had this complex graph as outcome.
 
 ### Comparison to other strategies and designs
 
 > Note: This was a bullet list compiled from a series of Q&A sessions internally held at Yahoo. This section is here for historical purposes and will be removed once this design is revised to convey the current architecture in Mendel
 
-* conditional in the code
-    * would deliver more code to the client
-    * even conditionals with async loaders would have some more code (including the loader) and then add more requests for scripts/css async. with 20 layers, 20 small files/requests would be required
-    * unmanageable in the long run
-    * not immediately disposable
-    * scary to open 1 file with dozens of conditionals because of buckets
-    * conditional precedence is not predictable and consistent across files, with file system tree merge, it is impossible to have any ambiguity, since even with bucket inheritance, there is no way a developer will be able to change precedence arbitrarily in different files
-* conditional removal (Esprima or other Javascript parsers and transformations)
-    * same drawbacks as above maintainability wise, but would achieve "no payload overhead"
-    * harder build system to implement
-    * build times increase
-    * it is not easily disposable (unless the same parser/exclusion is used for disposal, but this would increase even more how hard it is to implement)
-    * not easy to analyze differences, since searching the codebase with grep and similar tools is harder with conditionals
-    * lead to implicit precedence per file, where declarative merge/inheritance is consistent (example of if block, some statements execution, followed by another if block)
-    * might be overridden "if(foo) feature2 = true"
+-   conditional in the code
+    -   would deliver more code to the client
+    -   even conditionals with async loaders would have some more code (including the loader) and then add more requests for scripts/css async. with 20 layers, 20 small files/requests would be required
+    -   unmanageable in the long run
+    -   not immediately disposable
+    -   scary to open 1 file with dozens of conditionals because of buckets
+    -   conditional precedence is not predictable and consistent across files, with file system tree merge, it is impossible to have any ambiguity, since even with bucket inheritance, there is no way a developer will be able to change precedence arbitrarily in different files
+-   conditional removal (Esprima or other Javascript parsers and transformations)
 
-* branches for each experiment
-    * get outdated for every single commit on master while duplicating files on folders only potentially get outdated for the handful of forked files
-        * which means the cost is not paid upfront, but also maintained over time
-    * can’t be used for server-side, only for client-side (or isomorphic) and code that is required per-request on the server
-    * can diff branches but it’s not easy to grep the codebase and see that a given function is also used on an experiment, among other analysis problems
-    * regular branches would need to be disambiguated with experiment branches, confusion, naming convention, dirty codebase
-    * inheritance problems
-        * cannot have multiple inheritance by declarative configuration, only direct inheritance
-        * if parent branch is rebased, child branch is still outdated or will incur extra development time to update
+    -   same drawbacks as above maintainability wise, but would achieve "no payload overhead"
+    -   harder build system to implement
+    -   build times increase
+    -   it is not easily disposable (unless the same parser/exclusion is used for disposal, but this would increase even more how hard it is to implement)
+    -   not easy to analyze differences, since searching the codebase with grep and similar tools is harder with conditionals
+    -   lead to implicit precedence per file, where declarative merge/inheritance is consistent (example of if block, some statements execution, followed by another if block)
+    -   might be overridden "if(foo) feature2 = true"
+
+-   branches for each experiment
+    -   get outdated for every single commit on master while duplicating files on folders only potentially get outdated for the handful of forked files
+        -   which means the cost is not paid upfront, but also maintained over time
+    -   can’t be used for server-side, only for client-side (or isomorphic) and code that is required per-request on the server
+    -   can diff branches but it’s not easy to grep the codebase and see that a given function is also used on an experiment, among other analysis problems
+    -   regular branches would need to be disambiguated with experiment branches, confusion, naming convention, dirty codebase
+    -   inheritance problems
+        -   cannot have multiple inheritance by declarative configuration, only direct inheritance
+        -   if parent branch is rebased, child branch is still outdated or will incur extra development time to update
 
 ## Multivariate and Multi Layer Testing
 
@@ -558,13 +548,13 @@ As we stated before, multilayer support can be used for multivariate testing. On
 
 Dynamic allocation for experiments targeting the same subset of components of an application imposes interesting technical challenges:
 
-* Are all combinations thoroughly tested?
-* How to automate such a combination of builds?
-* How to automate tests?
-* Is is easy to monitor errors in production?
-* Does it lead to a chaotic code base in the long run?
+-   Are all combinations thoroughly tested?
+-   How to automate such a combination of builds?
+-   How to automate tests?
+-   Is is easy to monitor errors in production?
+-   Does it lead to a chaotic code base in the long run?
 
-Multi Layer increases exponentially the number of ****potential errors**** a developer can inadvertently cause in production.
+Multi Layer increases exponentially the number of \***\*potential errors\*\*** a developer can inadvertently cause in production.
 
 It brings Testability and Maintainability issues to the project.
 
@@ -575,21 +565,19 @@ Therefore, most Multi Layer errors are only caught by monitoring production. Thr
 From all the research and design we did before creating Mendel, it becomes clear it's a question to where we want the long term continuous cost to go:
 
 1. We enable Multi Layer, we have higher **development costs** in the long run as we progress, with potential of affecting real users inadvertently, and increasing FE architecture complexity and maintainability significantly.
-2. We go back to the ****product management costs***** of having teams competing and organizing to use smaller experiments space.
+2. We go back to the \***\*product management costs\*\*\*** of having teams competing and organizing to use smaller experiments space.
 
 Mendel does not choose for you. If you decide to use Mendel only at build time, it will generate all variations of bundles, you can upload to your CDN and use the bundles as is, with no multi-layer support.
 
 If you want to support multi-layering (or an array of variations enabled in production for a single user), you can use mendel-middleware and the exported manifests and server generated files to achieve all the combinations in an isomorphic fashion, while keeping all performance traits discussed above.
 
-
 ## Implementation: Build tools and runtime libraries
 
 Mendel is implemented using Browserify. Regardless of recent popularity of WebPack as a front-end build tool, Browserify is still state of the art and provided a stable foundation that is way more modular than WebPack and allowed the team to develop Mendel with high quality standards and in a timely manner.
 
-
 ### Mendel Manifest: Building Front-End assets with thousands of possible permutations in each deployment
 
-In previous iterations of this bucket system design, used in the Mobile Search  codebase, for each experiment a single client-side bundle was generated. This practice becomes prohibitive for multi-layer scenarios where thousands of permutations are created per deployment (i.e. 40 experiments evenly distributed in 5 layers generate 6.700 permutations).
+In previous iterations of this bucket system design, used in the Mobile Search codebase, for each experiment a single client-side bundle was generated. This practice becomes prohibitive for multi-layer scenarios where thousands of permutations are created per deployment (i.e. 40 experiments evenly distributed in 5 layers generate 6.700 permutations).
 
 During the **Browserify pipeline**, there is an internal package format that contains source-code and extra metadata. When creating the Mendel manifest, we decided to reuse this representation, wrapped in a Mendel specific object. Here is a simplified manifest:
 
@@ -637,17 +625,17 @@ Since Mendel is based on file system we can understand the potential bundles and
 
 The image above can be used to understand a number of Mendel responsibilities. Here are the ones relevant to bundle hashing and caching:
 
-  1. With 4 experiments in those layers Mendel can potentially generate 9 bundles.
-  2. If file `F6` is changed in your application between one version and the other, it should only affects 3 bundles
+1. With 4 experiments in those layers Mendel can potentially generate 9 bundles.
+2. If file `F6` is changed in your application between one version and the other, it should only affects 3 bundles
 
 This scenario is easy to understand, but large applications can yield a huge number of variations, for instance, 40 experiments evenly distributed in 8 layers will yield 6.700 permutations. Those permutations are not static at build time. Enabling and disabling permutations, organizing variations into layers are responsibilities of campaign management tools and external systems, so creating all permutations in build time would not only be slow, but also impossible by the nature of A/B testing best practices.
 
 Also, in order to cache and serve those bundles, we need consistent URLs:
 
-  * URLs must be the same to multiple users
-  * URLs must be cookie-less, so we can use CDN caching
-  * URLs should benefit from enhanced security, by obfuscating experiment names
-  * URLs should be small enough
+-   URLs must be the same to multiple users
+-   URLs must be cookie-less, so we can use CDN caching
+-   URLs should benefit from enhanced security, by obfuscating experiment names
+-   URLs should be small enough
 
 For that reason, `mendel-core` generates a hash for each bundle. The hash is based in the file list for a bundle (or what we call a tree representation), and the content of each file. This is very similar to how `git` works internally -- each blob has a hash, and each tree has a hash based on file names and blob hashes -- but it is meant to be evaluated dynamically in production.
 
@@ -655,7 +643,6 @@ Using hashes guarantees that we will cache bust only the required bundle on ever
 
 Source code and details on Mendel Hashing is available at:
 https://github.com/considerinc/mendel/tree/master/packages/mendel-core
-
 
 #### **A) Resolving bundle URL on HTML request:**
 

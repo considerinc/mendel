@@ -30,16 +30,26 @@ var body = document.querySelector('body');
 body.apprendChild(square());
 
 // base/square.js
-module.exports = function() {
+module.exports = function () {
     var div = document.createElement('div');
-    Object.assign(div.style, {backgroundColor: "red",  display: 'inline-block', width: '50px', height: '50px' });
+    Object.assign(div.style, {
+        backgroundColor: 'red',
+        display: 'inline-block',
+        width: '50px',
+        height: '50px',
+    });
     return div;
 };
 
 // variations/blue_square/square.js
-module.exports = function() {
+module.exports = function () {
     var div = document.createElement('div');
-    Object.assign(div.style, {backgroundColor: "blue",  display: 'inline-block', width: '50px', height: '50px' });
+    Object.assign(div.style, {
+        backgroundColor: 'blue',
+        display: 'inline-block',
+        width: '50px',
+        height: '50px',
+    });
     return div;
 };
 ```
@@ -60,7 +70,6 @@ var square = require('./square');
 // compiled source code for 'base/body.js' while building base bundle:
 var square = require('square.js');
 
-
 // when compiling blue_square bundle './square' resolves to
 // '/variations/square/index.js'
 // relativeToVariation('/variations/square/index.js') -> 'square/index.js'
@@ -75,12 +84,15 @@ This causes `body.js` to have two different compiled versions. In order to avoid
 Some file transformations might be unsafe, and this problem can only be addressed outside of Mendel, on the transformation itself. For instance, lets assume the following, very naive, hypothetical Browserify transform:
 
 ```js
-var options = {excludeExtensions: [".json"]};
-module.exports = transformTools.makeStringTransform("timestampify", options,
-function (content, transformOptions, done) {
-    var newContent = content + '\n// Generated: ' + Date.now() + '\n';
-    done(null, newContent);
-});
+var options = { excludeExtensions: ['.json'] };
+module.exports = transformTools.makeStringTransform(
+    'timestampify',
+    options,
+    function (content, transformOptions, done) {
+        var newContent = content + '\n// Generated: ' + Date.now() + '\n';
+        done(null, newContent);
+    }
+);
 ```
 
 Because `Date.now()` is different when parsing `base/body.js` the first time (for base) and the second time (for blue_square) variation, it will yield different sources for the "same file".
@@ -88,13 +100,16 @@ Because `Date.now()` is different when parsing `base/body.js` the first time (fo
 You could fix the potential transform problem with deterministic algorithms, in our naive example, this could be fixed by replacing `Date.now()` for git last commit date:
 
 ```js
-var options = {excludeExtensions: [".json"]};
+var options = { excludeExtensions: ['.json'] };
 var consistentDate = HipoteticalGitLibrary.lastCommitTimestamp();
-module.exports = transformTools.makeStringTransform("timestampify", options,
-function (content, transformOptions, done) {
-    var newContent = content + '\n// Build time: ' + consistentDate + '\n';
-    done(null, newContent);
-});
+module.exports = transformTools.makeStringTransform(
+    'timestampify',
+    options,
+    function (content, transformOptions, done) {
+        var newContent = content + '\n// Build time: ' + consistentDate + '\n';
+        done(null, newContent);
+    }
+);
 ```
 
 A number of transforms might make similar mistakes, take for instance [this UglifyJS2 old issue](https://github.com/mishoo/UglifyJS2/issues/229) where something similar happened.

@@ -1,5 +1,2 @@
-**/*.json
-**/*.md
-**/*.mdown
-**/*.markdown
-**/*.css
+.husky/
+.*ignore

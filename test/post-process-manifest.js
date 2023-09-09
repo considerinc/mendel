@@ -11,60 +11,80 @@ var tmp = require('tmp');
 var realSamples = path.join(__dirname, './manifest-samples/');
 var copySamples = tmp.dirSync().name;
 
-var postProcessManifests = require(
-    '../packages/mendel-development/post-process-manifest');
+var postProcessManifests = require('../packages/mendel-development/post-process-manifest');
 
 test('postProcessManifests loads manifests', function (t) {
     copyRecursiveSync(realSamples, copySamples);
     t.plan(1);
 
-    postProcessManifests({
-        outdir: copySamples,
-        bundles: [{
-            bundleName: 'minimal',
-            manifest: 'minimal.manifest.json',
-        }],
-    }, t.error);
+    postProcessManifests(
+        {
+            outdir: copySamples,
+            bundles: [
+                {
+                    bundleName: 'minimal',
+                    manifest: 'minimal.manifest.json',
+                },
+            ],
+        },
+        t.error
+    );
 });
 
 test('postProcessManifests sorts and cleans manifests', function (t) {
     copyRecursiveSync(realSamples, copySamples);
     t.plan(4);
 
-    postProcessManifests({
-        outdir: copySamples,
-        bundles: [{
-            bundleName: 'bad-sort',
-            manifest: 'bad-sort.manifest.json',
-        }],
-    }, function(error) {
-        t.error(error);
-        var result = require(path.join(copySamples, 'bad-sort.manifest.json'));
+    postProcessManifests(
+        {
+            outdir: copySamples,
+            bundles: [
+                {
+                    bundleName: 'bad-sort',
+                    manifest: 'bad-sort.manifest.json',
+                },
+            ],
+        },
+        function (error) {
+            t.error(error);
+            var result = require(
+                path.join(copySamples, 'bad-sort.manifest.json')
+            );
 
-        t.equal(result.bundles.length, 4, 'removed one unused bundle');
-        t.deepEqual(result.indexes,
-            { bar: 0, foo: 1, root:2, zoo: 3 }, 'reordered indexes');
-        t.deepEqual(Object.keys(result.bundles[1].data[0].deps),
-            ['bar', 'zoo'], 'reordered deps');
-    });
+            t.equal(result.bundles.length, 4, 'removed one unused bundle');
+            t.deepEqual(
+                result.indexes,
+                { bar: 0, foo: 1, root: 2, zoo: 3 },
+                'reordered indexes'
+            );
+            t.deepEqual(
+                Object.keys(result.bundles[1].data[0].deps),
+                ['bar', 'zoo'],
+                'reordered deps'
+            );
+        }
+    );
 });
-
 
 test('postProcessManifests validates manifests', function (t) {
     copyRecursiveSync(realSamples, copySamples);
     t.plan(1);
 
-    postProcessManifests({
-        outdir: copySamples,
-        bundles: [{
-            bundleName: 'bad',
-            manifest: 'bad.manifest.json',
-        }],
-    }, function(err) {
-        t.equal(err.code, 'INVALID_MANIFEST', 'should validate manifests');
-    });
+    postProcessManifests(
+        {
+            outdir: copySamples,
+            bundles: [
+                {
+                    bundleName: 'bad',
+                    manifest: 'bad.manifest.json',
+                },
+            ],
+        },
+        function (err) {
+            t.equal(err.code, 'INVALID_MANIFEST', 'should validate manifests');
+        }
+    );
 });
-
 
 test('postProcessManifests applying post-processors', function (t) {
     copyRecursiveSync(realSamples, copySamples);
@@ -80,39 +100,50 @@ test('postProcessManifests applying post-processors', function (t) {
         calls.push('external file');
         next(manifests);
     };
-    postProcessManifests({
-        manifestProcessors:[
-            [passThroughProcessor, {'LMAO':'the french smiley cat'}],
-            path.resolve(__filename),
-        ],
-        outdir: copySamples,
-        bundles: [{
-            bundleName: 'minimal',
-            manifest: 'minimal.manifest.json',
-        }],
-    }, function(error) {
-        t.error(error);
-        t.equals(calls.length, 2, 'calls the post-processors');
-        t.equals(calls[0][1].LMAO,
-            'the french smiley cat', 'pass correct options');
-        t.equals(calls[1],
-            'external file', 'loads external processors');
-    });
+    postProcessManifests(
+        {
+            manifestProcessors: [
+                [passThroughProcessor, { LMAO: 'the french smiley cat' }],
+                path.resolve(__filename),
+            ],
+            outdir: copySamples,
+            bundles: [
+                {
+                    bundleName: 'minimal',
+                    manifest: 'minimal.manifest.json',
+                },
+            ],
+        },
+        function (error) {
+            t.error(error);
+            t.equals(calls.length, 2, 'calls the post-processors');
+            t.equals(
+                calls[0][1].LMAO,
+                'the french smiley cat',
+                'pass correct options'
+            );
+            t.equals(calls[1], 'external file', 'loads external processors');
+        }
+    );
 });
 
-
-
 function copyRecursiveSync(src, dest) {
-  var exists = fs.existsSync(src);
-  var stats = exists && fs.statSync(src);
-  var isDirectory = exists && stats.isDirectory();
-  if (exists && isDirectory) {
-    try{fs.mkdirSync(dest);} catch(e) {/**/}
-    fs.readdirSync(src).forEach(function(childItemName) {
-      copyRecursiveSync(path.join(src, childItemName),
-                        path.join(dest, childItemName));
-    });
-  } else {
-    fs.writeFileSync(dest, fs.readFileSync(src));
-  }
+    var exists = fs.existsSync(src);
+    var stats = exists && fs.statSync(src);
+    var isDirectory = exists && stats.isDirectory();
+    if (exists && isDirectory) {
+        try {
+            fs.mkdirSync(dest);
+        } catch (e) {
+            /**/
+        }
+        fs.readdirSync(src).forEach(function (childItemName) {
+            copyRecursiveSync(
+                path.join(src, childItemName),
+                path.join(dest, childItemName)
+            );
+        });
+    } else {
+        fs.writeFileSync(dest, fs.readFileSync(src));
+    }
 }

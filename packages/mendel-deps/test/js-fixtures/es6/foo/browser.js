@@ -1,1 +1,1 @@
-import {test} from 'glob';
+import { test } from 'glob';

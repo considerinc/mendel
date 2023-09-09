@@ -11,15 +11,17 @@ const colors = require('chalk');
 const EventEmitter = require('events').EventEmitter;
 
 module.exports = class MendelPipeline extends EventEmitter {
-    constructor ({options, cache, transformer, depsResolver}) {
+    constructor({ options, cache, transformer, depsResolver }) {
         super();
         this.debug = _debug('mendel:pipeline:' + options.environment);
         this.cache = cache;
 
-        const registry = this._registry = new MendelRegistry(options, cache);
+        const registry = (this._registry = new MendelRegistry(options, cache));
         const toolset = {
-            cache, registry,
-            transformer, depsResolver,
+            cache,
+            registry,
+            transformer,
+            depsResolver,
         };
 
         // Pipeline steps
@@ -34,7 +36,7 @@ module.exports = class MendelPipeline extends EventEmitter {
         steps.forEach((curStep, i) => {
             const nextStep = i < steps.length - 1 ? steps[i + 1] : null;
             const name = curStep.constructor.name;
-            curStep.on('done', ({entryId}) => {
+            curStep.on('done', ({ entryId }) => {
                 const entry = registry.getEntry(entryId);
                 if (!nextStep) return;
                 try {
@@ -43,11 +45,11 @@ module.exports = class MendelPipeline extends EventEmitter {
                         [entry].concat(Array.prototype.slice.call(arguments, 1))
                     );
                 } catch (error) {
-                    this._handleError(name, {error, id: entryId});
+                    this._handleError(name, { error, id: entryId });
                 }
             });
 
-            curStep.on('error', descriptor => {
+            curStep.on('error', (descriptor) => {
                 this._handleError(name, descriptor);
             });
         });
@@ -56,7 +58,7 @@ module.exports = class MendelPipeline extends EventEmitter {
     }
 
     _handleError(name, descriptor) {
-        const {error, id} = descriptor;
+        const { error, id } = descriptor;
         console.error(colors.white(`[Mendel] builder "${name}" errored:`));
         console.error(colors.red(error.message));
         console.error(error.stack);
@@ -69,22 +71,20 @@ module.exports = class MendelPipeline extends EventEmitter {
         let startedEntries = 0;
         let doneEntries = 0;
 
-        this.steps[0]
-            .on('done', () => startedEntries++);
+        this.steps[0].on('done', () => startedEntries++);
 
-        this.steps[this.steps.length-1]
-            .on('done', () => {
-                if (++doneEntries === startedEntries) {
-                    const total = this.cache.size();
-                    this.debug(`${doneEntries} entries were processed.`);
-                    this.debug(`${total} entries in registry.`);
+        this.steps[this.steps.length - 1].on('done', () => {
+            if (++doneEntries === startedEntries) {
+                const total = this.cache.size();
+                this.debug(`${doneEntries} entries were processed.`);
+                this.debug(`${total} entries in registry.`);
 
-                    startedEntries = 0;
-                    doneEntries = 0;
+                startedEntries = 0;
+                doneEntries = 0;
 
-                    this.emit('idle', doneEntries);
-                }
-            });
+                this.emit('idle', doneEntries);
+            }
+        });
 
         this.steps[0].start();
     }

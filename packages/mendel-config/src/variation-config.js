@@ -1,10 +1,10 @@
 const parseVariations = require('../variations');
 const createValidator = require('./validator');
 const validate = createValidator({
-    variations: {type: 'array', minLen: 1},
+    variations: { type: 'array', minLen: 1 },
     // There can be a user of Mendel who does not want variation but faster build.
-    allVariationDirs: {type: 'array', minLen: 0},
-    allDirs: {type: 'array', minLen: 1},
+    allVariationDirs: { type: 'array', minLen: 0 },
+    allDirs: { type: 'array', minLen: 1 },
 });
 
 function VariationConfig(config) {
@@ -33,7 +33,7 @@ function VariationConfig(config) {
 
 function getAllDirs(variationArray) {
     return variationArray.reduce((allDirs, variation) => {
-        variation.chain.forEach(dir => {
+        variation.chain.forEach((dir) => {
             if (!allDirs.includes(dir)) allDirs.push(dir);
         });
         return allDirs;

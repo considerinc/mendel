@@ -1,1 +1,1 @@
-const {test} = require('tap');
+const { test } = require('tap');

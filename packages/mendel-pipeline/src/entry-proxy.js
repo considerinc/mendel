@@ -9,6 +9,6 @@ class EntryProxy {
         proxy.deps = entry.istDeps;
         return proxy;
     }
- }
+}
 
 module.exports = EntryProxy;
