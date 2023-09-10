@@ -1,31 +1,19 @@
-const test = require('tap').test;
+const { test } = require('tap');
 const Resolver = require('../');
 const VariationalResolver = require('../variational-resolver');
 const fs = require('fs');
 const path = require('path');
 const basePath = path.resolve(__dirname, './fixtures');
+const parseConfig = require('../../mendel-config');
 
 ['basic', 'package-json'].forEach((dir) => {
     const dirPath = path.resolve(basePath, dir);
+    process.chdir(dirPath);
 
     test('resolve ' + dir, function (t) {
-        const config = {
-            extensions: ['.js'],
-            runtimes: ['main', 'browser'],
-            basedir: dirPath,
-            cwd: __dirname,
-        };
+        const config = {};
 
-        try {
-            Object.assign(
-                config,
-                JSON.parse(
-                    fs.readFileSync(path.resolve(dirPath, 'config.json'))
-                )
-            );
-        } catch (e) {
-            // Eslint hates empty block
-        }
+        Object.assign(config, parseConfig());
 
         return new Resolver(config).resolve('.').then((resolved) => {
             const expected = JSON.parse(
@@ -40,23 +28,11 @@ const basePath = path.resolve(__dirname, './fixtures');
 test('resolve node-modules', function (t) {
     const dir = 'node-modules';
     const dirPath = path.resolve(basePath, dir);
-    const config = {
-        extensions: ['.js'],
-        runtimes: ['main', 'browser'],
-        basedir: dirPath,
-        cwd: __dirname,
-    };
 
-    try {
-        Object.assign(
-            config,
-            JSON.parse(fs.readFileSync(path.resolve(dirPath, 'config.json')))
-        );
-    } catch (e) {
-        // Eslint hates empty block
-    }
+    process.chdir(dirPath);
+    const config = parseConfig();
 
-    return new Resolver(config).resolve('mendel-config').then((resolved) => {
+    return new Resolver(config).resolve('fake-module').then((resolved) => {
         const expected = JSON.parse(
             fs.readFileSync(path.resolve(dirPath, 'expect.json'))
         );
@@ -68,25 +44,14 @@ test('resolve node-modules', function (t) {
 ['easy-variational', 'hard-variational'].forEach((dir) => {
     test('variational ' + dir, function (t) {
         const dirPath = path.resolve(basePath, dir);
-        const config = {
-            extensions: ['.js'],
-            runtimes: ['main', 'browser'],
-            basedir: dirPath,
-            cwd: __dirname,
-        };
-        try {
-            Object.assign(
-                config,
-                JSON.parse(
-                    fs.readFileSync(path.resolve(dirPath, 'config.json'))
-                )
-            );
-        } catch (e) {
-            // Eslint hates empty block
-        }
+        process.chdir(dirPath);
+        const config = parseConfig();
+
+        config.basedir = dirPath + '/variations/var1/footer';
+        config.runtimes = ['main', 'browser', 'extra'];
 
         return new VariationalResolver(config)
-            .resolve('./variations/var1')
+            .resolve('./variations/var1/footer')
             .then((resolved) => {
                 const expected = JSON.parse(
                     fs.readFileSync(path.resolve(dirPath, 'expect.json'))

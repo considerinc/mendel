@@ -1,4 +1,5 @@
 {
-  "main": "fixtures/package-json/index.js",
-  "browser": "fixtures/package-json/browser.js"
+    "main": "./index.js",
+    "module": "./index.js",
+    "browser": "./browser.js"
 }

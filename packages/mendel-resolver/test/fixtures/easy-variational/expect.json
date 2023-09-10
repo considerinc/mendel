@@ -1,5 +1,5 @@
 {
-  "main": "fixtures/easy-variational/base/index.js",
-  "browser": "fixtures/easy-variational/variations/var1/special.js",
-  "extra": "fixtures/easy-variational/variations/var1/extra.js"
+    "main": "./base/footer/index.js",
+    "extra": "./variations/var1/footer/extra.js",
+    "browser": "./variations/var1/footer/special.js"
 }

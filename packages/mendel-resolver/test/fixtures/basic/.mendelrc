@@ -1,0 +1,15 @@
+
+# relative to basedir, defaults to "build"
+dest: output_root
+
+base: default
+basetree: .
+
+bundles:
+  test:
+    entries:
+      - .
+
+variations:
+  variation_A:
+  variation_B:
