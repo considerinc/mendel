@@ -22,7 +22,7 @@ tap.test('Build the extraction app', function (t) {
         const main = require(path.join(appBuildPath, 'main.manifest.json'));
         const lazy = require(path.join(appBuildPath, 'lazy.manifest.json'));
 
-        t.matches(
+        t.match(
             main.indexes,
             {
                 './': /\d/,
@@ -31,7 +31,7 @@ tap.test('Build the extraction app', function (t) {
             },
             'indices have all normalizedId expected in main'
         );
-        t.matches(
+        t.match(
             lazy.indexes,
             {
                 './another-number': /\d/,

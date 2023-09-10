@@ -8,6 +8,9 @@
         "mendel-manifest-processor",
         "build"
     ],
+    "scripts": {
+        "test": "tap test/*.js"
+    },
     "author": "Irae Carvalho <irae@irae.pro.br>",
     "license": "MIT",
     "repository": {

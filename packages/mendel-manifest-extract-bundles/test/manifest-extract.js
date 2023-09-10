@@ -8,11 +8,14 @@ var path = require('path');
 var tmp = require('tmp');
 
 // Since this file re-writes stuff, lets work on a copy
-var realSamples = path.join(__dirname, './manifest-samples/');
+var realSamples = path.join(
+    __dirname,
+    '../../mendel-development/test/manifest-samples/'
+);
 var copySamples = tmp.dirSync().name;
 
-var postProcessManifests = require('mendel-development/post-process-manifest');
-var extract = require('../packages/mendel-manifest-extract-bundles');
+var postProcessManifests = require('../../mendel-development/post-process-manifest');
+var extract = require('../manifest-extract');
 
 test('postProcessManifests applying post-processors', function (t) {
     copyRecursiveSync(realSamples, copySamples);
@@ -51,13 +54,13 @@ test('postProcessManifests applying post-processors', function (t) {
             var resultExternal = require(
                 path.join(copySamples, 'foo-is-children.manifest.json')
             );
-            t.equals(
+            t.equal(
                 resultExternal.bundles.length,
                 2,
                 'removed external bundles'
             );
-            t.equals(resultFrom.bundles[1].expose, 'foo', 'exposed bundle');
-            t.equals(
+            t.equal(resultFrom.bundles[1].expose, 'foo', 'exposed bundle');
+            t.equal(
                 resultFrom.bundles[1].data[0].expose,
                 'foo',
                 'exposed variation'

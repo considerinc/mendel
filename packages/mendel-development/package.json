@@ -2,7 +2,9 @@
     "name": "mendel-development",
     "version": "4.0.0-alpha.0",
     "description": "Mendel shared dependencies for build and development",
-    "main": "index.js",
+    "scripts": {
+        "test": "tap test/*.js"
+    },
     "keywords": [
         "mendel"
     ],

@@ -11,7 +11,7 @@ var tmp = require('tmp');
 var realSamples = path.join(__dirname, './manifest-samples/');
 var copySamples = tmp.dirSync().name;
 
-var postProcessManifests = require('../packages/mendel-development/post-process-manifest');
+var postProcessManifests = require('../post-process-manifest');
 
 test('postProcessManifests loads manifests', function (t) {
     copyRecursiveSync(realSamples, copySamples);
@@ -52,12 +52,12 @@ test('postProcessManifests sorts and cleans manifests', function (t) {
             );
 
             t.equal(result.bundles.length, 4, 'removed one unused bundle');
-            t.deepEqual(
+            t.same(
                 result.indexes,
                 { bar: 0, foo: 1, root: 2, zoo: 3 },
                 'reordered indexes'
             );
-            t.deepEqual(
+            t.same(
                 Object.keys(result.bundles[1].data[0].deps),
                 ['bar', 'zoo'],
                 'reordered deps'
@@ -116,13 +116,13 @@ test('postProcessManifests applying post-processors', function (t) {
         },
         function (error) {
             t.error(error);
-            t.equals(calls.length, 2, 'calls the post-processors');
-            t.equals(
+            t.equal(calls.length, 2, 'calls the post-processors');
+            t.equal(
                 calls[0][1].LMAO,
                 'the french smiley cat',
                 'pass correct options'
             );
-            t.equals(calls[1], 'external file', 'loads external processors');
+            t.equal(calls[1], 'external file', 'loads external processors');
         }
     );
 });
