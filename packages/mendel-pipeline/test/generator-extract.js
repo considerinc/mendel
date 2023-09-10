@@ -3,7 +3,7 @@ const path = require('path');
 const appPath = path.resolve(__dirname, './extract-samples');
 const appBuildPath = path.join(appPath, 'build');
 
-const MendelV2 = require('../packages/mendel-pipeline');
+const MendelV2 = require('../');
 const rimraf = require('rimraf');
 
 process.env.MENDELRC = '.extract.mendelrc';

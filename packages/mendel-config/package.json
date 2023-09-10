@@ -4,7 +4,7 @@
     "description": "Mendel configuration parser",
     "main": "index.js",
     "scripts": {
-        "test": "tap --no-check-coverage test/*.js"
+        "test": "tap test/*.js --coverage-map=../../.tap.coverage.map.js --no-check-coverage"
     },
     "keywords": [
         "mendel"

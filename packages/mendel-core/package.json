@@ -4,7 +4,7 @@
     "description": "Mendel shared dependencies production use",
     "main": "trees.js",
     "scripts": {
-        "test": "tap --coverage-map=../../.tap.coverage.map.js --no-check-coverage test/*.js"
+        "test": "tap test/*.js --coverage-map=../../.tap.coverage.map.js --no-check-coverage"
     },
     "keywords": [
         "mendel"

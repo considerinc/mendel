@@ -9,7 +9,7 @@
         "build"
     ],
     "scripts": {
-        "test": "tap test/*.js"
+        "test": "tap test/*.js --coverage-map=../../.tap.coverage.map.js --no-check-coverage"
     },
     "author": "Irae Carvalho <irae@irae.pro.br>",
     "license": "MIT",

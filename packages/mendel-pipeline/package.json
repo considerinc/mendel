@@ -7,7 +7,7 @@
         "mendel": "src/cli.js"
     },
     "scripts": {
-        "test": "tap test/*.js",
+        "test": "tap test/*.js --coverage-map=../../.tap.coverage.map.js --no-check-coverage",
         "lint": "eslint ."
     },
     "author": "Stephan Lee <stephanwlee@gmail.com>",

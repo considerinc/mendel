@@ -2,7 +2,7 @@ const path = require('path');
 const test = require('tap').test;
 const rimraf = require('rimraf');
 const fs = require('fs');
-const MendelV2 = require('../packages/mendel-pipeline');
+const MendelV2 = require('../');
 const appPath = path.join(__dirname, './css-samples');
 const buildPath = path.join(appPath, 'build');
 

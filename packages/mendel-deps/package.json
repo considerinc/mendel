@@ -4,7 +4,7 @@
     "description": "Depedency detector based on AST. Supports custom cache and custom resolver.",
     "main": "src/index.js",
     "scripts": {
-        "test": "tap test/*.js"
+        "test": "tap test/*.js --coverage-map=../../.tap.coverage.map.js --no-check-coverage"
     },
     "author": "Stephan Lee <stephanwlee@gmail.com>",
     "license": "MIT",
