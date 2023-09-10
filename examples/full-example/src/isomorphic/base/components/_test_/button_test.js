@@ -4,14 +4,14 @@
 
 import React from 'react'; // eslint-disable-line no-unused-vars
 import { findDOMNode } from 'react-dom'; // eslint-disable-line no-unused-vars
-import { renderIntoDocument } from 'react-dom/test-utils';
 import Button from '../button';
 import { expect } from 'chai';
+import { screen, render } from '@testing-library/react';
 
 describe('Button [base]', function () {
     it('renders with children', function () {
-        const button = renderIntoDocument(<Button>meow</Button>);
-
-        expect(findDOMNode(button).innerText).to.equal('meow');
+        render(<Button>meow</Button>);
+        screen.findByText('meow');
+        expect(screen.getByText('meow').innerText).to.equal('meow');
     });
 });

@@ -4,17 +4,16 @@
 
 import React from 'react'; // eslint-disable-line no-unused-vars
 import { findDOMNode } from 'react-dom'; // eslint-disable-line no-unused-vars
-import {
-    renderIntoDocument,
-    scryRenderedDOMComponentsWithTag,
-} from 'react-dom/test-utils';
+import { screen, render } from '@testing-library/react';
 import Toolbar from '../toolbar';
 import { expect } from 'chai';
 
 describe('toolbar [feature_B]', function () {
     it('contains 3 buttons', function () {
-        const toolbar = renderIntoDocument(<Toolbar />);
-        const buttons = scryRenderedDOMComponentsWithTag(toolbar, 'button');
+        render(<Toolbar />);
+
+        screen.findAllByText('B');
+        const buttons = screen.getAllByText('B');
 
         expect(buttons.length).to.equal(3);
         expect(findDOMNode(buttons[0]).innerText).to.equal('B');

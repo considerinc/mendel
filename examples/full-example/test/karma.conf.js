@@ -16,6 +16,7 @@ module.exports = function (config) {
                 pattern: '../src/isomorphic/**/_test_/*.js',
                 included: false,
                 served: true,
+                watched: false,
             },
         ],
 
@@ -53,10 +54,22 @@ module.exports = function (config) {
             reports: ['html', 'lcovonly', 'text-summary'],
         },
 
+        client: {
+            jasmine: {
+                random: false,
+                seed: '4321',
+                oneFailurePerSpec: false,
+                failFast: false,
+                timeoutInterval: 1000,
+            },
+        },
+
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['jasmine-diff', 'spec', 'coverage-istanbul'],
+        reporters: ['spec', 'coverage-istanbul'],
+
+        specReporter: getSpecConfig(),
 
         // web server port
         port: 9876,
@@ -84,3 +97,27 @@ module.exports = function (config) {
         concurrency: 1,
     });
 };
+
+function getSpecConfig() {
+    if (argvIncludes('minimal')) {
+        return {
+            suppressPassed: true,
+            suppressErrorSummary: true,
+            suppressSkipped: true,
+            suppressFailed: false,
+            failFast: false,
+        };
+    } else {
+        // leave to defaults
+        return {
+            failFast: false,
+        };
+    }
+}
+
+function argvIncludes(param) {
+    return []
+        .concat(process.argv)
+        .filter(Boolean)
+        .includes('--' + param);
+}

@@ -1,5 +1,5 @@
 concurrent:
-'*!(*.js|*.mjs|*.ts|*.jsx|*.tsx)':
+'*(*.md|*.yaml|*.yml|*.json|*.css|*.html|*.less)':
     - prettier --write
 '*(*.js|*.mjs|*.ts|*.jsx|*.tsx)':
     - prettier --write

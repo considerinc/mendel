@@ -1,0 +1,4 @@
+dev-server: PORT=3000 npm run development --silent
+dev-builder: npm run builder --silent
+test-builder: npm run test-builder --silent
+test-karma: npm run test-karma-dev --silent
