@@ -72,7 +72,10 @@ function bundle(req, bundle) {
     var key = bundle + ':' + req.mendel.variations.join(':');
     if (!cache || !bundleCache[key]) {
         if (bundle === 'css') {
-            if (Boolean(process.env.INLINE_CSS) === true) {
+            if (
+                Boolean(process.env.INLINE_CSS) === true ||
+                process.env.NODE_ENV === 'production'
+            ) {
                 bundleCache[key] =
                     '<style>' + concatDeps(req, bundle) + '</style>';
             } else {

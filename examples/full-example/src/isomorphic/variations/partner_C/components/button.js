@@ -14,10 +14,10 @@ class Button extends React.Component {
         };
     }
     render() {
+        const text = `${this.props.children} C#${this.state.count}`;
         return (
             <button className="partner_C" {...this.props}>
-                {this.props.children}
-                C#{this.state.count}
+                {text}
             </button>
         );
     }

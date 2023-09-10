@@ -12,7 +12,7 @@ class Message extends React.Component {
     }
 
     render() {
-        return <div className="message">Message #{++count}</div>;
+        return <div className="message">{'Message #' + ++count}</div>;
     }
 }
 

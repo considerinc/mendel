@@ -15,7 +15,7 @@ class Footer extends React.Component {
         return (
             <footer>
                 <div>--- footer stuff ---</div>
-                <div>Current NODE_ENV is {foo()}</div>
+                <div>{'Current NODE_ENV is ' + foo()}</div>
             </footer>
         );
     }
