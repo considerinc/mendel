@@ -8,7 +8,7 @@ const Resolver = require('../../mendel-resolver');
 const jsFixtures = globSync(__dirname + '/js-fixtures/**/*.js');
 
 const jsResolver = new Resolver({
-    cwd: __dirname + '/fixtures',
+    basedir: __dirname,
     runtimes: ['browser', 'main'],
 });
 
@@ -22,7 +22,7 @@ jsFixtures
             return deps({
                 file,
                 source: readFileSync(file, 'utf8'),
-                jsResolver,
+                resolver: jsResolver,
             }).then((deps) => {
                 // foo, process, and global
                 t.equal(Object.keys(deps).length, 3);
@@ -37,7 +37,7 @@ jsFixtures
 const cssFixtures = globSync(__dirname + '/css-fixtures/**/*.css');
 
 const cssResolver = new Resolver({
-    cwd: __dirname + '/fixtures',
+    cwd: __dirname,
     runtimes: ['browser', 'main'],
 });
 
@@ -51,13 +51,19 @@ cssFixtures
             return deps({
                 file,
                 source: readFileSync(file, 'utf8'),
-                cssResolver,
+                resolver: cssResolver,
             }).then((deps) => {
-                t.equal(Object.keys(deps).length, 1);
+                t.equal(Object.keys(deps).length, 2);
 
-                const fooDep = deps['./foo.css'];
-                t.match(fooDep.browser, /foo\.css$/);
-                t.match(fooDep.main, /foo\.css$/);
+                t.equal(
+                    deps["url('./foo.css')"],
+                    false,
+                    'url is not traversed or imported, it is treated as an external/lazy dependency'
+                );
+
+                const barDep = deps['./bar.css'];
+                t.match(barDep.browser, /bar\.css$/);
+                t.match(barDep.main, /bar\.css$/);
             });
         });
     });
