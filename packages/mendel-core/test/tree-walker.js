@@ -8,7 +8,7 @@ var MendelWalker = require('../tree-walker');
 
 var walker = MendelWalker();
 
-t.equals(walker.constructor, MendelWalker, 'constructor');
+t.equal(walker.constructor, MendelWalker, 'constructor');
 
 var shallowModule = {
     id: 'root',
@@ -21,13 +21,13 @@ var shallowModule = {
     ],
 };
 
-t.equals(
+t.equal(
     walker.find(shallowModule).id,
     'stubData',
     "Shallow module won't call _resolveBranch"
 );
 
-t.equals(walker.find({ index: 0 }).id, 'stubData', 'Caches result by index');
+t.equal(walker.find({ index: 0 }).id, 'stubData', 'Caches result by index');
 
 t.throws(function () {
     walker.find({ index: 1, data: [1, 2] });

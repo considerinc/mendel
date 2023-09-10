@@ -6,7 +6,7 @@ var t = require('tap');
 
 var MendelVariationWalker = require('../tree-variation-walker');
 
-t.equals(
+t.equal(
     MendelVariationWalker().constructor,
     MendelVariationWalker,
     'constructor'
@@ -31,21 +31,17 @@ ret = walker._resolveBranch(stub1);
 
 t.match(ret, { index: 1, resolved: { id: 'b' } }, 'returns first match');
 
-t.equals(walker.conflicts, 0, 'no conflicts with base');
+t.equal(walker.conflicts, 0, 'no conflicts with base');
 
 walker = new MendelVariationWalker([['a', 'b'], ['special']], 'special');
 ret = walker._resolveBranch(stub1);
 
-t.equals(
-    walker.conflicts,
-    0,
-    "Two variations on the same level don't conflict"
-);
+t.equal(walker.conflicts, 0, "Two variations on the same level don't conflict");
 
 walker = new MendelVariationWalker([['a'], ['b'], ['special']], 'special');
 ret = walker.find(stub1);
 
-t.equals(walker.conflicts, 1, 'detects conflicts');
+t.equal(walker.conflicts, 1, 'detects conflicts');
 
 t.match(walker.conflictList, { first: true }, 'conflicts map');
 

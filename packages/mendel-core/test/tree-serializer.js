@@ -82,7 +82,7 @@ sut2.pushFileHash(
     Buffer.from('b84590a32b966f8e13f790b83d19df02e79d50ee', 'hex')
 );
 
-t.notEqual(
+t.not(
     sut1.result(),
     sut2.result(),
     'different result if different hahses pushed'

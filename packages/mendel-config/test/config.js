@@ -23,6 +23,12 @@ t.match(
     'recurses and give up if no config found'
 );
 
+t.match(
+    config().variationConfig.allVariationDirs,
+    [],
+    'builds-basic variation object'
+);
+
 process.chdir(path.resolve(__dirname, './config-samples/2/subfolder/'));
 
 t.match(

@@ -59,7 +59,7 @@ module.exports = function (config) {
     }
 
     // require only inside conditional
-    if (config['base-config']) {
+    if (config['base-config'] || JSON.stringify(config) === '{}') {
         // This requires node 6 - can use ES6 features
         return require('./src')(config);
     } else {

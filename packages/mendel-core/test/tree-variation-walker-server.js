@@ -6,7 +6,7 @@ var t = require('tap');
 
 var MendelServerVariationWalker = require('../tree-variation-walker-server');
 
-t.equals(
+t.equal(
     MendelServerVariationWalker().constructor,
     MendelServerVariationWalker,
     'constructor'

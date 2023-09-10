@@ -63,7 +63,7 @@ t.match(
     },
     'proper output whith error'
 );
-t.notEqual(f.hash, validHash, 'different hash when error present');
+t.not(f.hash, validHash, 'different hash when error present');
 t.equal(f.error.code, 'TRVRSL', 'but same error code');
 
 walker = new MendelHashWalker(validHash);
@@ -78,7 +78,7 @@ t.match(
     },
     'Parsed ok, but hash mismatch'
 );
-t.notEqual(f.error.code, 'HASHMISS', 'but same error code');
+t.not(f.error.code, 'HASHMISS', 'but same error code');
 
 var stub1 = {
     index: 0,

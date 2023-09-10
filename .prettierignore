@@ -1,3 +1,6 @@
 .husky/
 .*
-.git-blame-ignore-revs
+!.*.js
+!.*.yml
+!.*.json
+*.sh
