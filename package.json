@@ -33,11 +33,13 @@
         "url": "https://github.com/considerinc/mendel"
     },
     "workspaces": [
-        "packages/*"
+        "packages/*",
+        "examples/*"
     ],
     "engines": {
         "npm": ">= 9.0.0",
-        "node": ">= 20.0.0"
+        "node": ">= 20.0.0",
+        "pnpm": ">= 8.7.4"
     },
     "scripts": {
         "prepare": "husky install",
