@@ -8,13 +8,8 @@ var count = 0;
 
 class Button extends React.Component {
     render() {
-        const text = `A#${++count}`;
-        return (
-            <button {...this.props}>
-                {this.props.children}
-                {text}
-            </button>
-        );
+        const text = `${this.props.children} A#${++count}`;
+        return <button {...this.props}>{text}</button>;
     }
 }
 
