@@ -25,6 +25,9 @@ importers:
             eslint:
                 specifier: ^8.49.0
                 version: 8.49.0
+            eslint-plugin-implicit-dependencies:
+                specifier: ^1.1.1
+                version: 1.1.1
             eslint-plugin-react:
                 specifier: ^7.33.1
                 version: 7.33.2(eslint@8.49.0)
@@ -255,6 +258,10 @@ importers:
             source-map:
                 specifier: ^0.7.4
                 version: 0.7.4
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-config:
         dependencies:
@@ -273,6 +280,13 @@ importers:
             xtend:
                 specifier: ^4.0.1
                 version: 4.0.2
+        devDependencies:
+            mkdirp:
+                specifier: ^3.0.1
+                version: 3.0.1
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-core:
         dependencies:
@@ -297,6 +311,13 @@ importers:
             xtend:
                 specifier: ^4.0.1
                 version: 4.0.2
+        devDependencies:
+            mkdirp:
+                specifier: ^3.0.1
+                version: 3.0.1
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-deps:
         dependencies:
@@ -328,6 +349,9 @@ importers:
 
     packages/mendel-development:
         dependencies:
+            async:
+                specifier: ^3.2.4
+                version: 3.2.4
             debug:
                 specifier: ^4.3.4
                 version: 4.3.4(supports-color@8.1.1)
@@ -337,6 +361,9 @@ importers:
             glob:
                 specifier: ^7.0.3
                 version: 7.2.3
+            resolve:
+                specifier: ^1.22.4
+                version: 1.22.4
             shasum:
                 specifier: ^1.0.2
                 version: 1.0.2
@@ -346,6 +373,10 @@ importers:
             tmp:
                 specifier: 0.0.28
                 version: 0.0.28
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-development-middleware:
         dependencies:
@@ -367,6 +398,13 @@ importers:
             path-to-regexp:
                 specifier: ^2.1.0
                 version: 2.4.0
+        devDependencies:
+            request:
+                specifier: ^2.88.2
+                version: 2.88.2
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-exec:
         dependencies:
@@ -379,30 +417,50 @@ importers:
             source-map:
                 specifier: ^0.5.7
                 version: 0.5.7
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-generator-extract:
         dependencies:
             debug:
                 specifier: ^4.3.4
                 version: 4.3.4(supports-color@8.1.1)
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-generator-node-modules:
         dependencies:
             debug:
                 specifier: ^4.3.4
                 version: 4.3.4(supports-color@8.1.1)
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-generator-prune:
         dependencies:
             debug:
                 specifier: ^4.3.4
                 version: 4.3.4(supports-color@8.1.1)
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-loader:
         dependencies:
             debug:
                 specifier: ^4.3.4
                 version: 4.3.4(supports-color@8.1.1)
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-manifest-extract-bundles:
         dependencies:
@@ -412,6 +470,13 @@ importers:
             mendel-development:
                 specifier: ^4.0.0-alpha.0
                 version: link:../mendel-development
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
+            tmp:
+                specifier: ^0.2.1
+                version: 0.2.1
 
     packages/mendel-manifest-uglify:
         dependencies:
@@ -421,6 +486,10 @@ importers:
             uglify-js:
                 specifier: ^3.17.4
                 version: 3.17.4
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-middleware:
         dependencies:
@@ -439,6 +508,13 @@ importers:
             path-to-regexp:
                 specifier: ^1.2.1
                 version: 1.8.0
+        devDependencies:
+            request:
+                specifier: ^2.88.2
+                version: 2.88.2
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-mocha-runner:
         dependencies:
@@ -460,6 +536,13 @@ importers:
             resolve:
                 specifier: ^1.2.0
                 version: 1.22.4
+        devDependencies:
+            glob:
+                specifier: ^10.3.4
+                version: 10.3.4
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-outlet-browser-pack:
         dependencies:
@@ -469,6 +552,10 @@ importers:
             debug:
                 specifier: ^4.3.4
                 version: 4.3.4(supports-color@8.1.1)
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-outlet-css:
         dependencies:
@@ -481,6 +568,10 @@ importers:
             postcss:
                 specifier: ^8.4.27
                 version: 8.4.29
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-outlet-manifest:
         dependencies:
@@ -499,6 +590,10 @@ importers:
             shasum:
                 specifier: ^1.0.2
                 version: 1.0.2
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-outlet-server-side-render:
         dependencies:
@@ -517,12 +612,20 @@ importers:
             mkdirp:
                 specifier: ^0.5.1
                 version: 0.5.6
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-parser-json:
         dependencies:
             debug:
                 specifier: ^4.3.4
                 version: 4.3.4(supports-color@8.1.1)
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-pipeline:
         dependencies:
@@ -556,6 +659,9 @@ importers:
             mendel-resolver:
                 specifier: ^4.0.0-alpha.0
                 version: link:../mendel-resolver
+            minimatch:
+                specifier: ^3.1.2
+                version: 3.1.2
             mkdirp:
                 specifier: ^0.5.1
                 version: 0.5.6
@@ -575,6 +681,9 @@ importers:
             eslint:
                 specifier: ^8.46.0
                 version: 8.49.0
+            rimraf:
+                specifier: ^5.0.1
+                version: 5.0.1
             tap:
                 specifier: ^16.3.8
                 version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
@@ -593,6 +702,10 @@ importers:
             through2:
                 specifier: ^2.0.1
                 version: 2.0.5
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-resolver:
         dependencies:
@@ -615,6 +728,10 @@ importers:
             debug:
                 specifier: ^4.3.4
                 version: 4.3.4(supports-color@8.1.1)
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-transform-buble:
         dependencies:
@@ -624,6 +741,10 @@ importers:
             debug:
                 specifier: ^4.3.4
                 version: 4.3.4(supports-color@8.1.1)
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-transform-inline-env:
         dependencies:
@@ -636,6 +757,10 @@ importers:
             debug:
                 specifier: ^4.3.4
                 version: 4.3.4(supports-color@8.1.1)
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-transform-istanbul:
         dependencies:
@@ -648,6 +773,10 @@ importers:
             debug:
                 specifier: ^4.3.4
                 version: 4.3.4(supports-color@8.1.1)
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-transform-less:
         dependencies:
@@ -663,6 +792,10 @@ importers:
             postcss-less-engine:
                 specifier: ^0.6.2
                 version: 0.6.2
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-transform-uglify:
         dependencies:
@@ -672,6 +805,10 @@ importers:
             uglify-js:
                 specifier: ^3.17.4
                 version: 3.17.4
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
     packages/mendel-treenherit:
         dependencies:
@@ -687,6 +824,10 @@ importers:
             debug:
                 specifier: ^4.3.4
                 version: 4.3.4(supports-color@8.1.1)
+        devDependencies:
+            tap:
+                specifier: ^16.3.8
+                version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)
 
 packages:
     /@aashutoshrathi/word-wrap@1.2.6:
@@ -3986,6 +4127,23 @@ packages:
             minimalistic-assert: 1.0.1
             safer-buffer: 2.1.2
 
+    /asn1@0.2.6:
+        resolution:
+            {
+                integrity: sha512-ix/FxPn0MDjeyJ7i/yoHGFt/EX6LyNbxSEhPPXODPL+KB0VPk86UYfL0lMdy+KCnv+fmvIzySwaK5COwqVbWTQ==,
+            }
+        dependencies:
+            safer-buffer: 2.1.2
+        dev: true
+
+    /assert-plus@1.0.0:
+        resolution:
+            {
+                integrity: sha512-NfJ4UzBCcQGLDlQq7nHxH+tv3kyZ0hHQqF5BO6J7tNJeP5do1llPr8dZ8zHonfhAu0PHAdMkSo+8o0wxg9lZWw==,
+            }
+        engines: { node: '>=0.8' }
+        dev: true
+
     /assert@1.5.1:
         resolution:
             {
@@ -4032,7 +4190,6 @@ packages:
             {
                 integrity: sha512-iAB+JbDEGXhyIUavoDl9WP/Jj106Kz9DEn1DPgYw5ruDn0e3Wgi3sKFm55sASdGBNOQB8F59d9qQ7deqrHA8wQ==,
             }
-        dev: true
 
     /asynciterator.prototype@1.0.0:
         resolution:
@@ -4084,6 +4241,20 @@ packages:
                 integrity: sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==,
             }
         engines: { node: '>= 0.4' }
+        dev: true
+
+    /aws-sign2@0.7.0:
+        resolution:
+            {
+                integrity: sha512-08kcGqnYf/YmjoRhfxyu+CLxBjUtHLXLXX/vUfx9l2LYzG3c1m61nrpyFUZI6zeS+Li/wWMMidD9KgrqtGq3mA==,
+            }
+        dev: true
+
+    /aws4@1.12.0:
+        resolution:
+            {
+                integrity: sha512-NmWvPnx0F1SfrQbYwOi7OeaNGokp9XhzNioJ/CSBs8Qa4vxug81mhJEAVZwxXuBmYB5KDRfMq/F3RR0BIU7sWg==,
+            }
         dev: true
 
     /axios@1.5.0(debug@4.3.4):
@@ -4212,6 +4383,15 @@ packages:
         dependencies:
             safe-buffer: 5.1.2
         dev: false
+
+    /bcrypt-pbkdf@1.0.2:
+        resolution:
+            {
+                integrity: sha512-qeFIXtP4MSoi6NLqO12WfqARWWuCKi2Rn/9hJLEmtB5yTNr9DqFWkJRCf2qShWzPeAMRnOgCrq0sg/KLv5ES9w==,
+            }
+        dependencies:
+            tweetnacl: 0.14.5
+        dev: true
 
     /before-after-hook@2.2.3:
         resolution:
@@ -4587,6 +4767,14 @@ packages:
             ieee754: 1.2.1
         dev: true
 
+    /builtin-modules@1.1.1:
+        resolution:
+            {
+                integrity: sha512-wxXCdllwGhI2kCC0MnvTGYTMvnVZTvqgypkiTI8Pa5tcz2i6VqsqwYGgqwXji+4RgCzms6EajE4IxiUH6HH8nQ==,
+            }
+        engines: { node: '>=0.10.0' }
+        dev: true
+
     /builtin-status-codes@3.0.0:
         resolution:
             {
@@ -4713,6 +4901,13 @@ packages:
             {
                 integrity: sha512-FbDFnNat3nMnrROzqrsg314zhqN5LGQ1kyyMk2opcrwGbVGpHRhgCWtAgD5YJUqNAiQ+dklreil/c3Qf1dfCTw==,
             }
+
+    /caseless@0.12.0:
+        resolution:
+            {
+                integrity: sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw==,
+            }
+        dev: true
 
     /chai@4.3.8:
         resolution:
@@ -5025,6 +5220,14 @@ packages:
             }
         dev: true
 
+    /colors@0.6.2:
+        resolution:
+            {
+                integrity: sha512-OsSVtHK8Ir8r3+Fxw/b4jS1ZLPXkV6ZxDRJQzeD7qo0SqMXWrHDM71DgYzPMHY8SFJ0Ao+nNU2p1MmwdzKqPrw==,
+            }
+        engines: { node: '>=0.1.90' }
+        dev: true
+
     /colors@1.0.3:
         resolution:
             {
@@ -5079,6 +5282,14 @@ packages:
                 integrity: sha512-9HMlXtt/BNoYr8ooyjjNRdIilOTkVJXB+GhxMTtOKwk0R4j4lS4NpjuqmRxroBfnfTSHQIHQB7wryHhXarNjmQ==,
             }
         engines: { node: '>=16' }
+        dev: true
+
+    /commander@2.1.0:
+        resolution:
+            {
+                integrity: sha512-J2wnb6TKniXNOtoHS8TSrG9IOQluPrsmyAJ8oCUJOBmv+uLBCyPYAZkD2jFvw2DCzIXNnISIM01NIvr35TkBMQ==,
+            }
+        engines: { node: '>= 0.6.x' }
         dev: true
 
     /commander@2.20.3:
@@ -5386,6 +5597,13 @@ packages:
         requiresBuild: true
         dev: true
 
+    /core-util-is@1.0.2:
+        resolution:
+            {
+                integrity: sha512-3lqz5YjWTYnW6dlDa5TLaTCcShfar1e40rmcJVwCBJC6mWlFuj0eCHIElmG1g5kyuJ/GD+8Wn4FFCcz4gJPfaQ==,
+            }
+        dev: true
+
     /core-util-is@1.0.3:
         resolution:
             {
@@ -5564,6 +5782,16 @@ packages:
             {
                 integrity: sha512-Vy4dx7gquTeMcQR/hDkYLGUnwVil6vk4FOOct+djUnHOUWt+zJPJAaRIXaAFkPXtJjvlY7o3rfRu0/3hpnwoUA==,
             }
+        dev: true
+
+    /dashdash@1.14.1:
+        resolution:
+            {
+                integrity: sha512-jRFi8UDGo6j+odZiEpjazZaWqEal3w/basFjQHQEwVtZJGDpxbH1MeYluwCS8Xq5wmLJooDlMgvVarmWfGM44g==,
+            }
+        engines: { node: '>=0.10' }
+        dependencies:
+            assert-plus: 1.0.0
         dev: true
 
     /data-urls@4.0.0:
@@ -6017,6 +6245,16 @@ packages:
             }
         dev: true
 
+    /ecc-jsbn@0.1.2:
+        resolution:
+            {
+                integrity: sha512-eh9O+hwRHNbG4BLTjEl3nw044CkGm5X6LoaCf7LPp7UU8Qrt47JYNi6nPX8xjW97TKGKm1ouctg0QSpZe9qrnw==,
+            }
+        dependencies:
+            jsbn: 0.1.1
+            safer-buffer: 2.1.2
+        dev: true
+
     /ee-first@1.1.1:
         resolution:
             {
@@ -6354,6 +6592,16 @@ packages:
             }
         engines: { node: '>=10' }
 
+    /eslint-plugin-implicit-dependencies@1.1.1:
+        resolution:
+            {
+                integrity: sha512-/EbKwaWTASieQR+hWeSIYaNRUCwIn/wAuPNFsiZZTMKYLXegVJyHvepDnJIIpfYWpqtYcrukNLQDit1yfmGD/A==,
+            }
+        dependencies:
+            builtin-modules: 1.1.1
+            findup: 0.1.5
+        dev: true
+
     /eslint-plugin-react@7.33.2(eslint@8.49.0):
         resolution:
             {
@@ -6669,6 +6917,14 @@ packages:
             tmp: 0.0.33
         dev: true
 
+    /extsprintf@1.3.0:
+        resolution:
+            {
+                integrity: sha512-11Ndz7Nv+mvAC1j0ktTa7fAb0vLyGGX+rMHNBYQviQDGU0Hw7lhctJANqbPhu9nV9/izT/IntTgZ7Im/9LJs9g==,
+            }
+        engines: { '0': node >=0.6.0 }
+        dev: true
+
     /falafel@1.2.0:
         resolution:
             {
@@ -6889,6 +7145,18 @@ packages:
             }
         dev: true
 
+    /findup@0.1.5:
+        resolution:
+            {
+                integrity: sha512-Udxo3C9A6alt2GZ2MNsgnIvX7De0V3VGxeP/x98NSVgSlizcDHdmJza61LI7zJy4OEtSiJyE72s0/+tBl5/ZxA==,
+            }
+        engines: { node: '>=0.6' }
+        hasBin: true
+        dependencies:
+            colors: 0.6.2
+            commander: 2.1.0
+        dev: true
+
     /flat-cache@3.1.0:
         resolution:
             {
@@ -6980,6 +7248,25 @@ packages:
             shell-quote: 1.8.1
         transitivePeerDependencies:
             - debug
+        dev: true
+
+    /forever-agent@0.6.1:
+        resolution:
+            {
+                integrity: sha512-j0KLYPhm6zeac4lz3oJ3o65qvgQCcPubiyotZrXqEaG4hNagNYO8qdlUrX5vwqv9ohqeT/Z3j6+yW067yWWdUw==,
+            }
+        dev: true
+
+    /form-data@2.3.3:
+        resolution:
+            {
+                integrity: sha512-1lLKB2Mu3aGP1Q/2eCOx0fNbRMe7XdwktwOruhfqqd0rIJWwN4Dh+E3hrPSlDCXnSR7UtZ1N38rVXm+6+MEhJQ==,
+            }
+        engines: { node: '>= 0.12' }
+        dependencies:
+            asynckit: 0.4.0
+            combined-stream: 1.0.8
+            mime-types: 2.1.35
         dev: true
 
     /form-data@4.0.0:
@@ -7253,6 +7540,15 @@ packages:
             get-intrinsic: 1.2.1
         dev: true
 
+    /getpass@0.1.7:
+        resolution:
+            {
+                integrity: sha512-0fzj9JxOLfJ+XGLhR8ze3unN0KZCgZwiSSDz168VERjK8Wl8kVSdcu2kspd4s4wtAa1y/qrVRiAA0WclVsu0ng==,
+            }
+        dependencies:
+            assert-plus: 1.0.0
+        dev: true
+
     /git-raw-commits@2.0.11:
         resolution:
             {
@@ -7375,7 +7671,7 @@ packages:
             fs.realpath: 1.0.0
             inflight: 1.0.6
             inherits: 2.0.4
-            minimatch: 3.0.5
+            minimatch: 3.1.2
             once: 1.4.0
             path-is-absolute: 1.0.1
         dev: true
@@ -7521,6 +7817,26 @@ packages:
             wordwrap: 1.0.0
         optionalDependencies:
             uglify-js: 3.17.4
+        dev: true
+
+    /har-schema@2.0.0:
+        resolution:
+            {
+                integrity: sha512-Oqluz6zhGX8cyRaTQlFMPw80bSJVG2x/cFb8ZPhUILGgHka9SsokCCOQgpveePerqidZOrT14ipqfJb7ILcW5Q==,
+            }
+        engines: { node: '>=4' }
+        dev: true
+
+    /har-validator@5.1.5:
+        resolution:
+            {
+                integrity: sha512-nmT2T0lljbxdQZfspsno9hgrG3Uir6Ks5afism62poxqBM6sDnMEuPmzTq8XN0OEwqKLLdh1jQI3qyE66Nzb3w==,
+            }
+        engines: { node: '>=6' }
+        deprecated: this library is no longer supported
+        dependencies:
+            ajv: 6.12.6
+            har-schema: 2.0.0
         dev: true
 
     /hard-rejection@2.1.0:
@@ -7766,6 +8082,18 @@ packages:
             requires-port: 1.0.0
         transitivePeerDependencies:
             - debug
+
+    /http-signature@1.2.0:
+        resolution:
+            {
+                integrity: sha512-CAbnr6Rz4CYQkLYUtSNXxQPUH2gK8f3iWexVlsnMeD+GjlsQ0Xsy1cOX+mN3dtxYomRy21CiOzU8Uhw6OwncEQ==,
+            }
+        engines: { node: '>=0.8', npm: '>=1.3.7' }
+        dependencies:
+            assert-plus: 1.0.0
+            jsprim: 1.4.2
+            sshpk: 1.17.0
+        dev: true
 
     /https-browserify@1.0.0:
         resolution:
@@ -8537,6 +8865,13 @@ packages:
         engines: { node: '>=0.10.0' }
         dev: true
 
+    /isstream@0.1.2:
+        resolution:
+            {
+                integrity: sha512-Yljz7ffyPbrLpLngrMtZ7NduUgVvi6wG9RJ9IUcyCd59YQ911PBJphODUcbOVbqYfxe1wuYf/LJ8PauMRwsM/g==,
+            }
+        dev: true
+
     /istanbul-lib-coverage@2.0.5:
         resolution:
             {
@@ -8768,6 +9103,13 @@ packages:
         dependencies:
             argparse: 2.0.1
 
+    /jsbn@0.1.1:
+        resolution:
+            {
+                integrity: sha512-UVU9dibq2JcFWxQPA6KCqj5O42VOmAY3zQUfEKxU0KpTGXwNoCjkX1e13eHNvw/xPynt6pU0rZ1htjWTNTSXsg==,
+            }
+        dev: true
+
     /jsdom@22.1.0:
         resolution:
             {
@@ -8867,6 +9209,13 @@ packages:
             }
         dev: true
 
+    /json-schema@0.4.0:
+        resolution:
+            {
+                integrity: sha512-es94M3nTIfsEPisRafak+HDLfHXnKBhV3vU5eqPcS3flIWqcxJWgXHXiey3YrpaNsanY5ei1VoYEbOzijuq9BA==,
+            }
+        dev: true
+
     /json-stable-stringify-without-jsonify@1.0.1:
         resolution:
             {
@@ -8946,6 +9295,19 @@ packages:
                 integrity: sha512-POQXvpdL69+CluYsillJ7SUhKvytYjW9vG/GKpnf+xP8UWgYEM/RaMzHHofbALDiKbbP1W8UEYmgGl39WkPZsg==,
             }
         engines: { '0': node >= 0.2.0 }
+
+    /jsprim@1.4.2:
+        resolution:
+            {
+                integrity: sha512-P2bSOMAc/ciLz6DzgjVlGJP9+BrJWu5UDGK70C2iweC5QBIeFf0ZXRvGjEj2uYgrY2MkAAhsSWHDWlFtEroZWw==,
+            }
+        engines: { node: '>=0.6.0' }
+        dependencies:
+            assert-plus: 1.0.0
+            extsprintf: 1.3.0
+            json-schema: 0.4.0
+            verror: 1.10.0
+        dev: true
 
     /jsx-ast-utils@3.3.5:
         resolution:
@@ -10169,7 +10531,7 @@ packages:
             array-differ: 3.0.0
             array-union: 2.1.0
             arrify: 2.0.1
-            minimatch: 3.0.5
+            minimatch: 3.1.2
         dev: true
 
     /mustache@2.3.2:
@@ -10728,6 +11090,13 @@ packages:
             yargs: 15.4.1
         transitivePeerDependencies:
             - supports-color
+        dev: true
+
+    /oauth-sign@0.9.0:
+        resolution:
+            {
+                integrity: sha512-fexhUFFPTGV8ybAtSIGbV6gOkSv8UtRbDBnAyLQw4QPKkgNlsH2ByPGtMUqdWkos6YCRmAqViwgZrJc/mRDzZQ==,
+            }
         dev: true
 
     /object-assign@4.1.1:
@@ -11410,6 +11779,13 @@ packages:
             safe-buffer: 5.2.1
             sha.js: 2.4.11
 
+    /performance-now@2.1.0:
+        resolution:
+            {
+                integrity: sha512-7EAHlyLHI56VEIdK57uwHdHKIaAGbnXPiw0yWbarQZOKaKpvUIgW0jWRVLiatnM+XXlSwsanIBH/hzGMJulMow==,
+            }
+        dev: true
+
     /picocolors@1.0.0:
         resolution:
             {
@@ -11743,6 +12119,14 @@ packages:
         engines: { node: '>=0.6' }
         dependencies:
             side-channel: 1.0.4
+
+    /qs@6.5.3:
+        resolution:
+            {
+                integrity: sha512-qxXIEh4pCGfHICj1mAJQ2/2XVZkjCDTcEgfoSQxc/fYivUZxTkk7L3bDBJSoNrEzXI17oUO5Dp07ktqE5KzczA==,
+            }
+        engines: { node: '>=0.6' }
+        dev: true
 
     /querystring-es3@0.2.1:
         resolution:
@@ -12141,6 +12525,36 @@ packages:
         engines: { node: '>=4' }
         dependencies:
             es6-error: 4.1.1
+        dev: true
+
+    /request@2.88.2:
+        resolution:
+            {
+                integrity: sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==,
+            }
+        engines: { node: '>= 6' }
+        deprecated: request has been deprecated, see https://github.com/request/request/issues/3142
+        dependencies:
+            aws-sign2: 0.7.0
+            aws4: 1.12.0
+            caseless: 0.12.0
+            combined-stream: 1.0.8
+            extend: 3.0.2
+            forever-agent: 0.6.1
+            form-data: 2.3.3
+            har-validator: 5.1.5
+            http-signature: 1.2.0
+            is-typedarray: 1.0.0
+            isstream: 0.1.2
+            json-stringify-safe: 5.0.1
+            mime-types: 2.1.35
+            oauth-sign: 0.9.0
+            performance-now: 2.1.0
+            qs: 6.5.3
+            safe-buffer: 5.2.1
+            tough-cookie: 2.5.0
+            tunnel-agent: 0.6.0
+            uuid: 3.4.0
         dev: true
 
     /require-directory@2.1.1:
@@ -12924,6 +13338,25 @@ packages:
                 integrity: sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==,
             }
 
+    /sshpk@1.17.0:
+        resolution:
+            {
+                integrity: sha512-/9HIEs1ZXGhSPE8X6Ccm7Nam1z8KcoCqPdI7ecm1N33EzAetWahvQWVqLZtaZQ+IDKX4IyA2o0gBzqIMkAagHQ==,
+            }
+        engines: { node: '>=0.10.0' }
+        hasBin: true
+        dependencies:
+            asn1: 0.2.6
+            assert-plus: 1.0.0
+            bcrypt-pbkdf: 1.0.2
+            dashdash: 1.14.1
+            ecc-jsbn: 0.1.2
+            getpass: 0.1.7
+            jsbn: 0.1.1
+            safer-buffer: 2.1.2
+            tweetnacl: 0.14.5
+        dev: true
+
     /ssri@10.0.5:
         resolution:
             {
@@ -13612,6 +14045,17 @@ packages:
             nopt: 1.0.10
         dev: true
 
+    /tough-cookie@2.5.0:
+        resolution:
+            {
+                integrity: sha512-nlLsUzgm1kfLXSXfRZMc1KLAugd4hqJHDTvc2hDIwS3mZAfMEuMbc03SujMF+GEcpaX/qboeycw6iO8JwVv2+g==,
+            }
+        engines: { node: '>=0.8' }
+        dependencies:
+            psl: 1.9.0
+            punycode: 2.3.0
+        dev: true
+
     /tough-cookie@4.1.3:
         resolution:
             {
@@ -13736,6 +14180,22 @@ packages:
             make-fetch-happen: 11.1.1
         transitivePeerDependencies:
             - supports-color
+        dev: true
+
+    /tunnel-agent@0.6.0:
+        resolution:
+            {
+                integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==,
+            }
+        dependencies:
+            safe-buffer: 5.2.1
+        dev: true
+
+    /tweetnacl@0.14.5:
+        resolution:
+            {
+                integrity: sha512-KXXFFdAbFXY4geFIwoyNK+f5Z1b7swfXABfL7HXCmoIWMKU3dmS26672A4EeQtDzLKy7SXmfBu51JolvEKwtGA==,
+            }
         dev: true
 
     /type-check@0.4.0:
@@ -14186,6 +14646,15 @@ packages:
             }
         engines: { node: '>= 0.4.0' }
 
+    /uuid@3.4.0:
+        resolution:
+            {
+                integrity: sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==,
+            }
+        deprecated: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
+        hasBin: true
+        dev: true
+
     /uuid@8.3.2:
         resolution:
             {
@@ -14251,6 +14720,18 @@ packages:
                 integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==,
             }
         engines: { node: '>= 0.8' }
+
+    /verror@1.10.0:
+        resolution:
+            {
+                integrity: sha512-ZZKSmDAEFOijERBLkmYfJ+vmk3w+7hOLYDNkRCuRuMJGEmqYNCNLyBBFwWKVMhfwaEF3WOd0Zlw86U/WC/+nYw==,
+            }
+        engines: { '0': node >=0.6.0 }
+        dependencies:
+            assert-plus: 1.0.0
+            core-util-is: 1.0.2
+            extsprintf: 1.3.0
+        dev: true
 
     /vm-browserify@1.1.2:
         resolution:

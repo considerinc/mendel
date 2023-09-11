@@ -19,5 +19,9 @@
     },
     "bin": {
         "mendel-mocha": "cli.js"
+    },
+    "devDependencies": {
+        "glob": "^10.3.4",
+        "tap": "^16.3.8"
     }
 }

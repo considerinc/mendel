@@ -15,5 +15,8 @@
     },
     "engines": {
         "node": ">=6.0"
+    },
+    "devDependencies": {
+        "tap": "^16.3.8"
     }
 }

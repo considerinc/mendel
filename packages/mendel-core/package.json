@@ -23,5 +23,9 @@
         "stream-browserify": "^2.0.1",
         "urlsafe-base64": "^1.0.0",
         "xtend": "^4.0.1"
+    },
+    "devDependencies": {
+        "mkdirp": "^3.0.1",
+        "tap": "^16.3.8"
     }
 }

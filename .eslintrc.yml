@@ -10,7 +10,13 @@ parserOptions:
     sourceType: module
 plugins:
     - react
-rules: {}
+    - implicit-dependencies
+rules:
+    implicit-dependencies/no-implicit:
+        - error
+        - dev: true
+          peer: true
+          optional: false
 settings:
     react:
         version: 18.0.0

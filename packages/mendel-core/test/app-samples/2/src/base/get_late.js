@@ -13,6 +13,7 @@ if (module.parent) {
         }, 10);
     };
 } else {
+    // eslint-disable-next-line implicit-dependencies/no-implicit
     var ajaxLib = require('prentent-this-is-an-ajax-lib');
     module.exports = function () {
         ajaxLib(getter);

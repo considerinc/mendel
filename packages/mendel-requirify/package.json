@@ -19,5 +19,8 @@
         "fs-extra": "~0.26.5",
         "mendel-development": "^4.0.0-alpha.0",
         "through2": "^2.0.1"
+    },
+    "devDependencies": {
+        "tap": "^16.3.8"
     }
 }
