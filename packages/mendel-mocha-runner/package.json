@@ -12,7 +12,6 @@
     "dependencies": {
         "commander": "^2.9.0",
         "debug": "^4.3.4",
-        "dissolve": "0.2.1",
         "mendel-exec": "^4.0.0-alpha.0",
         "mendel-pipeline": "^4.0.0-alpha.0",
         "mocha": "^10.2.0",

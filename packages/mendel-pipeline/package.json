@@ -22,7 +22,6 @@
         "cli-table": "^0.3.1",
         "commander": "^2.9.0",
         "debug": "^4.3.4",
-        "dissolve": "0.2.1",
         "figures": "^2.0.0",
         "mendel-config": "^4.0.0-alpha.0",
         "mendel-deps": "^4.0.0-alpha.0",
