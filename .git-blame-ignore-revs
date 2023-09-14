@@ -2,3 +2,5 @@
 a0f885b62b4c5090795b7efee1672f6057dd7238
 # update prettier config and formated all files
 9f16367d8ec22ac749891faffdf738dcc881d676
+# revert yml,json to 2 spaces to not fight with pnpm,npm
+67e3e26bf645cf087c9fa92b7eaf54bb99980db1
