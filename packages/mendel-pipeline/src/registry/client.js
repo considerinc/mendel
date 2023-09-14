@@ -1,5 +1,13 @@
-const Minimatch = require('minimatch').Minimatch;
 const path = require('path');
+const verbose = require('debug')('verbose:mendel:net:client:registry');
+const Minimatch = require('minimatch').Minimatch;
+
+const redacted = '--redacted';
+const redact = { source: redacted, rawSource: redacted, map: redacted };
+let debugFileMatching = process.env.DEBUG_FILE_MATCHING;
+if (debugFileMatching && debugFileMatching !== '') {
+    debugFileMatching = new RegExp(debugFileMatching);
+}
 
 class MendelOutletRegistry {
     constructor(config) {
@@ -43,6 +51,7 @@ class MendelOutletRegistry {
         if (!this._normalizedIdToEntryIds.has(entry.normalizedId)) {
             this._normalizedIdToEntryIds.set(entry.normalizedId, new Map());
         }
+
         this._normalizedIdToEntryIds
             .get(entry.normalizedId)
             .set(entry.id, entry);
@@ -56,6 +65,24 @@ class MendelOutletRegistry {
             });
         });
         this._cache.set(entry.id, entry);
+
+        let shouldLog = verbose.enabled;
+        if (debugFileMatching) {
+            shouldLog = debugFileMatching.test(entry.id);
+        }
+        if (shouldLog) {
+            verbose(
+                `entry ${entry.id} added to _normalizedIdToEntryIds ${entry.normalizedId}`
+            );
+
+            verbose(
+                Array.from(
+                    this._normalizedIdToEntryIds
+                        .get(entry.normalizedId)
+                        .entries()
+                ).map(([k, v]) => [k, { ...v, ...redact }])
+            );
+        }
     }
 
     removeEntry(id) {
@@ -74,7 +101,16 @@ class MendelOutletRegistry {
         const fromMap = this._normalizedIdToEntryIds.get(normId);
         if (!fromMap) return null;
 
-        const entries = Array.from(fromMap.entries()).filter(([, value]) => {
+        const arrayEntries = Array.from(fromMap.entries());
+        let shouldLog = verbose.enabled;
+        if (debugFileMatching) {
+            shouldLog = debugFileMatching.test(normId);
+        }
+        if (shouldLog) {
+            verbose(`entries for ${normId}`);
+            verbose(arrayEntries.map(([k, v]) => [k, { ...v, ...redact }]));
+        }
+        const entries = arrayEntries.filter(([, value]) => {
             const type = this._options.types.get(value.type);
             return type && !type.isResource;
         });

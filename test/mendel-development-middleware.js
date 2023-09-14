@@ -20,7 +20,7 @@ app.use(
 var server = app.listen('1337');
 var host = 'http://localhost:1337';
 var appBundle = host + '/mendel/app/app.js';
-tap.tearDown(function () {
+tap.teardown(function () {
     server.close(process.exit);
 });
 
@@ -38,7 +38,7 @@ tap.test('mendel-development-middleware serves a bundle', function (t) {
             },
             'serves javascript'
         );
-        t.contains(
+        t.has(
             body,
             'sourceMappingURL=data:application/json;',
             'has source maps'

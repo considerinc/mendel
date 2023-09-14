@@ -5,7 +5,14 @@ const verbose = require('debug')('verbose:mendel:cache');
 
 const Entry = require('./entry');
 const variationMatches = require('mendel-development/variation-matches');
-const RUNTIME = ['main', 'browser'];
+const RUNTIME = ['main', 'browser', 'module'];
+
+// const redacted = '--redacted';
+// const redact = { source: redacted, rawSource: redacted, map: redacted };
+let debugFileMatching = process.env.DEBUG_FILE_MATCHING;
+if (debugFileMatching && debugFileMatching !== '') {
+    debugFileMatching = new RegExp(debugFileMatching);
+}
 
 class MendelCache extends EventEmitter {
     constructor(config) {
@@ -89,13 +96,25 @@ class MendelCache extends EventEmitter {
             else normalizedId = './' + path.join(parts.dir, parts.name);
         }
 
+        let shouldLog = verbose.enabled;
+        if (debugFileMatching) {
+            shouldLog = debugFileMatching.test(id);
+        }
+        if (shouldLog) {
+            verbose(`resolved ${id} to ${normalizedId}`);
+        }
+
         return normalizedId;
     }
 
     getNormalizedId(id) {
         // For node's packages and shims, normalizedId will resolve to its respective package name
         if (this._shimPathToId.has(id)) return this._shimPathToId.get(id);
-        if (this._packageMap.has(id)) return this._packageMap.get(id).mapToId;
+        if (this._packageMap.has(id)) {
+            const to = this._packageMap.get(id).mapToId;
+            verbose(`_packageMap from ${id} to ${to} `);
+            return to;
+        }
         return this._getBeforePackageJSONNormalizedId(id);
     }
 
@@ -129,6 +148,10 @@ class MendelCache extends EventEmitter {
     }
 
     invariantTwoPackagesSameTarget(packageNormId, targetNormId) {
+        verbose(`invariantTwoPackagesSameTarget`, {
+            packageNormId,
+            targetNormId,
+        });
         const existing = this._packageMap.get(targetNormId);
         if (existing && existing.mapToId !== packageNormId) {
             throw new Error(
@@ -145,9 +168,11 @@ class MendelCache extends EventEmitter {
 
     getRuntime(id) {
         let runtime = 'isomorphic';
-        if (this._packageMap.has(id))
+        if (this._packageMap.has(id)) {
             runtime = this._packageMap.get(id).runtime;
+        }
         if (path.parse(id).base === 'package.json') runtime = 'package';
+        verbose(`${id} runtime ${runtime}`);
         return runtime;
     }
 
@@ -209,30 +234,44 @@ class MendelCache extends EventEmitter {
      * scope to the project, it cannot use global concept of normalizedId
      * but should use a special mapping. For easier search, we use RegExp
      * and key by "<moduleRoot>/<aliasName>" as key to the alias map.
+     *
+     * e.g.,
+     * "browser": {
+     *      "unexisting": "existing"
+     * }
+     * and in the code, `require('unexisting');` should resolve
+     * to `existing`.
+     *
      * For instance: "./node_modules/superagent/emitter" is one.
-     */
+     * https://github.com/visionmedia/superagent/blob/36ce8782842c2fee402013ff0650d7f8b310e3a7/package.json#L53-L57
+     **/
     _applyModuleAlias(id, depKey, depObject) {
         const match = id.match(/(.*\/node_modules\/[^/]+)\/\S+$/);
         if (!match || match.length !== 2) return depObject;
         const key = path.join(match[1], depKey);
         if (!this._moduleAliasMap.has(key)) return depObject;
 
-        if (typeof depObject !== 'object')
+        if (typeof depObject !== 'object') {
             depObject = {
                 main: false,
                 browser: false,
             };
+        }
 
         const { to, runtime } = this._moduleAliasMap.get(key);
         depObject[runtime] = to;
         return depObject;
     }
 
-    _handleDependency(oDep) {
+    // Deal with package.json having {main, browser, etc}
+    _handleDependency(oDep, depName) {
         const isPkgModule = !!oDep.packageJson;
         // Gather metadata on package if a package.json was never
         // visited even once.
-        if (isPkgModule && this.hasEntry(oDep.packageJson)) return;
+        if (isPkgModule && this.hasEntry(oDep.packageJson)) {
+            verbose('isPkgModule && hasEntry ' + depName);
+            return;
+        }
         // If oDependency is not added yet,
         isPkgModule && this._requestEntry(oDep.packageJson);
         isPkgModule && oDep.module && this._requestEntry(oDep.module);
@@ -244,20 +283,39 @@ class MendelCache extends EventEmitter {
             isIsomorphic = oDep.main === oDep.browser;
         }
 
+        let shouldLog = verbose.enabled;
+        if (debugFileMatching) {
+            shouldLog =
+                debugFileMatching.test(depName) ||
+                debugFileMatching.test(Object.values(oDep).join(' '));
+        }
+        if (shouldLog) {
+            verbose({ depName, oDep, isIsomorphic });
+        }
+
         RUNTIME
             // dep can have false as a value in which case indicates not found modules
             .filter((runtime) => oDep[runtime])
             .forEach((runtime) => {
                 const dep = oDep[runtime];
                 if (typeof dep === 'string') {
+                    shouldLog && verbose(`${runtime} for `);
                     if (isPkgModule && !isIsomorphic) {
                         const name = path.dirname(oDep.packageJson);
 
-                        name &&
+                        if (name) {
+                            verbose(`map: ${dep} to ${name} @ ${runtime}`);
                             this._packageMap.set(dep, {
                                 mapToId: name,
                                 runtime,
                             });
+
+                            const existing = this.getEntry(dep);
+                            if (existing) {
+                                existing.runtime = runtime;
+                                existing.normalizedId = name;
+                            }
+                        }
                     }
 
                     this._requestEntry(dep);
@@ -317,6 +375,21 @@ class MendelCache extends EventEmitter {
         const entry = this.getEntry(id);
         const normDep = new Dependencies();
 
+        let shouldLog = verbose.enabled;
+        if (debugFileMatching) {
+            shouldLog = debugFileMatching.test(id);
+        }
+        if (shouldLog) {
+            verbose(`dep postprocess ${id}`);
+        }
+
+        /********
+         * TODO: Fix mendel-exec usecase (see mendel-deps/index)
+         * Somewhere in the dependency treee we are marking the dep in
+         * a way that causes the client registry to not receive a copy
+         * of the `main` runtime version of a file.
+         * ******/
+
         Object.keys(deps)
             // mod = module name or require literal
             .forEach((mod) => {
@@ -325,6 +398,9 @@ class MendelCache extends EventEmitter {
                     mod,
                     deps[mod]
                 ));
+                if (shouldLog && deps[mod] !== dep) {
+                    verbose({ aliasedFrom: deps[mod], to: dep });
+                }
                 if (
                     typeof dep === 'object' &&
                     this._depIgnoreMap.has(dep.main)
@@ -333,8 +409,9 @@ class MendelCache extends EventEmitter {
                     set.forEach((runtime) => {
                         dep[runtime] = false;
                     });
+                    shouldLog && verbose(`in ignore map ${mod}`);
                 }
-                this._handleDependency(dep);
+                this._handleDependency(dep, mod);
 
                 normDep[mod] = new Dependency();
                 RUNTIME.forEach((runtime) => {
@@ -357,10 +434,15 @@ class MendelCache extends EventEmitter {
     }
 
     emit(eventName, entry) {
+        let shouldLog = verbose.enabled;
+        if (debugFileMatching) {
+            const str = entry.id || (typeof entry === 'string' && entry);
+            shouldLog = Boolean(str && debugFileMatching.test(str));
+        }
         if (entry && entry.id) {
-            verbose(eventName, entry.id);
+            shouldLog && verbose(eventName, entry.id, entry.normalizedId);
         } else if (entry) {
-            verbose(eventName, entry);
+            shouldLog && verbose(eventName, entry, entry.normalizedId);
         } else {
             verbose(eventName);
         }

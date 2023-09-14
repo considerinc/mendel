@@ -23,6 +23,7 @@ class BaseMasterProcess {
             );
         });
         this._workers.forEach((cp) => analyticsCollector.connectProcess(cp));
+        this._workers.forEach((cp) => cp.unref()); // master can exit faster
         this._workers.forEach((cp) => {
             const { pid } = cp;
             cp.once('close', () => {

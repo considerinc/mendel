@@ -1,6 +1,12 @@
+const verbose = require('debug')('verbose:mendel:deps:master');
 const path = require('path');
 const MultiProcessMaster = require('../multi-process/base-master');
 const mendelDeps = require('mendel-deps');
+
+let debugFileMatching = process.env.DEBUG_FILE_MATCHING;
+if (debugFileMatching && debugFileMatching !== '') {
+    debugFileMatching = new RegExp(debugFileMatching);
+}
 
 /**
  * Knows how to do all kinds of trasnforms in parallel way
@@ -47,6 +53,18 @@ class DepsManager extends MultiProcessMaster {
     }
 
     resolve(entryId, rawDeps) {
+        let shouldLog = verbose.enabled;
+        if (debugFileMatching) {
+            shouldLog =
+                debugFileMatching.test(entryId) ||
+                Object.keys(rawDeps).some((_) => {
+                    return debugFileMatching.test(_);
+                });
+        }
+        if (shouldLog) {
+            verbose({ entryId, rawDeps });
+        }
+
         const deps = Object.assign({}, rawDeps);
 
         // When a shim is present in one of the deps:

@@ -9,3 +9,4 @@ mendel-build/
 build-requirify/
 *.log
 jsdom.js
+debug.sh

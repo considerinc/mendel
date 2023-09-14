@@ -1,3 +1,5 @@
+const debug = require('debug')('mendel:exec');
+// const verbose = require('debug')('verbose:mendel:exec');
 const vm = require('vm');
 const path = require('path');
 const m = require('module');
@@ -6,6 +8,16 @@ const resolve = require('resolve');
 const builtinLibs = Object.keys(process.binding('natives'));
 const _require = require;
 const errorMapper = require('./source-mapper');
+const MendelResolver = require('mendel-resolver');
+
+let debugFileMatching = process.env.DEBUG_FILE_MATCHING;
+if (debugFileMatching && debugFileMatching !== '') {
+    debugFileMatching = new RegExp(debugFileMatching);
+}
+const debugEnabled = debug.enabled;
+
+const redacted = '--redacted';
+const redact = { source: redacted, rawSource: redacted, map: redacted };
 
 function runEntryInVM(filename, source, sandbox, require) {
     if (require.cache[filename]) {
@@ -50,6 +62,21 @@ function matchVar(norm, entries, variations, runtime) {
         return reduced.concat(chain.slice(0, chain.length - 1));
     }, []);
 
+    let shouldLog = debugEnabled;
+    if (debugFileMatching) shouldLog = debugFileMatching.test(norm);
+    if (shouldLog) {
+        console.log(`matchVar for ${norm}`);
+        console.log({
+            norm,
+            entries: entries.map((_) => ({
+                ..._,
+                ...redact,
+            })),
+            variations,
+            runtime,
+        });
+    }
+
     for (let i = 0; i < multiVariations.length; i++) {
         const varId = multiVariations[i];
         const found = entries.find((entry) => {
@@ -84,12 +111,37 @@ function exec(fileName, source, { sandbox = {}, resolver }) {
     if (!sandbox.clearTimeout) sandbox.clearTimeout = global.clearTimeout;
     if (!sandbox.setInterval) sandbox.setInterval = global.setInterval;
     if (!sandbox.clearInterval) sandbox.clearInterval = global.clearInterval;
+    if (!sandbox.debugFileMatching) {
+        sandbox.debugFileMatching = debugFileMatching;
+    }
+    if (sandbox.debugEnabled === undefined) {
+        sandbox.debugEnabled = debugEnabled;
+    }
 
     // Let's pipe vm output to stdout this way
     sandbox.console = console;
 
+    /********
+     * TODO: fix the following:
+     *
+     * The line `if (MendelResolver.isNodeModule(literal)) return _require(literal);`
+     * is technically correct, but was added to patch a deficiency on the
+     * client registry not receiving the correct files.
+     *
+     * The `debug` module has a weird pattern that breaks:
+     * see:
+     * https://github.com/debug-js/debug/blob/f42b9627922995561299b064fce56bd292abb030/package.json#L37-L38
+     * and:
+     * https://github.com/debug-js/debug/blob/f42b9627922995561299b064fce56bd292abb030/src/index.js#L7-L9
+     *
+     * If we remove `MendelResolver.isNodeModule(literal)` check, we never get
+     * a version of `debug/src/index.js` with {runtine: 'main'} and throw
+     * a RangeError
+     * *****/
+
     function varRequire(parentId, literal) {
         if (builtinLibs.indexOf(literal) >= 0) return _require(literal);
+        if (MendelResolver.isNodeModule(literal)) return _require(literal);
         const entry = resolver(parentId, literal);
         if (entry) {
             return runEntryInVM(entry.id, entry.source, sandbox, varRequire);
@@ -106,6 +158,8 @@ function exec(fileName, source, { sandbox = {}, resolver }) {
     // instance of sandbox. If not, we create a new one and make it
     // last one exec execution.
     varRequire.cache = sandbox.cache;
+
+    debug({ runEntryInVM: fileName });
     return runEntryInVM(fileName, source, sandbox, varRequire);
 }
 
@@ -131,6 +185,27 @@ module.exports = {
                 resolver(from, depLiteral) {
                     const parent = registry.getEntry(from);
 
+                    // mendel-exec is memory and garbage collector intensive
+                    // take care of not making alocations
+                    let shouldLog = debugEnabled;
+                    if (debug.enabled) {
+                        if (debugFileMatching) {
+                            const litMatch = debugFileMatching.test(depLiteral);
+                            const depMatch =
+                                parent.deps &&
+                                Object.keys(parent.deps).some((_) =>
+                                    debugFileMatching.test(_)
+                                );
+                            shouldLog = litMatch || depMatch;
+                        }
+                    }
+                    shouldLog &&
+                        debug({
+                            depLiteral,
+                            runtime,
+                            parent: { ...parent, ...redact },
+                        });
+
                     if (!parent.deps[depLiteral])
                         throw new Error(
                             'Any form of dynamic require is not supported by Mendel'
@@ -150,9 +225,8 @@ module.exports = {
             });
         } catch (e) {
             e.stack = errorMapper(e.stack, registry);
-            console.log('Error was thrown while evaluating.');
-            console.log(e.stack);
-            throw e;
+            console.error(e.stack);
+            throw new Error('Error was thrown while evaluating.');
         }
     },
     exec,

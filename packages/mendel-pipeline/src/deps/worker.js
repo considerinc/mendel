@@ -1,7 +1,7 @@
 const analytics = require('../helpers/analytics/analytics-worker')('deps');
 const debug = require('debug')('mendel:deps:slave-' + process.pid);
 const verbose = require('debug')('verbose:mendel:deps:slave-' + process.pid);
-const dep = require('mendel-deps');
+const mendelDeps = require('mendel-deps');
 const path = require('path');
 const VariationalResolver = require('mendel-resolver/bisource-resolver');
 
@@ -9,6 +9,11 @@ const pendingInquiry = new Map();
 const RUNTIME = ['main', 'browser', 'module'];
 const resolveCache = new Map();
 let resolver;
+
+let debugFileMatching = process.env.DEBUG_FILE_MATCHING;
+if (debugFileMatching && debugFileMatching !== '') {
+    debugFileMatching = new RegExp(debugFileMatching);
+}
 
 module.exports = function (done) {
     return {
@@ -20,7 +25,11 @@ module.exports = function (done) {
                 baseConfig,
                 variationConfig,
             } = payload;
-            debug(`Detecting dependencies for ${filePath}`);
+
+            let logFile = debug.enabled;
+            if (debug.enabled && debugFileMatching) {
+                logFile = debugFileMatching.test(filePath);
+            }
 
             analytics.tic();
             if (!resolver) {
@@ -51,8 +60,8 @@ module.exports = function (done) {
                 );
             }
 
-            debug(`Detecting dependencies for ${filePath}`);
-            dep({ file: filePath, source, resolver })
+            logFile && debug(`Detecting dependencies for ${filePath}`);
+            mendelDeps({ file: filePath, source, resolver })
                 // mendel-resolver throws in case nothing was found
                 .catch(() => {
                     return RUNTIME.reduce((reduced, name) => {
@@ -62,8 +71,8 @@ module.exports = function (done) {
                 })
                 .then((deps) => {
                     analytics.toc();
-                    verbose({ filePath, deps });
-                    debug(`Dependencies for ${filePath} found!`);
+                    logFile && debug(`Dependencies for ${filePath} found!`);
+                    logFile && verbose({ filePath, deps });
                     done({ filePath, deps });
                 });
         },

@@ -60,7 +60,7 @@ class VariationalModuleResolver extends ModuleResolver {
     resolveFile(modulePath) {
         if (
             this.isBasePath(modulePath) ||
-            isNodeModule(modulePath) ||
+            isNodeModuleFile(modulePath) ||
             this.isNonProjectSource(modulePath)
         ) {
             return super.resolveFile(modulePath);
@@ -107,7 +107,7 @@ class VariationalModuleResolver extends ModuleResolver {
     }
 
     resolveDir(moduleName) {
-        if (this.isBasePath(moduleName) || isNodeModule(moduleName))
+        if (this.isBasePath(moduleName) || isNodeModuleFile(moduleName))
             return super.resolveDir(moduleName);
 
         const moduleId = this.getModuleId(moduleName);
@@ -128,7 +128,7 @@ class VariationalModuleResolver extends ModuleResolver {
     }
 }
 
-function isNodeModule(id) {
+function isNodeModuleFile(id) {
     return id.indexOf('node_modules') >= 0;
 }
 

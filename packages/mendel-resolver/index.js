@@ -45,6 +45,17 @@ class ModuleResolver {
         });
     }
 
+    /***
+     * isNodeModule refers to detecting npm/yarn/pnpm modules.
+     * It does not check for 'node_modules' because its input is
+     * the string in `require('mod')` or `import * from 'mod'`.
+     * If it is not one of the following, it is a module:
+     *      * ./relative/path
+     *      * ../another/relative/path
+     *      * /absolute/path
+     *      * C:\absolute\windows\path
+     *      * C:/another/windows/path
+     ***/
     static isNodeModule(name) {
         return !/^(?:\.\.?(?:\/|$)|\/|([A-Za-z]:)?[\\/])/.test(name);
     }

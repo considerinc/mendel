@@ -9,6 +9,13 @@ const error = require('debug')('mendel:net:client:error');
 const verbose = require('debug')('verbose:mendel:net:client');
 const colors = require('chalk');
 
+// const redacted = '--redacted';
+// const redact = { source: redacted, rawSource: redacted, map: redacted };
+let debugFileMatching = process.env.DEBUG_FILE_MATCHING;
+if (debugFileMatching && debugFileMatching !== '') {
+    debugFileMatching = new RegExp(debugFileMatching);
+}
+
 class CacheClient extends EventEmitter {
     constructor({ cacheConnection, environment }, registry) {
         super();
@@ -53,8 +60,14 @@ class CacheClient extends EventEmitter {
 
             switch (data.type) {
                 case 'addEntry': {
+                    let shouldLog = verbose.enabled;
+                    if (debugFileMatching) {
+                        shouldLog = debugFileMatching.test(data.entry.id);
+                    }
+                    shouldLog && verbose('got', data.entry.id);
+
                     this.registry.addEntry(data.entry);
-                    verbose('got', data.entry.id);
+
                     if (typeof data.totalEntries === 'number') {
                         this.checkStatus(data.totalEntries);
                     }
