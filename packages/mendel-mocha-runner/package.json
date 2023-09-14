@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/considerinc/mendel"
+    "url": "git+https://github.com/irae/mendel.git"
   },
   "dependencies": {
     "commander": "^2.9.0",
@@ -23,5 +23,9 @@
   "devDependencies": {
     "glob": "^10.3.4",
     "tap": "^16.3.8"
+  },
+  "homepage": "https://github.com/irae/mendel#readme",
+  "bugs": {
+    "url": "https://github.com/irae/mendel/issues"
   }
 }

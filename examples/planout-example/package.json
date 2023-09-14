@@ -54,6 +54,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/considerinc/mendel"
+    "url": "git+https://github.com/irae/mendel.git"
+  },
+  "homepage": "https://github.com/irae/mendel#readme",
+  "bugs": {
+    "url": "https://github.com/irae/mendel/issues"
   }
 }

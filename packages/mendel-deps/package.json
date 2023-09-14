@@ -10,7 +10,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/considerinc/mendel"
+    "url": "git+https://github.com/irae/mendel.git"
   },
   "dependencies": {
     "acorn": "^8.10.0",
@@ -26,5 +26,9 @@
   },
   "files": [
     "src/*"
-  ]
+  ],
+  "homepage": "https://github.com/irae/mendel#readme",
+  "bugs": {
+    "url": "https://github.com/irae/mendel/issues"
+  }
 }

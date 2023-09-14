@@ -30,7 +30,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/considerinc/mendel"
+    "url": "git+https://github.com/irae/mendel.git"
   },
   "workspaces": [
     "packages/*",
@@ -83,5 +83,9 @@
     "tap": "^16.3.8",
     "temp": "^0.9.4",
     "tmp": "^0.2.1"
+  },
+  "homepage": "https://github.com/irae/mendel#readme",
+  "bugs": {
+    "url": "https://github.com/irae/mendel/issues"
   }
 }

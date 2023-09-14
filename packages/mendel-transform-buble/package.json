@@ -6,7 +6,7 @@
   "mode": "ist",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/considerinc/mendel.git"
+    "url": "git+https://github.com/irae/mendel.git"
   },
   "keywords": [
     "mendel",
@@ -20,9 +20,9 @@
   "author": "Irae Carvalho",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/considerinc/mendel/issues"
+    "url": "https://github.com/irae/mendel/issues"
   },
-  "homepage": "https://github.com/considerinc/mendel#readme",
+  "homepage": "https://github.com/irae/mendel#readme",
   "dependencies": {
     "buble": "^0.20.0",
     "debug": "^4.3.4"
