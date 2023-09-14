@@ -802,6 +802,9 @@ importers:
                 specifier: ^0.6.2
                 version: 0.6.2
         devDependencies:
+            rimraf:
+                specifier: ^5.0.1
+                version: 5.0.1
             tap:
                 specifier: ^16.3.8
                 version: 16.3.8(ts-node@10.9.1)(typescript@5.2.2)

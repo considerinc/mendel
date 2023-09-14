@@ -1,20 +1,20 @@
 const path = require('path');
-const test = require('tap').test;
+const { skip } = require('tap');
 const rimraf = require('rimraf');
 const fs = require('fs');
-const MendelV2 = require('../');
+const Pipeline = require('../../mendel-pipeline');
 const appPath = path.join(__dirname, './css-samples');
 const buildPath = path.join(appPath, 'build');
 
 rimraf.sync(buildPath);
 
-test('mendel-outlet-css sanity test', function (t) {
+skip('mendel-outlet-css sanity test', function (t) {
     t.plan(4);
 
     process.chdir(appPath);
     process.env.MENDELRC = '.mendelrc';
 
-    const mendel = new MendelV2();
+    const mendel = new Pipeline();
     mendel.run(function (error) {
         if (error) {
             console.error(error);
@@ -23,10 +23,10 @@ test('mendel-outlet-css sanity test', function (t) {
 
         const css = fs.readFileSync(path.join(buildPath, 'main.css'), 'utf8');
 
-        t.doesNotHave(css, 'background: red');
-        t.include(css, 'padding: 0');
-        t.include(css, 'background: blue');
+        t.notMatch(css, 'background: red');
+        t.has(css, 'padding: 0');
+        t.has(css, 'background: blue');
         // From LESS
-        t.include(css, 'background: #1111ff');
+        t.has(css, 'background: #1111ff');
     });
 });

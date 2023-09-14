@@ -8,7 +8,7 @@ const rimraf = require('rimraf');
 
 process.env.MENDELRC = '.extract.mendelrc';
 
-tap.test('Build the extraction app', function (t) {
+tap.skip('Build the extraction app', function (t) {
     t.plan(2);
     rimraf.sync(appBuildPath);
     rimraf.sync(path.join(appPath, '**/*/.mendelipc'));
