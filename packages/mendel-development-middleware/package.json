@@ -1,24 +1,24 @@
 {
-    "name": "mendel-development-middleware",
-    "version": "4.0.0-alpha.0",
-    "description": "Mendel middleware that executes and builds based on a Mendel client appropriate for during development.",
-    "main": "index.js",
-    "author": "Stephan Lee <stephanwlee@gmail.com>",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/considerinc/mendel"
-    },
-    "dependencies": {
-        "debug": "^4.3.4",
-        "mendel-config": "^4.0.0-alpha.0",
-        "mendel-development": "^4.0.0-alpha.0",
-        "mendel-exec": "^4.0.0-alpha.0",
-        "mendel-pipeline": "^4.0.0-alpha.0",
-        "path-to-regexp": "^2.1.0"
-    },
-    "devDependencies": {
-        "request": "^2.88.2",
-        "tap": "^16.3.8"
-    }
+  "name": "mendel-development-middleware",
+  "version": "4.0.0-alpha.0",
+  "description": "Mendel middleware that executes and builds based on a Mendel client appropriate for during development.",
+  "main": "index.js",
+  "author": "Stephan Lee <stephanwlee@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/considerinc/mendel"
+  },
+  "dependencies": {
+    "debug": "^4.3.4",
+    "mendel-config": "^4.0.0-alpha.0",
+    "mendel-development": "^4.0.0-alpha.0",
+    "mendel-exec": "^4.0.0-alpha.0",
+    "mendel-pipeline": "^4.0.0-alpha.0",
+    "path-to-regexp": "^2.1.0"
+  },
+  "devDependencies": {
+    "request": "^2.88.2",
+    "tap": "^16.3.8"
+  }
 }

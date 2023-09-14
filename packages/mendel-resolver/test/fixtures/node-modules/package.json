@@ -1,19 +1,19 @@
 {
-    "dependencies": {
-        "fake-module": "*"
+  "dependencies": {
+    "fake-module": "*"
+  },
+  "mendel": {
+    "dest": "build",
+    "base": "default",
+    "bundles": {
+      "main": {
+        "entries": [
+          "index.js"
+        ]
+      }
     },
-    "mendel": {
-        "dest": "build",
-        "base": "default",
-        "bundles": {
-            "main": {
-                "entries": [
-                    "index.js"
-                ]
-            }
-        },
-        "variations": {
-            "a": {}
-        }
+    "variations": {
+      "a": {}
     }
+  }
 }

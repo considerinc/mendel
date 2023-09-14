@@ -1,23 +1,23 @@
 {
-    "name": "mendel-generator-extract",
-    "version": "4.0.0-alpha.0",
-    "description": "Generator that creates a sub-bundle from a bundle following extractify (or code-split) algorithm.",
-    "main": "generator-extract.js",
-    "keywords": [
-        "mendel",
-        "extractify",
-        "generator"
-    ],
-    "author": "Irae Carvalho <irae@irae.pro.br>",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/considerinc/mendel"
-    },
-    "dependencies": {
-        "debug": "^4.3.4"
-    },
-    "devDependencies": {
-        "tap": "^16.3.8"
-    }
+  "name": "mendel-generator-extract",
+  "version": "4.0.0-alpha.0",
+  "description": "Generator that creates a sub-bundle from a bundle following extractify (or code-split) algorithm.",
+  "main": "generator-extract.js",
+  "keywords": [
+    "mendel",
+    "extractify",
+    "generator"
+  ],
+  "author": "Irae Carvalho <irae@irae.pro.br>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/considerinc/mendel"
+  },
+  "dependencies": {
+    "debug": "^4.3.4"
+  },
+  "devDependencies": {
+    "tap": "^16.3.8"
+  }
 }

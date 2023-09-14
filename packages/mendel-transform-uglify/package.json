@@ -1,28 +1,28 @@
 {
-    "name": "mendel-transform-uglify",
-    "version": "4.0.0-alpha.0",
-    "description": "Mendel transform to minify javascript using uglify-es",
-    "main": "index.js",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/considerinc/mendel.git"
-    },
-    "keywords": [
-        "mendel",
-        "transform",
-        "uglify"
-    ],
-    "author": "Irae Carvalho <irae@irae.pro.br>",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/considerinc/mendel/issues"
-    },
-    "homepage": "https://github.com/considerinc/mendel#readme",
-    "dependencies": {
-        "debug": "^4.3.4",
-        "uglify-js": "^3.17.4"
-    },
-    "devDependencies": {
-        "tap": "^16.3.8"
-    }
+  "name": "mendel-transform-uglify",
+  "version": "4.0.0-alpha.0",
+  "description": "Mendel transform to minify javascript using uglify-es",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/considerinc/mendel.git"
+  },
+  "keywords": [
+    "mendel",
+    "transform",
+    "uglify"
+  ],
+  "author": "Irae Carvalho <irae@irae.pro.br>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/considerinc/mendel/issues"
+  },
+  "homepage": "https://github.com/considerinc/mendel#readme",
+  "dependencies": {
+    "debug": "^4.3.4",
+    "uglify-js": "^3.17.4"
+  },
+  "devDependencies": {
+    "tap": "^16.3.8"
+  }
 }

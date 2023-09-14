@@ -1,16 +1,16 @@
 {
-    "indexes": {
-        "foo": 0
-    },
-    "bundles": [
+  "indexes": {
+    "foo": 0
+  },
+  "bundles": [
+    {
+      "variations": ["bar"],
+      "data": [
         {
-            "variations": ["bar"],
-            "data": [
-                {
-                    "source": "",
-                    "deps": {}
-                }
-            ]
+          "source": "",
+          "deps": {}
         }
-    ]
+      ]
+    }
+  ]
 }

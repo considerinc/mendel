@@ -1,30 +1,30 @@
 {
-    "name": "mendel-development",
-    "version": "4.0.0-alpha.0",
-    "description": "Mendel shared dependencies for build and development",
-    "scripts": {
-        "test": "tap test/*.js --coverage-map=../../.tap.coverage.map.js --no-check-coverage"
-    },
-    "keywords": [
-        "mendel"
-    ],
-    "author": "Irae Carvalho <irae@irae.pro.br>",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/considerinc/mendel"
-    },
-    "dependencies": {
-        "async": "^3.2.4",
-        "debug": "^4.3.4",
-        "falafel": "^1.2.0",
-        "glob": "^7.0.3",
-        "resolve": "^1.22.4",
-        "shasum": "^1.0.2",
-        "through2": "^2.0.1",
-        "tmp": "0.0.28"
-    },
-    "devDependencies": {
-        "tap": "^16.3.8"
-    }
+  "name": "mendel-development",
+  "version": "4.0.0-alpha.0",
+  "description": "Mendel shared dependencies for build and development",
+  "scripts": {
+    "test": "tap test/*.js --coverage-map=../../.tap.coverage.map.js --no-check-coverage"
+  },
+  "keywords": [
+    "mendel"
+  ],
+  "author": "Irae Carvalho <irae@irae.pro.br>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/considerinc/mendel"
+  },
+  "dependencies": {
+    "async": "^3.2.4",
+    "debug": "^4.3.4",
+    "falafel": "^1.2.0",
+    "glob": "^7.0.3",
+    "resolve": "^1.22.4",
+    "shasum": "^1.0.2",
+    "through2": "^2.0.1",
+    "tmp": "0.0.28"
+  },
+  "devDependencies": {
+    "tap": "^16.3.8"
+  }
 }

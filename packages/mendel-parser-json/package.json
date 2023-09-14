@@ -1,22 +1,22 @@
 {
-    "name": "mendel-parser-json",
-    "version": "4.0.0-alpha.0",
-    "description": "Wraps JSON file in a JavaScript module for bundling with assets in Mendel",
-    "main": "index.js",
-    "mode": "ist",
-    "author": "Stephan Lee <stephanwlee@gmail.com>",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/considerinc/mendel"
-    },
-    "dependencies": {
-        "debug": "^4.3.4"
-    },
-    "engines": {
-        "node": ">=6.0"
-    },
-    "devDependencies": {
-        "tap": "^16.3.8"
-    }
+  "name": "mendel-parser-json",
+  "version": "4.0.0-alpha.0",
+  "description": "Wraps JSON file in a JavaScript module for bundling with assets in Mendel",
+  "main": "index.js",
+  "mode": "ist",
+  "author": "Stephan Lee <stephanwlee@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/considerinc/mendel"
+  },
+  "dependencies": {
+    "debug": "^4.3.4"
+  },
+  "engines": {
+    "node": ">=6.0"
+  },
+  "devDependencies": {
+    "tap": "^16.3.8"
+  }
 }

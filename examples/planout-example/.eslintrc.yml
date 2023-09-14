@@ -2,17 +2,17 @@
 root: true
 extends: 'eslint:recommended'
 env:
-    node: true
-    es6: true
-    browser: true
-    jasmine: true
+  node: true
+  es6: true
+  browser: true
+  jasmine: true
 plugins:
-    - react
+  - react
 parserOptions:
-    sourceType: module
-    ecmaFeatures:
-        jsx: true
+  sourceType: module
+  ecmaFeatures:
+    jsx: true
 rules:
-    react/jsx-uses-vars: 2
-    react/jsx-uses-react: 2
-    no-console: 0
+  react/jsx-uses-vars: 2
+  react/jsx-uses-react: 2
+  no-console: 0

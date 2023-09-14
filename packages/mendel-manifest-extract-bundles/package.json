@@ -1,28 +1,28 @@
 {
-    "name": "mendel-manifest-extract-bundles",
-    "version": "4.0.0-alpha.0",
-    "description": "Parses a list of manifests, extract common dependencies and expose them from the parent bundle.",
-    "main": "manifest-extract.js",
-    "keywords": [
-        "mendel",
-        "mendel-manifest-processor",
-        "build"
-    ],
-    "scripts": {
-        "test": "tap test/*.js --coverage-map=../../.tap.coverage.map.js --no-check-coverage"
-    },
-    "author": "Irae Carvalho <irae@irae.pro.br>",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/considerinc/mendel"
-    },
-    "dependencies": {
-        "debug": "^4.3.4",
-        "mendel-development": "^4.0.0-alpha.0"
-    },
-    "devDependencies": {
-        "tap": "^16.3.8",
-        "tmp": "^0.2.1"
-    }
+  "name": "mendel-manifest-extract-bundles",
+  "version": "4.0.0-alpha.0",
+  "description": "Parses a list of manifests, extract common dependencies and expose them from the parent bundle.",
+  "main": "manifest-extract.js",
+  "keywords": [
+    "mendel",
+    "mendel-manifest-processor",
+    "build"
+  ],
+  "scripts": {
+    "test": "tap test/*.js --coverage-map=../../.tap.coverage.map.js --no-check-coverage"
+  },
+  "author": "Irae Carvalho <irae@irae.pro.br>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/considerinc/mendel"
+  },
+  "dependencies": {
+    "debug": "^4.3.4",
+    "mendel-development": "^4.0.0-alpha.0"
+  },
+  "devDependencies": {
+    "tap": "^16.3.8",
+    "tmp": "^0.2.1"
+  }
 }

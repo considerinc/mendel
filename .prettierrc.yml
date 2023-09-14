@@ -12,3 +12,16 @@ trailingComma: es5
 bracketSpacing: true
 bracketSameLine: false
 arrowParens: always
+
+overrides:
+  - files:
+      - '*.json'
+      - '*.yml'
+      - '*.yaml'
+    options:
+      tabWidth: 2
+  - files:
+      - '.mendelrc'
+    options:
+      parser: yaml
+      tabWidth: 2

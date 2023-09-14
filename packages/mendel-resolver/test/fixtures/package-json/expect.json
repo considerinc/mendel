@@ -1,5 +1,5 @@
 {
-    "main": "./index.js",
-    "module": "./index.js",
-    "browser": "./browser.js"
+  "main": "./index.js",
+  "module": "./index.js",
+  "browser": "./browser.js"
 }

@@ -1,5 +1,5 @@
 {
-    "browser": "special.js",
-    "main": "index.js",
-    "extra": "extra.js"
+  "browser": "special.js",
+  "main": "index.js",
+  "extra": "extra.js"
 }

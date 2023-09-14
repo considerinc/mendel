@@ -1,22 +1,22 @@
 {
-    "name": "mendel-outlet-manifest",
-    "version": "4.0.0-alpha.0",
-    "description": "Mendel outlet for generating mendel-core (Mendel v1) compatible manifest. Manifest is a serialization of a Mendel cache.",
-    "main": "src/index.js",
-    "author": "Stephan Lee <stephanwlee@gmail.com>",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/considerinc/mendel"
-    },
-    "dependencies": {
-        "@babel/core": "^7.22.9",
-        "babel-plugin-transform-inline-environment-variables": "0.4.4",
-        "debug": "^4.3.4",
-        "mendel-manifest-uglify": "^4.0.0-alpha.0",
-        "shasum": "^1.0.2"
-    },
-    "devDependencies": {
-        "tap": "^16.3.8"
-    }
+  "name": "mendel-outlet-manifest",
+  "version": "4.0.0-alpha.0",
+  "description": "Mendel outlet for generating mendel-core (Mendel v1) compatible manifest. Manifest is a serialization of a Mendel cache.",
+  "main": "src/index.js",
+  "author": "Stephan Lee <stephanwlee@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/considerinc/mendel"
+  },
+  "dependencies": {
+    "@babel/core": "^7.22.9",
+    "babel-plugin-transform-inline-environment-variables": "0.4.4",
+    "debug": "^4.3.4",
+    "mendel-manifest-uglify": "^4.0.0-alpha.0",
+    "shasum": "^1.0.2"
+  },
+  "devDependencies": {
+    "tap": "^16.3.8"
+  }
 }

@@ -1,43 +1,43 @@
 {
-    "indexes": {
-        "foo": 0,
-        "parent": 1,
-        "other": 2
-    },
-    "bundles": [
+  "indexes": {
+    "foo": 0,
+    "parent": 1,
+    "other": 2
+  },
+  "bundles": [
+    {
+      "id": "foo",
+      "variations": ["var"],
+      "data": [
         {
-            "id": "foo",
-            "variations": ["var"],
-            "data": [
-                {
-                    "source": "",
-                    "deps": {}
-                }
-            ]
-        },
-        {
-            "id": "parent",
-            "entry": true,
-            "variations": ["var"],
-            "data": [
-                {
-                    "source": "",
-                    "deps": {
-                        "foo": "foo",
-                        "other": "other"
-                    }
-                }
-            ]
-        },
-        {
-            "id": "other",
-            "variations": ["var"],
-            "data": [
-                {
-                    "source": "",
-                    "deps": {}
-                }
-            ]
+          "source": "",
+          "deps": {}
         }
-    ]
+      ]
+    },
+    {
+      "id": "parent",
+      "entry": true,
+      "variations": ["var"],
+      "data": [
+        {
+          "source": "",
+          "deps": {
+            "foo": "foo",
+            "other": "other"
+          }
+        }
+      ]
+    },
+    {
+      "id": "other",
+      "variations": ["var"],
+      "data": [
+        {
+          "source": "",
+          "deps": {}
+        }
+      ]
+    }
+  ]
 }

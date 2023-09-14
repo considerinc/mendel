@@ -1,23 +1,23 @@
 {
-    "name": "mendel-generator-node-modules",
-    "version": "4.0.0-alpha.0",
-    "description": "Mendel-generator that creates special bundle with only node_modules from a bundle",
-    "main": "generator-node-modules.js",
-    "keywords": [
-        "mendel",
-        "extractify",
-        "generator"
-    ],
-    "author": "Irae Carvalho <irae@irae.pro.br>",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/considerinc/mendel"
-    },
-    "dependencies": {
-        "debug": "^4.3.4"
-    },
-    "devDependencies": {
-        "tap": "^16.3.8"
-    }
+  "name": "mendel-generator-node-modules",
+  "version": "4.0.0-alpha.0",
+  "description": "Mendel-generator that creates special bundle with only node_modules from a bundle",
+  "main": "generator-node-modules.js",
+  "keywords": [
+    "mendel",
+    "extractify",
+    "generator"
+  ],
+  "author": "Irae Carvalho <irae@irae.pro.br>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/considerinc/mendel"
+  },
+  "dependencies": {
+    "debug": "^4.3.4"
+  },
+  "devDependencies": {
+    "tap": "^16.3.8"
+  }
 }

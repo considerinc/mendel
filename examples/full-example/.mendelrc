@@ -9,7 +9,6 @@
 ## this is again for the sake of helping you learn how to use it.
 ##
 
-
 ##
 ## Define basic paths:
 ## =========================
@@ -22,23 +21,22 @@
 ## will receive, and all the variations go to the variations folder.
 ##
 base-config:
-  id: base                   # Bundle id for default variation
+  id: base # Bundle id for default variation
   dir: ./src/isomorphic/base # Source dir for default variation
-  outdir: ./build            # Base output dir for all artifacts
+  outdir: ./build # Base output dir for all artifacts
 
 variation-config:
   variation-dirs:
     - ./src/isomorphic/variations
   variations:
-    unexisting_folder:      # this folder don't exist, therefore mendel
-                            # completelly ignores the variation
+    unexisting_folder:# this folder don't exist, therefore mendel
+      # completelly ignores the variation
     bucket_A:
-      - unexisting_folder   # The folder hierarchy is also ignored
+      - unexisting_folder # The folder hierarchy is also ignored
     feature_B:
     partner_C:
     bucket_D:
       - partner_C
-
 
 ##
 ## Transformation, compilation, transpilation, etc
@@ -65,9 +63,9 @@ transforms:
           #   modules: cjs
           #   ignoreBrowserslistConfig: true
         - '@babel/preset-react'
-  javascript-minification:                   # used in production only
+  javascript-minification: # used in production only
     plugin: mendel-transform-uglify
-  javascript-sources-coverage:               # used in test only
+  javascript-sources-coverage: # used in test only
     plugin: mendel-transform-babel
     options:
       presets: *babel-presets
@@ -107,7 +105,7 @@ types:
     transforms:
       - javascript-sources
     glob:
-      - "**/*.{js,jsx}"
+      - '**/*.{js,jsx}'
   css:
     extensions:
       - .css
@@ -179,7 +177,6 @@ outlets:
       requireTransform: true
       includeNodeModules: false # default false
 
-
 ##
 ## Bundles
 ## =========================
@@ -244,16 +241,16 @@ bundles: # Definition of a bundle
     outlet: css
     outfile: main.css # File gets written to ${outdir}/main.css
     entries:
-      - "./css/index.css"
+      - './css/index.css'
       # - "**/*.less"
-      - "!css/reset.css"
+      - '!css/reset.css'
   css-rtl:
     outlet: css-rtl
     outfile: main-rtl.css
     entries:
-      - "./css/index.css"
-      - "**/*.less"
-      - "!css/reset.css"
+      - './css/index.css'
+      - '**/*.less'
+      - '!css/reset.css'
 
 ##
 ## Environment configuration
@@ -324,16 +321,16 @@ env:
         transforms:
           - javascript-sources-coverage
         glob:
-          - "src/**/*.{js,jsx}"
-          - "!**/_test_/*"
+          - 'src/**/*.{js,jsx}'
+          - '!**/_test_/*'
       not-covered-js:
         transforms:
           - javascript-sources
         glob:
-          - "**/*.{js,jsx,json}"
+          - '**/*.{js,jsx,json}'
         include-node_modules: true
       json:
         extensions:
           - .json
-        parser-to-type: not-covered-js 
+        parser-to-type: not-covered-js
         include-node_modules: true

@@ -1,66 +1,66 @@
 {
-    "indexes": {
-        "zoo": 0,
-        "foo": 1,
-        "bar": 2,
-        "root": 3
-    },
-    "bundles": [
+  "indexes": {
+    "zoo": 0,
+    "foo": 1,
+    "bar": 2,
+    "root": 3
+  },
+  "bundles": [
+    {
+      "variations": ["var"],
+      "id": "zoo",
+      "data": [
         {
-            "variations": ["var"],
-            "id": "zoo",
-            "data": [
-                {
-                    "source": "",
-                    "deps": {}
-                }
-            ]
-        },
-        {
-            "variations": ["var"],
-            "id": "foo",
-            "data": [
-                {
-                    "source": "",
-                    "deps": {
-                        "zoo": "zoo",
-                        "bar": "bar"
-                    }
-                }
-            ]
-        },
-        {
-            "variations": ["var"],
-            "id": "root",
-            "entry": true,
-            "data": [
-                {
-                    "source": "",
-                    "deps": {
-                        "foo": "foo"
-                    }
-                }
-            ]
-        },
-        {
-            "variations": ["var"],
-            "id": "bar",
-            "data": [
-                {
-                    "source": "",
-                    "deps": {}
-                }
-            ]
-        },
-        {
-            "variations": ["var"],
-            "id": "dont-exists",
-            "data": [
-                {
-                    "source": "",
-                    "deps": {}
-                }
-            ]
+          "source": "",
+          "deps": {}
         }
-    ]
+      ]
+    },
+    {
+      "variations": ["var"],
+      "id": "foo",
+      "data": [
+        {
+          "source": "",
+          "deps": {
+            "zoo": "zoo",
+            "bar": "bar"
+          }
+        }
+      ]
+    },
+    {
+      "variations": ["var"],
+      "id": "root",
+      "entry": true,
+      "data": [
+        {
+          "source": "",
+          "deps": {
+            "foo": "foo"
+          }
+        }
+      ]
+    },
+    {
+      "variations": ["var"],
+      "id": "bar",
+      "data": [
+        {
+          "source": "",
+          "deps": {}
+        }
+      ]
+    },
+    {
+      "variations": ["var"],
+      "id": "dont-exists",
+      "data": [
+        {
+          "source": "",
+          "deps": {}
+        }
+      ]
+    }
+  ]
 }

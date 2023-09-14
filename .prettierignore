@@ -1,7 +1,8 @@
 .husky/
+*.sh
+([^\.])
 .*
 !.*.js
 !.*.yml
 !.*.json
-*.sh
-([^\.])
+!.mendelrc
