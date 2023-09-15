@@ -3,16 +3,10 @@ const { EventEmitter } = require('events');
 const { Minimatch } = require('minimatch');
 const verbose = require('debug')('verbose:mendel:cache');
 
+const debugFilter = require('../../debug-filter');
 const Entry = require('./entry');
 const variationMatches = require('mendel-development/variation-matches');
 const RUNTIME = ['main', 'browser', 'module'];
-
-// const redacted = '--redacted';
-// const redact = { source: redacted, rawSource: redacted, map: redacted };
-let debugFileMatching = process.env.DEBUG_FILE_MATCHING;
-if (debugFileMatching && debugFileMatching !== '') {
-    debugFileMatching = new RegExp(debugFileMatching);
-}
 
 class MendelCache extends EventEmitter {
     constructor(config) {
@@ -96,13 +90,7 @@ class MendelCache extends EventEmitter {
             else normalizedId = './' + path.join(parts.dir, parts.name);
         }
 
-        let shouldLog = verbose.enabled;
-        if (debugFileMatching) {
-            shouldLog = debugFileMatching.test(id);
-        }
-        if (shouldLog) {
-            verbose(`resolved ${id} to ${normalizedId}`);
-        }
+        debugFilter(verbose, `resolved ${id} to ${normalizedId}`);
 
         return normalizedId;
     }
@@ -112,7 +100,7 @@ class MendelCache extends EventEmitter {
         if (this._shimPathToId.has(id)) return this._shimPathToId.get(id);
         if (this._packageMap.has(id)) {
             const to = this._packageMap.get(id).mapToId;
-            verbose(`_packageMap from ${id} to ${to} `);
+            debugFilter(verbose, `_packageMap from ${id} to ${to} `);
             return to;
         }
         return this._getBeforePackageJSONNormalizedId(id);
@@ -172,7 +160,7 @@ class MendelCache extends EventEmitter {
             runtime = this._packageMap.get(id).runtime;
         }
         if (path.parse(id).base === 'package.json') runtime = 'package';
-        verbose(`${id} runtime ${runtime}`);
+        debugFilter(verbose, `${id} runtime ${runtime}`);
         return runtime;
     }
 
@@ -269,7 +257,7 @@ class MendelCache extends EventEmitter {
         // Gather metadata on package if a package.json was never
         // visited even once.
         if (isPkgModule && this.hasEntry(oDep.packageJson)) {
-            verbose('isPkgModule && hasEntry ' + depName);
+            debugFilter(verbose, 'isPkgModule && hasEntry ' + depName);
             return;
         }
         // If oDependency is not added yet,
@@ -283,15 +271,12 @@ class MendelCache extends EventEmitter {
             isIsomorphic = oDep.main === oDep.browser;
         }
 
-        let shouldLog = verbose.enabled;
-        if (debugFileMatching) {
-            shouldLog =
-                debugFileMatching.test(depName) ||
-                debugFileMatching.test(Object.values(oDep).join(' '));
-        }
-        if (shouldLog) {
-            verbose({ depName, oDep, isIsomorphic });
-        }
+        const shouldLog = debugFilter(
+            verbose,
+            { depName, oDep, isIsomorphic },
+            depName,
+            oDep
+        );
 
         RUNTIME
             // dep can have false as a value in which case indicates not found modules
@@ -299,12 +284,11 @@ class MendelCache extends EventEmitter {
             .forEach((runtime) => {
                 const dep = oDep[runtime];
                 if (typeof dep === 'string') {
-                    shouldLog && verbose(`${runtime} for `);
+                    shouldLog && verbose(`${runtime} for ${dep}`);
                     if (isPkgModule && !isIsomorphic) {
                         const name = path.dirname(oDep.packageJson);
 
                         if (name) {
-                            verbose(`map: ${dep} to ${name} @ ${runtime}`);
                             this._packageMap.set(dep, {
                                 mapToId: name,
                                 runtime,
@@ -312,6 +296,14 @@ class MendelCache extends EventEmitter {
 
                             const existing = this.getEntry(dep);
                             if (existing) {
+                                if (shouldLog) {
+                                    verbose(
+                                        `existing ${dep} runtime ${existing.runtime} -> ${runtime}`
+                                    );
+                                    verbose(
+                                        `existing ${dep} normalizedId ${existing.normalized} -> ${name}`
+                                    );
+                                }
                                 existing.runtime = runtime;
                                 existing.normalizedId = name;
                             }
@@ -375,13 +367,7 @@ class MendelCache extends EventEmitter {
         const entry = this.getEntry(id);
         const normDep = new Dependencies();
 
-        let shouldLog = verbose.enabled;
-        if (debugFileMatching) {
-            shouldLog = debugFileMatching.test(id);
-        }
-        if (shouldLog) {
-            verbose(`dep postprocess ${id}`);
-        }
+        const shouldLog = debugFilter(verbose, `dep postprocess ${id}`);
 
         /********
          * TODO: Fix mendel-exec usecase (see mendel-deps/index)
@@ -434,15 +420,13 @@ class MendelCache extends EventEmitter {
     }
 
     emit(eventName, entry) {
-        let shouldLog = verbose.enabled;
-        if (debugFileMatching) {
-            const str = entry.id || (typeof entry === 'string' && entry);
-            shouldLog = Boolean(str && debugFileMatching.test(str));
-        }
         if (entry && entry.id) {
-            shouldLog && verbose(eventName, entry.id, entry.normalizedId);
+            debugFilter(
+                verbose,
+                [eventName, entry.id, entry.normalizedId || ''].join(' ')
+            );
         } else if (entry) {
-            shouldLog && verbose(eventName, entry, entry.normalizedId);
+            debugFilter(verbose, [eventName, entry].join(' '));
         } else {
             verbose(eventName);
         }

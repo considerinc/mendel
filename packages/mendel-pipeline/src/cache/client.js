@@ -8,13 +8,7 @@ const debug = require('debug')('mendel:net:client');
 const error = require('debug')('mendel:net:client:error');
 const verbose = require('debug')('verbose:mendel:net:client');
 const colors = require('chalk');
-
-// const redacted = '--redacted';
-// const redact = { source: redacted, rawSource: redacted, map: redacted };
-let debugFileMatching = process.env.DEBUG_FILE_MATCHING;
-if (debugFileMatching && debugFileMatching !== '') {
-    debugFileMatching = new RegExp(debugFileMatching);
-}
+const debugFilter = require('../../debug-filter');
 
 class CacheClient extends EventEmitter {
     constructor({ cacheConnection, environment }, registry) {
@@ -60,11 +54,7 @@ class CacheClient extends EventEmitter {
 
             switch (data.type) {
                 case 'addEntry': {
-                    let shouldLog = verbose.enabled;
-                    if (debugFileMatching) {
-                        shouldLog = debugFileMatching.test(data.entry.id);
-                    }
-                    shouldLog && verbose('got', data.entry.id);
+                    debugFilter(verbose, 'got ' + data.entry.id);
 
                     this.registry.addEntry(data.entry);
 

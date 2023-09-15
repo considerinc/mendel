@@ -4,16 +4,12 @@ const verbose = require('debug')('verbose:mendel:deps:slave-' + process.pid);
 const mendelDeps = require('mendel-deps');
 const path = require('path');
 const VariationalResolver = require('mendel-resolver/bisource-resolver');
+const debugFilter = require('../../debug-filter');
 
 const pendingInquiry = new Map();
 const RUNTIME = ['main', 'browser', 'module'];
 const resolveCache = new Map();
 let resolver;
-
-let debugFileMatching = process.env.DEBUG_FILE_MATCHING;
-if (debugFileMatching && debugFileMatching !== '') {
-    debugFileMatching = new RegExp(debugFileMatching);
-}
 
 module.exports = function (done) {
     return {
@@ -25,11 +21,6 @@ module.exports = function (done) {
                 baseConfig,
                 variationConfig,
             } = payload;
-
-            let logFile = debug.enabled;
-            if (debug.enabled && debugFileMatching) {
-                logFile = debugFileMatching.test(filePath);
-            }
 
             analytics.tic();
             if (!resolver) {
@@ -60,7 +51,11 @@ module.exports = function (done) {
                 );
             }
 
-            logFile && debug(`Detecting dependencies for ${filePath}`);
+            const shouldLog = debugFilter(
+                debug,
+                `Detecting dependencies for ${filePath}`,
+                filePath
+            );
             mendelDeps({ file: filePath, source, resolver })
                 // mendel-resolver throws in case nothing was found
                 .catch(() => {
@@ -71,8 +66,8 @@ module.exports = function (done) {
                 })
                 .then((deps) => {
                     analytics.toc();
-                    logFile && debug(`Dependencies for ${filePath} found!`);
-                    logFile && verbose({ filePath, deps });
+                    shouldLog && debug(`Dependencies for ${filePath} found!`);
+                    shouldLog && verbose({ filePath, deps });
                     done({ filePath, deps });
                 });
         },

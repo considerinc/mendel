@@ -7,6 +7,7 @@ const EventEmitter = require('events').EventEmitter;
 const debug = require('debug')('mendel:net:server');
 const error = require('debug')('mendel:net:server:error');
 const verbose = require('debug')('verbose:mendel:net:server');
+const debugFilter = require('../../debug-filter');
 
 class CacheServer extends EventEmitter {
     constructor(config, cacheManager) {
@@ -170,7 +171,7 @@ class CacheServer extends EventEmitter {
             type: 'addEntry',
             entry: this.serializeEntry(entry),
         });
-        verbose('sent', entry.id);
+        debugFilter(verbose, 'sent ' + entry.id);
     }
 
     _signalRemoval(client, id) {
