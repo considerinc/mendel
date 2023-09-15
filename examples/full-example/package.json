@@ -6,7 +6,7 @@
   "main": "src/server/index.js",
   "scripts": {
     "start": "nf start",
-    "test": "MENDEL_IPC=.mendelipc-test-offline; mendel --watch & builderPid=$(echo $!) && sleep 1; karma start test/karma.conf.js --single-run ; kill -s INT $builderPid",
+    "test": "MENDEL_IPC=.mendelipc-test-offline; mendel --watch & builderPid=$(echo $!) && sleep 1; karma start test/karma.conf.js --single-run ; testExited=$(echo $?); kill -s INT $builderPid ; exit $testExited",
     "test-karma-dev": "MENDEL_IPC=.mendelipc-test karma start test/karma.conf.js --reporters spec --minimal",
     "test-karma-debug": "MENDEL_IPC=.mendelipc-test karma start test/karma.conf.js --reporters spec  --browsers Chrome",
     "test-mocha-once": "mendel-mocha --prelude 'test/setup.js' **/_test_/*.js",

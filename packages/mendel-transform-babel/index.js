@@ -1,24 +1,27 @@
 const babel = require('@babel/core');
 const path = require('path');
 
-function optionDepPath(arr, optionName) {
+function optionDepPath(arr, optionName, projectRoot) {
     return (arr || []).map((el) => {
         const name = typeof el === 'string' ? el : el[0];
         let absPath = '';
+        const paths = [projectRoot, process.cwd(), __dirname].reduce(
+            (all, _) => {
+                return [...all, _, path.join(_, 'node_modules')];
+            },
+            []
+        );
 
         try {
-            absPath = require.resolve(path.join(process.cwd(), name));
+            absPath = require.resolve(name, {
+                paths,
+            });
         } catch (e) {
             const defaultName =
                 name.indexOf('@babel/') === 0
                     ? name
                     : `babel-${optionName.toLowerCase()}-${name}`;
-            const pkgDir = path.join(
-                process.cwd(),
-                'node_modules',
-                defaultName
-            );
-            absPath = require.resolve(pkgDir);
+            absPath = require.resolve(defaultName, { paths });
         }
 
         if (typeof el === 'string') return absPath;
@@ -28,8 +31,13 @@ function optionDepPath(arr, optionName) {
 }
 
 module.exports = function ({ source, filename, map: inputSourceMap }, options) {
-    options.presets = optionDepPath(options.presets, 'preset');
-    options.plugins = optionDepPath(options.plugins, 'plugin');
+    const { presets, plugins, projectRoot } = options;
+    options.presets = optionDepPath(presets, 'preset', projectRoot);
+    options.plugins = optionDepPath(plugins, 'plugin', projectRoot);
+
+    delete options.baseConfig;
+    delete options.projectRoot;
+    delete options.variationConfig;
 
     const { code, map } = babel.transform(
         source,

@@ -95,6 +95,10 @@ module.exports = function (config) {
         // Concurrency level
         // how many browser should be started simultaneous
         concurrency: 1,
+
+        // In most cases ommiting 'plugins' defautls to ['karma-*'] and works.
+        // mendel-monorepo uses `require` to help karma with npm/pnpm workspaces
+        plugins: [require('karma-mendel'), 'karma-*'],
     });
 };
 

@@ -1,9 +1,18 @@
 var createValidator = require('./validator');
 var resolvePlugin = require('./resolve-plugin');
 
-function TransformConfig(id, transform, { projectRoot }) {
+function TransformConfig(
+    id,
+    transform,
+    { projectRoot, baseConfig, variationConfig }
+) {
     this.id = id;
-    this.options = transform.options;
+    this.options = {
+        projectRoot,
+        baseConfig,
+        variationConfig,
+        ...transform.options,
+    };
 
     var resolved = resolvePlugin(transform.plugin, projectRoot);
     this.plugin = resolved.plugin;
