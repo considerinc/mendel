@@ -29,7 +29,7 @@ variation-config:
   variation-dirs:
     - ./src/isomorphic/variations
   variations:
-    unexisting_folder:# this folder don't exist, therefore mendel
+    unexisting_folder: # this folder don't exist, therefore mendel
       # completelly ignores the variation
     bucket_A:
       - unexisting_folder # The folder hierarchy is also ignored
