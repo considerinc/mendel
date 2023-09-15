@@ -3,7 +3,6 @@ const debug = require('debug')('mendel:exec');
 const vm = require('vm');
 const path = require('path');
 const m = require('module');
-const resolve = require('resolve');
 // https://github.com/nodejs/node/blob/master/lib/internal/module.js#L54-L60
 const builtinLibs = Object.keys(process.binding('natives'));
 const _require = require;
@@ -64,8 +63,8 @@ function matchVar(norm, entries, variations, runtime) {
     let shouldLog = false;
     if (debugFileMatching) shouldLog = debugFileMatching.test(norm);
     if (shouldLog) {
-        console.log(`matchVar for ${norm}`);
-        console.log({
+        debug(`matchVar for ${norm}`);
+        debug({
             norm,
             entries: entries.map((_) => ({
                 ..._,
@@ -101,8 +100,10 @@ function matchVar(norm, entries, variations, runtime) {
 
 function exec(fileName, source, { sandbox = {}, resolver }) {
     if (!sandbox) sandbox = {};
-    if (!sandbox.cache) sandbox.cache = {};
-    vm.createContext(sandbox);
+    if (!sandbox.cache) {
+        sandbox.cache = {};
+        vm.createContext(sandbox);
+    }
     if (!sandbox.global) sandbox.global = sandbox;
     if (!sandbox.process) sandbox.process = require('process');
     if (!sandbox.Buffer) sandbox.Buffer = global.Buffer;
@@ -116,36 +117,29 @@ function exec(fileName, source, { sandbox = {}, resolver }) {
 
     // Let's pipe vm output to stdout this way
     sandbox.console = console;
-
-    /********
-     * TODO: fix the following:
-     *
-     * The line `if (MendelResolver.isNodeModule(literal)) return _require(literal);`
-     * is technically correct, but was added to patch a deficiency on the
-     * client registry not receiving the correct files.
-     *
-     * The `debug` module has a weird pattern that breaks:
-     * see:
-     * https://github.com/debug-js/debug/blob/f42b9627922995561299b064fce56bd292abb030/package.json#L37-L38
-     * and:
-     * https://github.com/debug-js/debug/blob/f42b9627922995561299b064fce56bd292abb030/src/index.js#L7-L9
-     *
-     * If we remove `MendelResolver.isNodeModule(literal)` check, we never get
-     * a version of `debug/src/index.js` with {runtine: 'main'} and throw
-     * a RangeError
-     * *****/
+    sandbox.debug = debug; // matchVar and other functions from this files
 
     function varRequire(parentId, literal) {
         if (builtinLibs.indexOf(literal) >= 0) return _require(literal);
-        if (MendelResolver.isNodeModule(literal)) return _require(literal);
-        const entry = resolver(parentId, literal);
-        if (entry) {
-            return runEntryInVM(entry.id, entry.source, sandbox, varRequire);
+        if (!MendelResolver.isNodeModule(literal)) {
+            const entry = resolver(parentId, literal);
+            if (entry) {
+                return runEntryInVM(
+                    entry.id,
+                    entry.source,
+                    sandbox,
+                    varRequire
+                );
+            }
         }
 
         // In such case, it is real node's module.
-        const dependencyPath = resolve.sync(literal, {
-            basedir: path.dirname(parentId),
+        const dependencyPath = _require.resolve(literal, {
+            paths: [
+                process.cwd(), // mendel-exec is symlinked (i.e. with npm link)
+                path.dirname(parentId), // when running with a production build
+                __dirname, // when mendel-exec is installed from npm
+            ],
         });
 
         return _require(dependencyPath);
@@ -205,7 +199,7 @@ module.exports = {
                     if (!parent.deps[depLiteral])
                         throw new Error(
                             'Any form of dynamic require is not supported by Mendel'
-                        ); // eslint-disable-line max-len
+                        );
 
                     let normId = parent.deps[depLiteral][runtime];
                     if (typeof normId === 'object') normId = normId[runtime];
@@ -214,7 +208,7 @@ module.exports = {
                     if (normId === '_noop')
                         throw new Error(
                             `Cannot find ${depLiteral} from ${mainEntry.id}`
-                        ); // eslint-disable-line max-len
+                        );
 
                     return resolve(normId);
                 },

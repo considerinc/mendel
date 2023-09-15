@@ -12,7 +12,6 @@
   "dependencies": {
     "debug": "^4.3.4",
     "mendel-resolver": "^4.0.0-alpha.1",
-    "resolve": "^1.2.0",
     "source-map": "^0.5.7"
   },
   "devDependencies": {
