@@ -3,7 +3,7 @@
    See the accompanying LICENSE file for terms. */
 
 var t = require('tap');
-var requireTransform = require('../packages/mendel-development/require-transform');
+var requireTransform = require('../require-transform');
 var wrapper = requireTransform.wrapper;
 
 var variationDirs = ['variation1', 'variation2', 'base'];

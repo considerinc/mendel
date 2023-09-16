@@ -5,9 +5,13 @@
 var test = require('tap').test;
 var path = require('path');
 
-var resolveInDirs = require('../packages/mendel-treenherit/resolve-dirs');
+var resolveInDirs = require('../resolve-dirs');
 
-var appDir = path.resolve(__dirname, './app-samples/1/');
+var appDir = path.resolve(
+    __dirname,
+    '../../mendel-core/test',
+    './app-samples/1/'
+);
 
 test('With defaults', function (t) {
     t.plan(2);

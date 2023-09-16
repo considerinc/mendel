@@ -3,7 +3,7 @@
    See the accompanying LICENSE file for terms. */
 
 var t = require('tap');
-var proxy = require('../packages/mendel-development/proxy');
+var proxy = require('../proxy');
 var onlyPublicMethods = proxy.onlyPublicMethods;
 
 function Iface(name) {

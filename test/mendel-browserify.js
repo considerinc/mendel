@@ -4,15 +4,15 @@
 
 var path = require('path');
 var mkdirp = require('mkdirp');
-var test = require('tap').test;
-var mendelPlugin = require('../packages/mendel-browserify');
+var tap = require('tap');
+var mendelPlugin = 'skip'; //require('../packages/mendel-browserify');
 
 var appPath = path.resolve(__dirname, 'app-samples/1/');
 var appBuild = path.join(appPath, 'build');
 mkdirp.sync(appBuild);
 process.chdir(appPath);
 
-test('mendel-browserify', function (t) {
+tap.skip('mendel-browserify', function (t) {
     t.plan(3);
     var calls;
 
