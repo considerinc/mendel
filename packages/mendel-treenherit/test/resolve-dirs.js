@@ -2,7 +2,7 @@
    Copyrights licensed under the MIT License.
    See the accompanying LICENSE file for terms. */
 
-var test = require('tap').test;
+var tap = require('tap');
 var path = require('path');
 
 var resolveInDirs = require('../resolve-dirs');
@@ -13,18 +13,18 @@ var appDir = path.resolve(
     './app-samples/1/'
 );
 
-test('With defaults', function (t) {
+tap.test('With defaults', function (t) {
     t.plan(2);
 
     process.chdir(appDir);
     resolveInDirs('./math', ['app'], false, false, function (err, path) {
-        t.equals(err, null, 'able to find relative to process');
+        t.equal(err, null, 'able to find relative to process');
         t.match(path, '/1/app/math.js', 'looks inside dirs param');
     });
 });
 
-test('With full params', function (t) {
-    t.plan(3);
+tap.test('With full params', function (t) {
+    t.plan(5);
 
     process.chdir(__dirname);
     resolveInDirs(
@@ -33,6 +33,7 @@ test('With full params', function (t) {
         appDir,
         false,
         function (err, path) {
+            t.error(err);
             t.match(path, '/1/test_A/math.js', 'finds in first directory');
         }
     );
@@ -42,6 +43,7 @@ test('With full params', function (t) {
         appDir,
         false,
         function (err, path) {
+            t.error(err);
             t.match(path, '/1/app/math.js', "skips directory that don't exist");
         }
     );

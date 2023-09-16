@@ -47,14 +47,14 @@
     "prettier": "prettier --write --list-different .",
     "eslint": "eslint --fix --ext js,mjs,ts,jsx,tsx .",
     "static": "npm run prettier && npm run eslint",
-    "unit": "rimraf test/**/build* && rimraf test/**/.mendelipc && npm run unit-dirty",
-    "unit-dirty": "tap --coverage-map=.tap.coverage.map.js --no-check-coverage $(find packages test -regex '.*test/[^/]*\\.js' | grep -v node_modules)",
     "test": "npm run static && npm run unit",
-    "unit-file": "tap",
-    "coverage": "tap test/*.js --coverage --nyc-arg=--all",
-    "coverage-file": "tap --coverage --coverage-report=lcov",
-    "coverage-html": "tap test/*.js --coverage --nyc-arg=--all --coverage-report=lcov",
-    "coverage-all-individualy": "DEBUG='' for test in $(find test -name *.js -depth 1); do tap $test --coverage ; done"
+    "unit": "lerna run --no-sort --no-bail test",
+    "unit-grouped": "tap ./packages/*/test/*.js --coverage-map=.tap.coverage.map.js --no-check-coverage",
+    "unit-dirty": "tap --no-check-coverage ./packages/*/test/*.js",
+    "unit-legacy": "tap ./test/*.js --no-check-coverage",
+    "coverage": "tap ./packages/*/test/*.js --coverage --nyc-arg=--all",
+    "coverage-html": "tap ./packages/*/test/*.js --coverage --nyc-arg=--all --coverage-report=lcov",
+    "coverage-all-individualy": "for test in $(find packages test -depth 3 -regex '.*test/[^/]*\\.js'); do tap $test --coverage --coverage-map=.tap.coverage.map.js --no-check-coverage ; done"
   },
   "nyc": {
     "exclude": [
