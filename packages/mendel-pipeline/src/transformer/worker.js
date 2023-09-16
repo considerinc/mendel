@@ -31,7 +31,7 @@ module.exports = function () {
                             result.source === undefined
                         ) {
                             debug(
-                                `Transform ${transform.id} returned empty result for non empty input`
+                                `Transform ${transform.id} returned empty result for non empty input [${filename}]`
                             );
                         } else {
                             debug(

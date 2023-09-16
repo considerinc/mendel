@@ -30,14 +30,18 @@ function optionDepPath(arr, optionName, projectRoot) {
     });
 }
 
-module.exports = function ({ source, filename, map: inputSourceMap }, options) {
-    const { presets, plugins, projectRoot } = options;
+module.exports = function (
+    { source, filename, map: inputSourceMap },
+    optionsIn
+) {
+    const {
+        mendelConfig: { projectRoot },
+        ...options
+    } = optionsIn;
+    const { presets, plugins } = options;
+
     options.presets = optionDepPath(presets, 'preset', projectRoot);
     options.plugins = optionDepPath(plugins, 'plugin', projectRoot);
-
-    delete options.baseConfig;
-    delete options.projectRoot;
-    delete options.variationConfig;
 
     const { code, map } = babel.transform(
         source,

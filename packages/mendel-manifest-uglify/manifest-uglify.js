@@ -3,14 +3,14 @@
    See the accompanying LICENSE file for terms. */
 
 var UglifyJS = require('uglify-js');
-var debug = require('debug')('mendel-manifest-uglify');
+var debug = require('debug')('mendel:manifest-uglify');
 
 module.exports = manifestUglify;
 
 function manifestUglify(manifests, options, next) {
     var optBundles = [].concat(options.bundles).filter(Boolean);
     var uglifyOptions = Object.assign({}, options.uglifyOptions, {
-        fromString: true,
+        sourceMap: false, // TODO: sourcemaps support
     });
 
     function whichManifests(manifest) {
@@ -28,30 +28,26 @@ function manifestUglify(manifests, options, next) {
             manifest.bundles.forEach(function (module) {
                 module.data.forEach(function (variation) {
                     var result = UglifyJS.minify(
-                        variation.source,
-                        Object.assign(
-                            {
-                                root: options.mendelConfig
-                                    ? options.mendelConfig.basedir
-                                    : '',
-                            },
-                            uglifyOptions,
-                            {
-                                file: variation.file,
-                                sourceMaps: false, // TODO: sourcemaps support
-                            }
-                        )
+                        {
+                            [variation.file]: variation.source,
+                        },
+                        uglifyOptions
                     );
 
-                    debug(
-                        [
-                            variation.id.replace(/^.*node_modules\//, ''),
-                            variation.source.length,
-                            '->',
-                            result.code.length,
-                            'bytes',
-                        ].join(' ')
-                    );
+                    try {
+                        debug(
+                            [
+                                variation.id.replace(/^.*node_modules\//, ''),
+                                variation.source.length,
+                                '->',
+                                result.code.length,
+                                'bytes',
+                            ].join(' ')
+                        );
+                    } catch (e) {
+                        debug(e);
+                        debug(result);
+                    }
 
                     variation.source = result.code;
                 });

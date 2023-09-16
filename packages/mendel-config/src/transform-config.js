@@ -1,17 +1,12 @@
 var createValidator = require('./validator');
 var resolvePlugin = require('./resolve-plugin');
 
-function TransformConfig(
-    id,
-    transform,
-    { projectRoot, baseConfig, variationConfig }
-) {
+function TransformConfig(id, transform, mendelConfig) {
+    const { projectRoot, baseConfig, variationConfig } = mendelConfig;
     this.id = id;
     this.options = {
-        projectRoot,
-        baseConfig,
-        variationConfig,
         ...transform.options,
+        mendelConfig: { projectRoot, baseConfig, variationConfig },
     };
 
     var resolved = resolvePlugin(transform.plugin, projectRoot);

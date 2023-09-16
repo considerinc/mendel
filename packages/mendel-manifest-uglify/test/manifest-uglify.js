@@ -2,23 +2,26 @@
    Copyrights licensed under the MIT License.
    See the accompanying LICENSE file for terms. */
 
-var test = require('tap').test;
+var tap = require('tap');
 var fs = require('fs');
 var path = require('path');
 var tmp = require('tmp');
 
 // Since this file re-writes stuff, lets work on a copy
-var realSamples = path.join(__dirname, './manifest-samples/');
+var realSamples = path.join(
+    __dirname,
+    '../../mendel-development/test/manifest-samples'
+);
 var copySamples = tmp.dirSync().name;
 
-var postProcessManifests = require('../packages/mendel-cli/post-process-manifest');
-var uglify = require('../packages/mendel-manifest-uglify');
+var postProcessManifests = require('../../mendel-development/post-process-manifest');
+var uglify = require('../manifest-uglify');
 
 var simpleCompressionSize;
 
-test('mendel-manifest-uglify compress', function (t) {
+tap.test('mendel-manifest-uglify compress', function (t) {
     copyRecursiveSync(realSamples, copySamples);
-    t.plan(2);
+    t.plan(1);
 
     postProcessManifests(
         {
@@ -34,7 +37,9 @@ test('mendel-manifest-uglify compress', function (t) {
             ],
         },
         function (error) {
-            t.error(error);
+            if (error) {
+                throw error;
+            }
             var real = require(
                 path.join(realSamples, 'one-file.manifest.json')
             );
@@ -44,14 +49,14 @@ test('mendel-manifest-uglify compress', function (t) {
             var realSize = real.bundles[0].data[0].source.length;
             var compressedSize = compressed.bundles[0].data[0].source.length;
             simpleCompressionSize = compressedSize;
-            t.assert(compressedSize / realSize < 0.8, 'compressed file');
+            t.ok(compressedSize / realSize < 0.8, 'compressed file');
         }
     );
 });
 
-test('mendel-manifest-uglify skips based on bundle id', function (t) {
+tap.test('mendel-manifest-uglify skips based on bundle id', function (t) {
     copyRecursiveSync(realSamples, copySamples);
-    t.plan(2);
+    t.plan(1);
 
     postProcessManifests(
         {
@@ -74,7 +79,9 @@ test('mendel-manifest-uglify skips based on bundle id', function (t) {
             ],
         },
         function (error) {
-            t.error(error);
+            if (error) {
+                throw error;
+            }
             var real = require(
                 path.join(realSamples, 'one-file.manifest.json')
             );
@@ -89,9 +96,9 @@ test('mendel-manifest-uglify skips based on bundle id', function (t) {
     );
 });
 
-test('mendel-manifest-uglify compress with options', function (t) {
+tap.test('mendel-manifest-uglify compress with options', function (t) {
     copyRecursiveSync(realSamples, copySamples);
-    t.plan(2);
+    t.plan(1);
 
     postProcessManifests(
         {
@@ -101,11 +108,7 @@ test('mendel-manifest-uglify compress with options', function (t) {
                     uglify,
                     {
                         uglifyOptions: {
-                            mangle: {
-                                eval: true,
-                                toplevel: true,
-                            },
-                            mangleProperties: true,
+                            toplevel: true,
                         },
                     },
                 ],
@@ -121,12 +124,14 @@ test('mendel-manifest-uglify compress with options', function (t) {
             ],
         },
         function (error) {
-            t.error(error);
+            if (error) {
+                throw error;
+            }
             var mangled = require(
                 path.join(copySamples, 'one-file.manifest.json')
             );
             var extraMangleSize = mangled.bundles[0].data[0].source.length;
-            t.assert(
+            t.ok(
                 extraMangleSize / simpleCompressionSize < 0.8,
                 'compressed with options'
             );
