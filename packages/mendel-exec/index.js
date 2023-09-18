@@ -7,6 +7,7 @@ const m = require('module');
 const builtinLibs = Object.keys(process.binding('natives'));
 const _require = require;
 const errorMapper = require('./source-mapper');
+const globalProps = require('./global-props');
 const MendelResolver = require('mendel-resolver');
 
 let debugFileMatching = process.env.DEBUG_FILE_MATCHING;
@@ -106,14 +107,14 @@ function exec(fileName, source, { sandbox = {}, resolver }) {
     }
     if (!sandbox.global) sandbox.global = sandbox;
     if (!sandbox.process) sandbox.process = require('process');
-    if (!sandbox.Buffer) sandbox.Buffer = global.Buffer;
-    if (!sandbox.setTimeout) sandbox.setTimeout = global.setTimeout;
-    if (!sandbox.clearTimeout) sandbox.clearTimeout = global.clearTimeout;
-    if (!sandbox.setInterval) sandbox.setInterval = global.setInterval;
-    if (!sandbox.clearInterval) sandbox.clearInterval = global.clearInterval;
     if (!sandbox.debugFileMatching) {
         sandbox.debugFileMatching = debugFileMatching;
     }
+
+    globalProps.forEach((p) => {
+        if (sandbox[p]) return;
+        sandbox[p] = global[p];
+    });
 
     // Let's pipe vm output to stdout this way
     sandbox.console = console;
