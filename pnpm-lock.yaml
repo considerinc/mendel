@@ -253,13 +253,13 @@ importers:
         specifier: ^6.4.2
         version: 6.4.2(debug@4.3.4)
       mendel-config:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.3
         version: link:../mendel-config
       mendel-development:
         specifier: ^4.0.0-alpha.2
         version: link:../mendel-development
       mendel-pipeline:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.3
         version: link:../mendel-pipeline
       source-map:
         specifier: ^0.7.4
@@ -306,7 +306,7 @@ importers:
         specifier: ^0.2.1
         version: 0.2.1
       mendel-config:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.3
         version: link:../mendel-config
       stream-browserify:
         specifier: ^2.0.1
@@ -390,16 +390,16 @@ importers:
         specifier: ^4.3.4
         version: 4.3.4(supports-color@8.1.1)
       mendel-config:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.3
         version: link:../mendel-config
       mendel-development:
         specifier: ^4.0.0-alpha.2
         version: link:../mendel-development
       mendel-exec:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.3
         version: link:../mendel-exec
       mendel-pipeline:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.3
         version: link:../mendel-pipeline
       path-to-regexp:
         specifier: ^2.1.0
@@ -509,7 +509,7 @@ importers:
         specifier: ^4.3.4
         version: 4.3.4(supports-color@8.1.1)
       mendel-core:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.3
         version: link:../mendel-core
       mendel-loader:
         specifier: ^4.0.0-alpha.2
@@ -534,10 +534,10 @@ importers:
         specifier: ^4.3.4
         version: 4.3.4(supports-color@8.1.1)
       mendel-exec:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.3
         version: link:../mendel-exec
       mendel-pipeline:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.3
         version: link:../mendel-pipeline
       mocha:
         specifier: ^10.2.0
@@ -594,7 +594,7 @@ importers:
         specifier: ^4.3.4
         version: 4.3.4(supports-color@8.1.1)
       mendel-manifest-uglify:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.3
         version: link:../mendel-manifest-uglify
       shasum:
         specifier: ^1.0.2
@@ -616,7 +616,7 @@ importers:
         specifier: ^4.0.0-alpha.2
         version: link:../mendel-development
       mendel-outlet-manifest:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.3
         version: link:../mendel-outlet-manifest
       mkdirp:
         specifier: ^0.5.1
@@ -657,7 +657,7 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0
       mendel-config:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.3
         version: link:../mendel-config
       mendel-deps:
         specifier: ^4.0.0-alpha.2

@@ -1,6 +1,6 @@
 {
   "name": "karma-mendel",
-  "version": "4.0.0-alpha.2",
+  "version": "4.0.0-alpha.3",
   "description": "Karma plugin for mendel",
   "main": "lib/plugin.js",
   "keywords": [
@@ -41,9 +41,9 @@
   "dependencies": {
     "debug": "^4.3.4",
     "karma": "^6.4.2",
-    "mendel-config": "^4.0.0-alpha.2",
+    "mendel-config": "^4.0.0-alpha.3",
     "mendel-development": "^4.0.0-alpha.2",
-    "mendel-pipeline": "^4.0.0-alpha.2",
+    "mendel-pipeline": "^4.0.0-alpha.3",
     "source-map": "^0.7.4"
   },
   "devDependencies": {
