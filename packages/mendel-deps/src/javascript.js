@@ -5,47 +5,42 @@ const GLOBAL_WHITELIST = ['global', 'process'];
 //     imports: ['./foo', '../bar', 'baz'],
 //     exports: ['helloWorld', 'cruelWorld']
 // }
+const { default: traverse } = require('@babel/traverse');
 function _depFinder(ast) {
-    const { visit } = require('ast-types');
     const imports = {};
     const exports = {};
     const globals = {};
 
-    visit(ast, {
+    const visitor = {
         /************** IMPORT/REQUIRE ***************/
-        visitImportDeclaration: function (nodePath) {
-            const node = nodePath.value;
+        ImportDeclaration(nodePath) {
+            const { node } = nodePath;
             imports[node.source.value] = true;
-            return false;
         },
-        visitCallExpression: function (nodePath) {
-            const node = nodePath.value;
+        CallExpression(nodePath) {
+            const { node } = nodePath;
 
             // cjs require syntax support
             if (
                 node.callee.type === 'Identifier' &&
                 node.callee.name === 'require' &&
-                node.arguments[0].type === 'Literal'
+                node.arguments[0].type === 'StringLiteral'
             ) {
                 imports[node.arguments[0].value] = true;
             }
-
-            return this.traverse(nodePath);
         },
-        visitMemberExpression(nodePath) {
-            const node = nodePath.value;
+        MemberExpression(nodePath) {
+            const { node } = nodePath;
             if (
                 node.object.type === 'Identifier' &&
-                !nodePath.scope.lookup(node.object.name) &&
+                // !nodePath.scope.lookup(node.object.name) &&
                 GLOBAL_WHITELIST.indexOf(node.object.name) >= 0
             ) {
                 globals[node.object.name] = true;
             }
-
-            return this.traverse(nodePath);
         },
-        visitExportNamedDeclaration(nodePath) {
-            const node = nodePath.value;
+        ExportNamedDeclaration(nodePath) {
+            const { node } = nodePath;
 
             let exportName = '';
 
@@ -67,15 +62,25 @@ function _depFinder(ast) {
                     exports[exportName] = [];
                 }
             }
-
-            return this.traverse(nodePath);
         },
-        visitExportDefaultDeclaration(nodePath) {
+        ExportDefaultDeclaration() {
             exports.default = [];
-
-            return this.traverse(nodePath);
         },
-    });
+    };
+
+    try {
+        traverse(ast, visitor);
+    } catch (e) {
+        const { message } = e;
+        const { loc: { filename } = {} } = ast;
+        if (filename) {
+            console.error(
+                `[Mendel] deps (@babel/traverse) ${message} \n wile parsing: ${filename}`
+            );
+        } else {
+            console.error(`[Mendel] deps (@babel/traverse) ${message}`);
+        }
+    }
 
     Object.keys(globals).forEach((use) => {
         imports[use] = true;
@@ -98,27 +103,31 @@ function _depFinder(ast) {
  *   "../baz.js": "./baz.js"
  * }
  */
-const acorn = require('acorn');
-const jsx = require('acorn-jsx');
-const JSXParser = acorn.Parser.extend(jsx());
+const { parse } = require('@babel/parser');
 module.exports = function jsDependency(source, filePath) {
     let ast;
 
     try {
-        ast = JSXParser.parse(source, {
+        ast = parse(source, {
             ecmaVersion: 'latest',
             sourceType: 'module',
-            allowReturnOutsideFunction: true,
             allowHashBang: true,
+            errorRecovery: true,
+            sourceFilename: filePath,
+            allowUndeclaredExports: true,
+            allowSuperOutsideMethod: true,
             allowAwaitOutsideFunction: true,
+            allowReturnOutsideFunction: true,
             allowImportExportEverywhere: true,
+            allowNewTargetOutsideFunction: true,
+            plugins: ['jsx', 'flow'],
         });
     } catch (e) {
         const { message, loc: { line, column } = {} } = e;
 
         if (message && line && column) {
             console.error(
-                `[Mendel] (acorn) ${message} ${filePath}:${line}:${column}`
+                `[Mendel] deps (@babel/parser) ${message} ${filePath}:${line}:${column}`
             );
         } else {
             console.error(e);

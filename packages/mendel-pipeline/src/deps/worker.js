@@ -58,7 +58,8 @@ module.exports = function (done) {
             );
             mendelDeps({ file: filePath, source, resolver })
                 // mendel-resolver throws in case nothing was found
-                .catch(() => {
+                .catch((e) => {
+                    shouldLog && verbose(e);
                     return RUNTIME.reduce((reduced, name) => {
                         reduced[name] = false;
                         return reduced;

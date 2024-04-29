@@ -1,3 +1,8 @@
+let debugFileMatching = process.env.DEBUG_FILE_MATCHING;
+if (debugFileMatching && debugFileMatching !== '') {
+    debugFileMatching = new RegExp(debugFileMatching);
+}
+const debug = require('debug')('mendel:deps');
 const path = require('path');
 const jsDependency = require('./javascript');
 const cssDependency = require('./css');
@@ -35,7 +40,12 @@ function getDependencies(filePath, source) {
 module.exports = function deps({ file, resolver, source }) {
     return Promise.resolve()
         .then(() => getDependencies(file, source))
-        .then(({ imports }) => {
+        .catch((e) => debug(e))
+        .then((result) => {
+            if (debugFileMatching && debugFileMatching.test(file)) {
+                debug({ file, result });
+            }
+            const { imports } = result;
             const promises = imports.map((importLiteral) => {
                 return resolver.resolve(importLiteral).catch(() => {
                     if (!builtInModules.includes(importLiteral)) {

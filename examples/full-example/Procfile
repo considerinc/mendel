@@ -1,4 +1,4 @@
-dev-server: DEBUG_COLORS=1 PORT=3000 npm run development --silent
-dev-builder: npm run builder --silent
-test-builder: npm run test-builder --silent
-test-karma: npm run test-karma-dev --silent
+dev-server: DEBUG_COLORS=1 PORT=3000 pnpm development
+dev-builder: pnpm builder
+test-builder: pnpm test-builder
+test-karma: pnpm test-karma-dev
