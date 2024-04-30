@@ -12,7 +12,6 @@ function _depFinder(ast) {
     const globals = {};
 
     const visitor = {
-        /************** IMPORT/REQUIRE ***************/
         ImportDeclaration(nodePath) {
             const { node } = nodePath;
             imports[node.source.value] = true;
@@ -33,44 +32,17 @@ function _depFinder(ast) {
             const { node } = nodePath;
             if (
                 node.object.type === 'Identifier' &&
-                // !nodePath.scope.lookup(node.object.name) &&
                 GLOBAL_WHITELIST.indexOf(node.object.name) >= 0
             ) {
                 globals[node.object.name] = true;
             }
-        },
-        ExportNamedDeclaration(nodePath) {
-            const { node } = nodePath;
-
-            let exportName = '';
-
-            if (!node.declaration && node.specifiers.length) {
-                node.specifiers
-                    .filter(({ type }) => type === 'ExportSpecifier')
-                    .forEach(({ exported }) => (exports[exported.name] = []));
-            } else if (node.declaration) {
-                if (node.declaration.type === 'FunctionDeclaration') {
-                    exportName = node.declaration.id.name;
-                } else if (node.declaration.type === 'VariableDeclaration') {
-                    const declarator = node.declaration.declarations.find(
-                        ({ type }) => type === 'VariableDeclarator'
-                    );
-                    exportName = declarator && declarator.id.name;
-                }
-
-                if (exportName) {
-                    exports[exportName] = [];
-                }
-            }
-        },
-        ExportDefaultDeclaration() {
-            exports.default = [];
         },
     };
 
     try {
         traverse(ast, visitor);
     } catch (e) {
+        /* c8 ignore start */
         const { message } = e;
         const { loc: { filename } = {} } = ast;
         if (filename) {
@@ -80,6 +52,7 @@ function _depFinder(ast) {
         } else {
             console.error(`[Mendel] deps (@babel/traverse) ${message}`);
         }
+        /* c8 ignore end */
     }
 
     Object.keys(globals).forEach((use) => {
