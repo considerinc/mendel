@@ -260,7 +260,7 @@ importers:
         specifier: ^4.0.0-alpha.2
         version: link:../mendel-development
       mendel-pipeline:
-        specifier: ^4.0.0-alpha.3
+        specifier: ^4.0.0-alpha.4
         version: link:../mendel-pipeline
       source-map:
         specifier: ^0.7.4
@@ -397,7 +397,7 @@ importers:
         specifier: ^4.0.0-alpha.3
         version: link:../mendel-exec
       mendel-pipeline:
-        specifier: ^4.0.0-alpha.3
+        specifier: ^4.0.0-alpha.4
         version: link:../mendel-pipeline
       path-to-regexp:
         specifier: ^2.1.0
@@ -535,7 +535,7 @@ importers:
         specifier: ^4.0.0-alpha.3
         version: link:../mendel-exec
       mendel-pipeline:
-        specifier: ^4.0.0-alpha.3
+        specifier: ^4.0.0-alpha.4
         version: link:../mendel-pipeline
       mocha:
         specifier: ^10.2.0
@@ -658,7 +658,7 @@ importers:
         specifier: ^4.0.0-alpha.3
         version: link:../mendel-config
       mendel-deps:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.4
         version: link:../mendel-deps
       mendel-development:
         specifier: ^4.0.0-alpha.2
