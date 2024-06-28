@@ -1,11 +1,15 @@
 const analytics = require('../helpers/analytics/analytics-worker')('transform');
+const debugFilter = require('mendel-development/debug-filter');
 
 module.exports = function () {
     const debug = require('debug')('mendel:transformer:slave-' + process.pid);
 
     return {
         start({ source: startSource, transforms, filename }) {
-            debug(`[Slave ${process.pid}] Starting transform.`);
+            debugFilter(
+                debug,
+                `[Slave ${process.pid}] Starting ${filename} transform.`
+            );
             let promise = Promise.resolve({ source: startSource });
 
             transforms.forEach((transform) => {
@@ -34,7 +38,8 @@ module.exports = function () {
                                 `Transform ${transform.id} returned empty result for non empty input [${filename}]`
                             );
                         } else {
-                            debug(
+                            debugFilter(
+                                debug,
                                 `[Slave ${process.pid}][${transform.id}] "${filename}" transformed`
                             );
                         }

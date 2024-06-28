@@ -1,5 +1,7 @@
+const verbose = require('debug')('verbose:mendel:resolver:base');
 const path = require('path');
 const { stat, readFile } = require('fs');
+const debugFilter = require('mendel-development/debug-filter');
 
 function withPrefix(path) {
     if (/^\w[^:]/.test(path)) path = './' + path;
@@ -179,8 +181,9 @@ class ModuleResolver {
         const packagePath = path.join(moduleName, '/package.json');
         return this.readPackageJson(packagePath)
             .then((pkg) => {
-                if (this.runtimes.every((name) => !pkg[name]))
-                    throw new Error('package.json without "main"');
+                if (this.runtimes.every((name) => !pkg[name])) {
+                    throw new Error(`package.json without "${this.runtimes}"`);
+                }
 
                 const consider = new Map();
                 // A "package.json" can have below data structure
@@ -221,6 +224,7 @@ class ModuleResolver {
                     resolves.forEach((resolved, index) => {
                         consider.set(furtherPaths[index], resolved);
                     });
+
                     return { deps: consider, pkg };
                 });
             })
@@ -245,6 +249,8 @@ class ModuleResolver {
                 }, {});
 
                 if (this.recordPackageJson) resolved.packageJson = packagePath;
+                debugFilter(verbose, `${moduleName} runtimes`);
+                debugFilter(verbose, resolved, moduleName);
                 return resolved;
             });
     }

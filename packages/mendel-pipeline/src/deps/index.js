@@ -2,7 +2,7 @@ const verbose = require('debug')('verbose:mendel:deps:master');
 const path = require('path');
 const MultiProcessMaster = require('../multi-process/base-master');
 const mendelDeps = require('mendel-deps');
-const debugFilter = require('../../debug-filter');
+const debugFilter = require('mendel-development/debug-filter');
 /**
  * Knows how to do all kinds of trasnforms in parallel way
  */

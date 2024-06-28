@@ -37,6 +37,7 @@ class IndependentSourceTransform extends BaseStep {
         const { type } = entry;
         let typeConfig = this._types.get(entry.type);
 
+        this.extraVerbose({ typeConfigA: typeConfig }, entry.id);
         // When current entry is a node modules,
         // it can be applied with more global configuration from
         // "includeNodeModules". As node_modules cannot have more than one
@@ -50,6 +51,7 @@ class IndependentSourceTransform extends BaseStep {
                 typeConfig = config;
             }
         }
+        this.extraVerbose({ typeConfigB: typeConfig }, entry.id);
         if (!typeConfig) return { type, ids: [] };
 
         const ist = { type: typeConfig.name, ids: [] };
@@ -75,20 +77,30 @@ class IndependentSourceTransform extends BaseStep {
 
     perform(entry) {
         const entryId = entry.id;
+        this.verbose(`start ${entryId}`);
+        this.extraVerbose(entry, entryId);
         const { ids, type: newType } = this.getTransform(entry);
         const source = entry.rawSource;
         const map = entry.map;
 
         let promise = Promise.resolve({ source, map });
         if (ids.length) {
-            promise = promise.then(() => {
-                return this._transformer.transform(
-                    entryId.replace(/^\.\//, ''),
-                    ids,
-                    source,
-                    map
-                );
-            });
+            const verbose = this.verbose;
+            promise = promise
+                .then(() => {
+                    return this._transformer.transform(
+                        entryId.replace(/^\.\//, ''),
+                        ids,
+                        source,
+                        map
+                    );
+                })
+                .then((result) => {
+                    verbose({ result });
+                    return result;
+                });
+        } else {
+            this.verbose(`NO transform ${entryId} ${ids}`);
         }
 
         promise.then(

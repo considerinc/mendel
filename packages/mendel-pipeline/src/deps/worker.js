@@ -4,7 +4,7 @@ const verbose = require('debug')('verbose:mendel:deps:slave-' + process.pid);
 const mendelDeps = require('mendel-deps');
 const path = require('path');
 const VariationalResolver = require('mendel-resolver/bisource-resolver');
-const debugFilter = require('../../debug-filter');
+const debugFilter = require('mendel-development/debug-filter');
 
 const pendingInquiry = new Map();
 const RUNTIME = ['main', 'browser', 'module'];

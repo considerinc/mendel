@@ -2,8 +2,9 @@ const path = require('path');
 const { EventEmitter } = require('events');
 const { Minimatch } = require('minimatch');
 const verbose = require('debug')('verbose:mendel:cache');
+const extraVerbose = require('debug')('debug:mendel:cache');
 
-const debugFilter = require('../../debug-filter');
+const debugFilter = require('mendel-development/debug-filter');
 const Entry = require('./entry');
 const variationMatches = require('mendel-development/variation-matches');
 const RUNTIME = ['main', 'browser', 'module'];
@@ -133,6 +134,7 @@ class MendelCache extends EventEmitter {
         // finally
         this._store.set(id, entry);
         this.emit('entryAdded', id);
+        debugFilter(extraVerbose, { entry }, id);
     }
 
     invariantTwoPackagesSameTarget(packageNormId, targetNormId) {
@@ -417,6 +419,7 @@ class MendelCache extends EventEmitter {
             });
 
         entry.setSource(source, normDep, map);
+        debugFilter(extraVerbose, this.getEntry(id), id);
     }
 
     emit(eventName, entry) {

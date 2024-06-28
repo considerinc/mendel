@@ -4,6 +4,8 @@
 const MultiProcessMaster = require('../multi-process/base-master');
 const path = require('path');
 const debug = require('debug')('mendel:transformer:master');
+const verbose = require('debug')('verbose:mendel:transformer:master');
+const debugFilter = require('mendel-development/debug-filter');
 
 /**
  * Knows how to do all kinds of trasnforms in parallel way
@@ -27,7 +29,7 @@ class TransformManager extends MultiProcessMaster {
     }
 
     transform(filename, transformIds, source, map) {
-        debug(`Transforming "${filename}" with [${transformIds}]`);
+        debugFilter(debug, `Transforming "${filename}" with [${transformIds}]`);
         const transforms = transformIds.map((id) => this._transforms.get(id));
         const existing = this._transforming.find((exist) => {
             return (
@@ -38,7 +40,10 @@ class TransformManager extends MultiProcessMaster {
             );
         });
 
-        if (!transforms.length) return Promise.resolve({ source, map });
+        if (!transforms.length) {
+            debugFilter(verbose, `No trasnforms configured for "${filename}"`);
+            return Promise.resolve({ source, map });
+        }
         if (existing) {
             return new Promise((resolve, reject) => {
                 existing.additional.push({ resolve, reject });

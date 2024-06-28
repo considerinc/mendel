@@ -1,7 +1,7 @@
 const path = require('path');
 const verbose = require('debug')('verbose:mendel:net:client:registry');
 const Minimatch = require('minimatch').Minimatch;
-const debugFilter = require('../../debug-filter');
+const debugFilter = require('mendel-development/debug-filter');
 const redacted = '--redacted';
 const redact = { source: redacted, rawSource: redacted, map: redacted };
 
