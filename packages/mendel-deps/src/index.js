@@ -49,6 +49,28 @@ module.exports = function deps({ file, resolver, source }) {
             const promises = imports.map((importLiteral) => {
                 return resolver.resolve(importLiteral).catch(() => {
                     if (!builtInModules.includes(importLiteral)) {
+                        if (
+                            source.indexOf('MODULE_NOT_FOUND') >= 0 &&
+                            source.indexOf('typeof require&&require') >= 0
+                        ) {
+                            const pattern = new RegExp(
+                                `[{,"]${importLiteral}"?:\\d`
+                            );
+                            /*
+                                assuming it is a minified file with indexes
+
+                                instead of requiring the file itself
+                                Minifined files have maps and include their on
+                                dependency as following (but without spaces):
+                                {
+                                    './implementation': 66,
+                                    'react': 13,
+                                    "@babel/runtime/helpers/typeof": 29,
+                                    has: 61,
+                                }
+                            */
+                            if (pattern.test(source)) return false;
+                        }
                         console.warn(
                             `Warning: Can't find ${importLiteral} from ${file}`
                         );
