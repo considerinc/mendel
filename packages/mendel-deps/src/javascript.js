@@ -37,6 +37,13 @@ function _depFinder(ast) {
                 globals[node.object.name] = true;
             }
         },
+        ExportNamedDeclaration(nodePath) {
+            // export {default as bisect, bisectRight, bisectLeft, bisectCenter} from "./bisect.js";
+            const { node } = nodePath;
+            if (node.source && node.source.type === 'StringLiteral') {
+                imports[node.source.value] = true;
+            }
+        },
     };
 
     try {
@@ -109,7 +116,7 @@ module.exports = function jsDependency(source, filePath) {
         return false;
     }
 
-    return _depFinder(ast);
+    return _depFinder(ast, filePath);
 };
 
 module.exports.supports = new Set(['.js', '.jsx', '.esnext']);
