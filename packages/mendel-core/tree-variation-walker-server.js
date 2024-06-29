@@ -3,12 +3,14 @@
    Copyrights licensed under the MIT License.
    See the accompanying LICENSE file for terms. */
 
+var debug = require('debug')('mendel:tree-variation-walker-server');
 var util = require('util');
 var MendelVariationWalker = require('./tree-variation-walker');
 
 util.inherits(MendelServerVariationWalker, MendelVariationWalker);
 
 function MendelServerVariationWalker(_lookupChains, _base) {
+    debug('init MendelServerVariationWalker');
     if (!(this instanceof MendelServerVariationWalker)) {
         return new MendelServerVariationWalker(_lookupChains, _base);
     }

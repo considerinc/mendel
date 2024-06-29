@@ -7,3 +7,5 @@
 !.*.json
 !.mendelrc
 pnpm-lock.yaml
+
+/.nx/workspace-data

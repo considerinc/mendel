@@ -3,6 +3,7 @@
    Copyrights licensed under the MIT License.
    See the accompanying LICENSE file for terms. */
 
+var debug = require('debug')('mendel:tree-variation-walker');
 var util = require('util');
 var xtend = require('xtend');
 
@@ -12,6 +13,7 @@ util.inherits(MendelVariationWalker, MendelWalker);
 module.exports = MendelVariationWalker;
 
 function MendelVariationWalker(_lookupChains, _base, _hash) {
+    debug('init MendelVariationWalker');
     if (!(this instanceof MendelVariationWalker)) {
         return new MendelVariationWalker(_lookupChains, _base, _hash);
     }

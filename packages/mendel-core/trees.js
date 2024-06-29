@@ -4,6 +4,7 @@
    See the accompanying LICENSE file for terms. */
 
 var path = require('path');
+var debug = require('debug')('mendel:trees');
 
 var parseConfig = require('mendel-config');
 var MendelVariationWalker = require('./tree-variation-walker');
@@ -62,6 +63,7 @@ MendelTrees.prototype.findServerVariationMap = function (
 };
 
 MendelTrees.prototype.findTreeForHash = function (bundle, hash) {
+    debug(`findTreeForHash: bunde: ${bundle} hash: ${hash}`);
     var finder = new MendelHashWalker(hash);
 
     this._walkTree(bundle, finder);
@@ -104,9 +106,12 @@ MendelTrees.prototype._loadBundles = function () {
 MendelTrees.prototype._walkTree = function (bundle, finder) {
     var tree = this.bundles[bundle];
 
+    if (!tree) throw new RangeError('Bundle not found');
+
     for (var i = 0; i < tree.bundles.length; i++) {
         var module = tree.bundles[i];
         if (module.entry || module.expose) {
+            debug(`walk module: ${module.id}`);
             walk(tree, module, finder);
         }
     }

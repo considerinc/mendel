@@ -3,6 +3,7 @@
    Copyrights licensed under the MIT License.
    See the accompanying LICENSE file for terms. */
 
+var debug = require('debug')('mendel:tree-walker');
 var TreeSerialiser = require('./tree-serialiser');
 
 function MendelWalker(_lookupChains, _base, _hash) {
@@ -21,9 +22,12 @@ MendelWalker.prototype.find = function (module) {
     if (this.deps[module.index]) {
         return this.deps[module.index];
     } else if (module.data.length === 1) {
+        debug(`module ${module.id} no variations`);
         resolved = module.data[0];
     } else {
+        debug(`module ${module.id} needs resolving`);
         var branch = this._resolveBranch(module);
+        debug({ branch });
         resolved = branch.resolved;
         if (this.serialiser) {
             this.serialiser.pushBranch(branch.index);
@@ -32,6 +36,9 @@ MendelWalker.prototype.find = function (module) {
     this.deps[module.index] = resolved;
 
     if (this.serialiser) {
+        if (!resolved.sha) {
+            debug({ moduleNoSha: module });
+        }
         this.serialiser.pushFileHash(Buffer.from(resolved.sha, 'hex'));
     }
 

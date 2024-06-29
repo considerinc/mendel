@@ -64,29 +64,29 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.7.1",
-    "@commitlint/config-conventional": "^17.7.0",
-    "async": "^3.2.4",
-    "browserify": "^17.0.0",
-    "debug": "^4.3.4",
-    "eslint": "^8.49.0",
+    "@commitlint/cli": "^17.8.1",
+    "@commitlint/config-conventional": "^17.8.1",
+    "async": "^3.2.6",
+    "browserify": "^17.0.1",
+    "debug": "^4.4.0",
+    "eslint": "^8.57.1",
     "eslint-plugin-implicit-dependencies": "^1.1.1",
-    "eslint-plugin-react": "^7.33.1",
-    "express": "^4.18.2",
+    "eslint-plugin-react": "^7.37.4",
+    "express": "^4.21.2",
     "husky": "^8.0.3",
-    "lerna": "^7.1.4",
+    "lerna": "^8.2.1",
     "lint-staged": "^14.0.1",
     "mkdirp": "^3.0.1",
     "prettier": "3.0.3",
     "request": "^2.88.2",
-    "rimraf": "^5.0.1",
-    "tap": "^16.3.8",
+    "rimraf": "^5.0.10",
+    "tap": "^16.3.10",
     "temp": "^0.9.4",
-    "tmp": "^0.2.1"
+    "tmp": "^0.2.3"
   },
   "homepage": "https://github.com/irae/mendel#readme",
   "bugs": {
     "url": "https://github.com/irae/mendel/issues"
   },
-  "packageManager": "pnpm@9.0.6+sha256.0624e30eff866cdeb363b15061bdb7fd9425b17bc1bb42c22f5f4efdea21f6b3"
+  "packageManager": "pnpm@10.7.0+sha512.6b865ad4b62a1d9842b61d674a393903b871d9244954f652b8842c2b553c72176b278f64c463e52d40fff8aba385c235c8c9ecf5cc7de4fd78b8bb6d49633ab6"
 }

@@ -3,6 +3,7 @@
    Copyrights licensed under the MIT License.
    See the accompanying LICENSE file for terms. */
 
+var debug = require('debug')('mendel:tree-hash-walker');
 var util = require('util');
 var xtend = require('xtend');
 
@@ -13,6 +14,7 @@ util.inherits(MendelHashWalker, MendelWalker);
 module.exports = MendelHashWalker;
 
 function MendelHashWalker(inputHash) {
+    debug('init MendelHashWalker');
     if (!(this instanceof MendelHashWalker)) {
         return new MendelHashWalker(inputHash);
     }
@@ -50,6 +52,7 @@ MendelHashWalker.prototype._resolveBranch = function (module) {
 MendelHashWalker.prototype._error = function (msg) {
     this.error = this.error || new Error(msg);
     this.error.code = 'TRVRSL';
+    debug(this.error);
 };
 
 MendelHashWalker.prototype.found = function () {
