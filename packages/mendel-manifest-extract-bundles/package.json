@@ -1,6 +1,6 @@
 {
   "name": "mendel-manifest-extract-bundles",
-  "version": "4.0.0-alpha.2",
+  "version": "4.0.0-alpha.5",
   "description": "Parses a list of manifests, extract common dependencies and expose them from the parent bundle.",
   "main": "manifest-extract.js",
   "keywords": [
@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "debug": "^4.3.4",
-    "mendel-development": "^4.0.0-alpha.2"
+    "mendel-development": "^4.0.0-alpha.5"
   },
   "devDependencies": {
     "tap": "^16.3.8",

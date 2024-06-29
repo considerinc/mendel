@@ -257,10 +257,10 @@ importers:
         specifier: ^4.0.0-alpha.3
         version: link:../mendel-config
       mendel-development:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.5
         version: link:../mendel-development
       mendel-pipeline:
-        specifier: ^4.0.0-alpha.4
+        specifier: ^4.0.0-alpha.5
         version: link:../mendel-pipeline
       source-map:
         specifier: ^0.7.4
@@ -345,7 +345,7 @@ importers:
         specifier: ^10.3.3
         version: 10.3.12
       mendel-resolver:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.5
         version: link:../mendel-resolver
       tap:
         specifier: ^16.3.8
@@ -391,13 +391,13 @@ importers:
         specifier: ^4.0.0-alpha.3
         version: link:../mendel-config
       mendel-development:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.5
         version: link:../mendel-development
       mendel-exec:
-        specifier: ^4.0.0-alpha.3
+        specifier: ^4.0.0-alpha.5
         version: link:../mendel-exec
       mendel-pipeline:
-        specifier: ^4.0.0-alpha.4
+        specifier: ^4.0.0-alpha.5
         version: link:../mendel-pipeline
       path-to-regexp:
         specifier: ^2.1.0
@@ -416,7 +416,7 @@ importers:
         specifier: ^4.3.4
         version: 4.3.4(supports-color@8.1.1)
       mendel-resolver:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.5
         version: link:../mendel-resolver
       source-map:
         specifier: ^0.5.7
@@ -472,7 +472,7 @@ importers:
         specifier: ^4.3.4
         version: 4.3.4(supports-color@8.1.1)
       mendel-development:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.5
         version: link:../mendel-development
     devDependencies:
       tap:
@@ -532,10 +532,10 @@ importers:
         specifier: ^4.3.4
         version: 4.3.4(supports-color@8.1.1)
       mendel-exec:
-        specifier: ^4.0.0-alpha.3
+        specifier: ^4.0.0-alpha.5
         version: link:../mendel-exec
       mendel-pipeline:
-        specifier: ^4.0.0-alpha.4
+        specifier: ^4.0.0-alpha.5
         version: link:../mendel-pipeline
       mocha:
         specifier: ^10.2.0
@@ -611,7 +611,7 @@ importers:
         specifier: ^2.1.0
         version: 2.2.5
       mendel-development:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.5
         version: link:../mendel-development
       mendel-outlet-manifest:
         specifier: ^4.0.0-alpha.3
@@ -658,13 +658,13 @@ importers:
         specifier: ^4.0.0-alpha.3
         version: link:../mendel-config
       mendel-deps:
-        specifier: ^4.0.0-alpha.4
+        specifier: ^4.0.0-alpha.5
         version: link:../mendel-deps
       mendel-development:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.5
         version: link:../mendel-development
       mendel-resolver:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.5
         version: link:../mendel-resolver
       minimatch:
         specifier: ^3.1.2
@@ -704,7 +704,7 @@ importers:
         specifier: ~0.26.5
         version: 0.26.7
       mendel-development:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.5
         version: link:../mendel-development
       through2:
         specifier: ^2.0.1
@@ -720,7 +720,7 @@ importers:
         specifier: ^4.3.4
         version: 4.3.4(supports-color@8.1.1)
       mendel-development:
-        specifier: ^4.0.0-alpha.2
+        specifier: ^4.0.0-alpha.5
         version: link:../mendel-development
     devDependencies:
       tap:

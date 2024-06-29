@@ -1,6 +1,6 @@
 {
   "name": "mendel-exec",
-  "version": "4.0.0-alpha.3",
+  "version": "4.0.0-alpha.5",
   "description": "JavaScript executor using VM and Mendelv2 for custom variational resolving.",
   "main": "index.js",
   "author": "Stephan Lee <stephanwlee@gmail.com>",
@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "debug": "^4.3.4",
-    "mendel-resolver": "^4.0.0-alpha.2",
+    "mendel-resolver": "^4.0.0-alpha.5",
     "source-map": "^0.5.7"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 {
   "name": "mendel-pipeline",
-  "version": "4.0.0-alpha.4",
+  "version": "4.0.0-alpha.5",
   "description": "The mendel package",
   "main": "src/main.js",
   "bin": {
@@ -24,9 +24,9 @@
     "debug": "^4.3.4",
     "figures": "^2.0.0",
     "mendel-config": "^4.0.0-alpha.3",
-    "mendel-deps": "^4.0.0-alpha.4",
-    "mendel-development": "^4.0.0-alpha.2",
-    "mendel-resolver": "^4.0.0-alpha.2",
+    "mendel-deps": "^4.0.0-alpha.5",
+    "mendel-development": "^4.0.0-alpha.5",
+    "mendel-resolver": "^4.0.0-alpha.5",
     "minimatch": "^3.1.2",
     "mkdirp": "^0.5.1",
     "mocha": "10.2.0",
