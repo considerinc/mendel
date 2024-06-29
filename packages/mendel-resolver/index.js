@@ -230,7 +230,22 @@ class ModuleResolver {
             })
             .then(({ pkg, deps }) => {
                 const resolved = this.runtimes.reduce((reduced, name) => {
-                    const runtimeVal = pkg[name] || pkg.main;
+                    // for almost any package, main will work
+                    let fallback = pkg.main;
+                    // newer packages wihtout 'browser' but module is defined
+                    // and it is the same as 'main', it might be the case that
+                    // we preferer a packaged version to avoid using
+                    // include-node_modules: true in mendelrc if we have a
+                    // compiled version
+                    if (name === 'browser' && pkg.main === pkg.module) {
+                        if (pkg.exports && pkg.exports.umd) {
+                            fallback = pkg.exports.umd;
+                        }
+                        if (pkg.unpkg) {
+                            fallback = pkg.unpkg.browser || pkg.unpkg;
+                        }
+                    }
+                    const runtimeVal = pkg[name] || fallback;
                     if (deps.has(runtimeVal))
                         reduced[name] = deps.get(runtimeVal)[name];
                     else if (typeof runtimeVal === 'object') {
