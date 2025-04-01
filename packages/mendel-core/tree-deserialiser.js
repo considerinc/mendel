@@ -22,16 +22,20 @@ function deserialize(treeHash) {
         })
         .uint8('version')
         .tap(function () {
-            if (this.vars.version !== 1) {
+            if (this.vars.version !== 2) {
                 result.error = error(': version mismatch');
             }
         })
         .loop('branches', function (end) {
-            this.uint8('data').tap(function () {
-                if (this.vars.data === 255) {
+            this.uint8('index').tap(function () {
+                if (this.vars.index === 255) {
                     return end();
+                } else if (this.vars.index === 254) {
+                    return this.uint16('next').tap(function () {
+                        branches.push(this.vars.next);
+                    });
                 }
-                branches.push(this.vars.data);
+                branches.push(this.vars.index);
             });
         })
         .tap(function () {

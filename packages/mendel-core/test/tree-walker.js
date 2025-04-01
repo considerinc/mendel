@@ -95,7 +95,7 @@ var finalResult = {
             variation: 'variationValue',
         },
     ],
-    hash: 'bWVuZGVsAQEC_wMA5EClgTUZaXjQeWopmqLqqDgWBJ4',
+    hash: 'bWVuZGVsAgEC_wMA5EClgTUZaXjQeWopmqLqqDgWBJ4',
 };
 
 t.match(walker.found(), finalResult, 'All toghether with hash');

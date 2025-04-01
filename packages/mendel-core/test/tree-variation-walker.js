@@ -49,7 +49,7 @@ t.match(
     walker.found(),
     {
         deps: [{ id: 'a', sha: 'ba' }],
-        hash: 'bWVuZGVsAQD_AQAGH7IIQx23k7vTZFt6FgWKHiokEg',
+        hash: 'bWVuZGVsAgD_AQAGH7IIQx23k7vTZFt6FgWKHiokEg',
         conflicts: 1,
         conflictList: { first: true },
     },

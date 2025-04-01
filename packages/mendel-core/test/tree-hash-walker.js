@@ -7,7 +7,7 @@ var t = require('tap');
 var MendelHashWalker = require('../tree-hash-walker');
 t.equal(MendelHashWalker().constructor, MendelHashWalker, 'constructor');
 
-var validHash = 'bWVuZGVsAQD_AQAGH7IIQx23k7vTZFt6FgWKHiokEg';
+var validHash = 'bWVuZGVsAgD_AQAGH7IIQx23k7vTZFt6FgWKHiokEg';
 var walker = new MendelHashWalker(validHash);
 t.equal(walker.error, null, 'Initialized without errors');
 
@@ -90,7 +90,7 @@ var stub1 = {
         { id: 'special' },
     ],
 };
-validHash = 'bWVuZGVsAQD_AQAGH7IIQx23k7vTZFt6FgWKHiokEg';
+validHash = 'bWVuZGVsAgD_AQAGH7IIQx23k7vTZFt6FgWKHiokEg';
 walker = new MendelHashWalker(validHash);
 module = { data: [null, null, null, { id: '3', index: 3, sha: '99' }] };
 walker.decoded.branches = [0];
@@ -104,7 +104,7 @@ var expected = {
             sha: 'ba',
         },
     ],
-    hash: 'bWVuZGVsAQD_AQAGH7IIQx23k7vTZFt6FgWKHiokEg',
+    hash: 'bWVuZGVsAgD_AQAGH7IIQx23k7vTZFt6FgWKHiokEg',
     error: null,
 };
 

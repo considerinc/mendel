@@ -129,6 +129,30 @@ The variations can be resolved in two ways: By an array of desired **variation n
 
 Because we need to make sure the contents are the same requested by user, the hash is calculated both when generating it for the first time (when generating HTML request) and when collecting the source code payload (when dynamically serving the bundle). If it is a match, the source code can be concatenated using `browser_pack`.
 
+#### Mendel hashing update to v2
+
+The mendel v1 algorithm had a limitation: If a project has more than 254 variations for a single file, it would never resolve the bundle correctly, giving a 500 error. We updated the algorithm as follows:
+
+```
+      1           2           3               4          5          6
++------------+---------+------------------+---------+----------+---------+
+| ascii(6*8) | uint(8) | loop uint(8)     | uint(8) | uint(16) | bin(20) |
+| === mendel |         | <= 253           | == 255  |          |         |
+|            |         | == 254 +uint(16) |         |          |         |
++------------+---------+------------------+---------+----------+---------+
+```
+
+The updated 6 pieces stand for:
+
+1. ID: The string “mendel” (lowercase) in ascii encoding
+2. VERSION: The version of this binary, **bumped to 2**
+3. VARIATIONS_ARRAY: 0+ segments of 8 bit unsigned integers, that are different than 255. When integer is 254, read next 16 bit and return its value as uint16(), instead of the reserved 254 value.
+4. VARIATIONS_LIMITER: Integer with value 255 that marks end of file variations
+5. FILE_COUNT: The number of total files that were hashed during tree walking
+6. CONTENT_HASH: 20 byte sha1 binary
+
+Updating the loop to support signalling a 16 bit integer bumps the 255 variation limits to over 65k variations. But any files with over 253 variations will add 3 bytes to the final hash instead of 1.
+
 ## Reference Usage
 
 Usually, you can use the `mendel-middleware` instead of using `mendel-core` directly. We also provide a [reference implementation](../../examples/full-example/) for the middleware use. In case you need advanced use of Mendel, the minimal server bellow should be enough for you to start your custom implementation.

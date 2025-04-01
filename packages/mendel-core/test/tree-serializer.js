@@ -17,7 +17,7 @@ sut.pushFileHash(
     Buffer.from('f8968ed58fa6f771df78e0be89be5a97c5d3fb59', 'hex')
 );
 
-var expected = 'bWVuZGVsAQAC_wIACwymnXS-hyyRSwbove5neRfo6fI';
+var expected = 'bWVuZGVsAgAC_wIACwymnXS-hyyRSwbove5neRfo6fI';
 
 t.equal(sut.result(), expected, 'Hash matches');
 t.equal(sut.result(), expected, 'Can call result multiple times');
@@ -86,4 +86,44 @@ t.not(
     sut1.result(),
     sut2.result(),
     'different result if different hahses pushed'
+);
+
+sut1 = createPredictable();
+sut2 = createPredictable();
+
+sut1.pushBranch(30);
+sut1.pushFileHash(
+    Buffer.from('f790b83d19df02e79d50eeb84590a32b966f8e13', 'hex')
+);
+sut2.pushBranch(253);
+sut2.pushFileHash(
+    Buffer.from('f790b83d19df02e79d50eeb84590a32b966f8e13', 'hex')
+);
+
+t.not(sut1.result(), sut2.result(), 'different hash changing only index');
+
+t.equal(
+    sut1.result().length,
+    sut2.result().length,
+    'same length of hash for indexes BELLOW 254'
+);
+
+sut1 = createPredictable();
+sut2 = createPredictable();
+
+sut1.pushBranch(30);
+sut1.pushFileHash(
+    Buffer.from('f790b83d19df02e79d50eeb84590a32b966f8e13', 'hex')
+);
+sut2.pushBranch(300);
+sut2.pushFileHash(
+    Buffer.from('f790b83d19df02e79d50eeb84590a32b966f8e13', 'hex')
+);
+
+t.not(sut1.result(), sut2.result(), 'different hash changing only index');
+
+t.not(
+    sut1.result().length,
+    sut2.result().length,
+    'different length of hash for indexes OVER 254'
 );
